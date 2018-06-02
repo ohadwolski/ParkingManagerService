@@ -19,21 +19,22 @@ public class ParkingManagerService {
         initialize();
         
         
-        ConnectionThread ConnectionThread = new ConnectionThread( "ConnectionThread");
+        parkingmanagerservice.ConnectionThread ConnectionThread;
+        ConnectionThread = new ConnectionThread( "ConnectionThread");
         ConnectionThread.start();
         
-        ListenerThread ListenerThread = new ListenerThread( "ConnectionThread");
-        ListenerThread.start();
+        //ListenerThread ListenerThread = new ListenerThread( "ConnectionThread");
+        //ListenerThread.start();
         
-        SenderThread SenderThread = new SenderThread( "ConnectionThread");
-        SenderThread.start();
+        //SenderThread SenderThread = new SenderThread( "ConnectionThread");
+        //SenderThread.start();
         
-        MsgQueuesHandler MsgQueuesHandler = new MsgQueuesHandler( "ConnectionThread");
-        MsgQueuesHandler.start();
-        
-        DataBaseUpdater DataBaseUpdater = new DataBaseUpdater( "ConnectionThread"); // both for DB and user interface
-        DataBaseUpdater.start();
-        
+        //MsgQueuesHandler MsgQueuesHandler = new MsgQueuesHandler( "ConnectionThread");
+        //MsgQueuesHandler.start();
+
+        //DataBaseUpdater DataBaseUpdater = new DataBaseUpdater( "ConnectionThread"); // both for DB and user interface
+        //DataBaseUpdater.start();
+
     }
     
      /**
