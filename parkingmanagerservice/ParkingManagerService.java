@@ -11,29 +11,17 @@ package parkingmanagerservice;
  */
 public class ParkingManagerService {
 
+    public static Threads Threads = new Threads();
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         // TODO code application logic here
         initialize();
-        
-        
-        parkingmanagerservice.ConnectionThread ConnectionThread;
-        ConnectionThread = new ConnectionThread( "ConnectionThread");
-        ConnectionThread.start();
-        
-        //ListenerThread ListenerThread = new ListenerThread( "ConnectionThread");
-        //ListenerThread.start();
-        
-        //SenderThread SenderThread = new SenderThread( "ConnectionThread");
-        //SenderThread.start();
-        
-        //MsgQueuesHandler MsgQueuesHandler = new MsgQueuesHandler( "ConnectionThread");
-        //MsgQueuesHandler.start();
 
-        //DataBaseUpdater DataBaseUpdater = new DataBaseUpdater( "ConnectionThread"); // both for DB and user interface
-        //DataBaseUpdater.start();
+        Threads.Start();
+
 
     }
     
@@ -45,5 +33,10 @@ public class ParkingManagerService {
         // is this how it is made?
         
     }
-// alon
+
+    public static void test() {
+        System.out.println("Called root.test() from root.ListenerThread");
+    }
+
 }
+
