@@ -41,25 +41,26 @@ public class ConnectionThread implements Runnable{
          try {
             System.out.println("Waiting for client on port " + serverSocket.getLocalPort() + "...");
             server = serverSocket.accept();
+            in = new DataInputStream(server.getInputStream());
+            out = new DataOutputStream(server.getOutputStream());
+
+
+
+
+            // while with delay, send echo every now and than, update status and break for retrying
 
             System.out.println("Just connected to " + server.getRemoteSocketAddress());
-            in = new DataInputStream(server.getInputStream());
-
             System.out.println(in.readUTF());
-            out = new DataOutputStream(server.getOutputStream());
             out.writeUTF("Thank you for connecting to " + server.getLocalSocketAddress() + "\nGoodbye!");
             server.close();
 
-         } catch (SocketTimeoutException s) {
+         } catch (SocketTimeoutException s) { // not suppose to happen because haven't set timeout
             System.out.println("Socket timed out!");
-            break;
-         }   catch (IOException e) {
+            continue; // try again
+         } catch (IOException e) {
             e.printStackTrace();
             break;
-         }// catch (InterruptedException e) {
-         //   System.out.println("Thread " +  threadName + " interrupted.");
-         //   e.printStackTrace();
-         //}
+         }
       }
       System.out.println("Thread " +  threadName + " exiting.");
    }
