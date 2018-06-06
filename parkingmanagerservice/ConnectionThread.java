@@ -48,7 +48,7 @@ public class ConnectionThread implements Runnable{
             in = new DataInputStream(server.getInputStream());
             out = new DataOutputStream(server.getOutputStream());
 
-            messages echo = new messages(0, new Date(), ECHO);
+            messages echo = new messages(0, new Date(), ECHO, 0);
             ObjectOutputStream outObject = new ObjectOutputStream(server.getOutputStream());
             outObject.writeObject(echo);
 

@@ -15,6 +15,10 @@ public class ListenerThread implements Runnable{
         System.out.println("Creating " +  threadName );
     }
 
+    public void join() throws InterruptedException {
+        t.join();
+    }
+
     @Override
     public void run() {
         //virtualEsp.Threads.ConnectionThread.test();

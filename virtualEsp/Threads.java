@@ -13,4 +13,10 @@ public class Threads {
         ListenerThread.start();
     }
 
+
+    public void Join() throws InterruptedException {
+        ConnectionThread.join();
+        ListenerThread.join();
+    }
+
 }

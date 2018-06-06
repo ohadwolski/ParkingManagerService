@@ -14,6 +14,12 @@ public class virtualEsp {
         initialize();
 
         Threads.Start();
+
+        try {
+            Threads.Join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void initialize() {

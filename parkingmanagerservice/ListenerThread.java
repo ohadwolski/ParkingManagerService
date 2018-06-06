@@ -17,8 +17,8 @@ public class ListenerThread implements Runnable{
 
     @Override
     public void run() {
-        ParkingManagerService.test();
-        ParkingManagerService.Threads.ConnectionThread.test();
+        //ParkingManagerService.test();
+        //ParkingManagerService.Threads.ConnectionThread.test();
 
     }
 
