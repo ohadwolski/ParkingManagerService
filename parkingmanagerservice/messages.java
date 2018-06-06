@@ -5,7 +5,7 @@ import java.util.Date;
 enum MessageType {
     ECHO, ACKECHO;
 }
-public class messages {
+public class messages implements java.io.Serializable {
     private int Id;
     private Date Date;
     private MessageType Type;
@@ -54,5 +54,12 @@ public class messages {
 
     public boolean compare(messages msg) {
         return this.compareDate(msg.getDate()) && this.compareId(msg.getId()) && this.compareType(msg.getType());
+    }
+
+    public void print() {
+        System.out.println("Message Printout:\n");
+        System.out.println("Id:" + this.getId() + "\n");
+        System.out.println("Date:" + this.getDate() + "\n");
+        System.out.println("Type:" + this.getType() + "\n");
     }
 }
