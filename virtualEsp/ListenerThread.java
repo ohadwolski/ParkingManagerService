@@ -1,4 +1,4 @@
-package parkingmanagerservice;
+package virtualEsp;
 
 /**
  *
@@ -15,10 +15,13 @@ public class ListenerThread implements Runnable{
         System.out.println("Creating " +  threadName );
     }
 
+    public void join() throws InterruptedException {
+        t.join();
+    }
+
     @Override
     public void run() {
-        //ParkingManagerService.test();
-        //ParkingManagerService.Threads.ConnectionThread.test();
+        //virtualEsp.Threads.ConnectionThread.test();
 
     }
 

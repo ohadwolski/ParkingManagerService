@@ -8,6 +8,9 @@ package parkingmanagerservice;
 import java.io.IOException;
 import java.net.*;
 import java.io.*;
+import java.util.*;
+
+import static parkingmanagerservice.MessageType.*;
 
 /**
  *
@@ -41,16 +44,21 @@ public class ConnectionThread implements Runnable{
          try {
             System.out.println("Waiting for client on port " + serverSocket.getLocalPort() + "...");
             server = serverSocket.accept();
+            System.out.println("Just connected to " + server.getRemoteSocketAddress());
             in = new DataInputStream(server.getInputStream());
             out = new DataOutputStream(server.getOutputStream());
 
+            messages echo = new messages(0, new Date(), ECHO, 0);
+            ObjectOutputStream outObject = new ObjectOutputStream(server.getOutputStream());
+            outObject.writeObject(echo);
 
-
+            ObjectInputStream inObject = new ObjectInputStream(server.getInputStream());
+            echo = (messages) inObject.readObject();
+            echo.print();
 
             // while with delay, send echo every now and than, update status and break for retrying
 
-            System.out.println("Just connected to " + server.getRemoteSocketAddress());
-            System.out.println(in.readUTF());
+            //System.out.println(in.readUTF());
             out.writeUTF("Thank you for connecting to " + server.getLocalSocketAddress() + "\nGoodbye!");
             server.close();
 
@@ -60,6 +68,8 @@ public class ConnectionThread implements Runnable{
          } catch (IOException e) {
             e.printStackTrace();
             break;
+         } catch (ClassNotFoundException e) {
+            e.printStackTrace();
          }
       }
       System.out.println("Thread " +  threadName + " exiting.");
