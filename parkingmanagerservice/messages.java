@@ -5,31 +5,24 @@ package parkingmanagerservice;
 import java.util.Date;
 
 enum MessageType {
-    ECHO, ACKECHO, CARGETPARK, SETPARK, SETSIGN, CARFREEPARK, FREEPARK, SETSYMBOL,OPENELEMENT,CLOSEELEMENT , PARKTYPE, ADDELEMENT, REMOVEELEMENT  ;
+    ECHO, ACK_ECHO,                                                                                         // Connection check
+    PARKING_SPOT_TAKEN, PARKING_SPOT_FREED,                                                                 // Notify parking spot taken and freed
+    SET_PAKING_SPOT_LED_OFF, SET_PAKING_SPOT_LED_RED, SET_PAKING_SPOT_LED_GREEN, SET_PAKING_SPOT_LED_BLUE,  // Set led color
+    UPDATE_COUNTER,                                                                                         // Update counter to new value
+    SET_SIGN_LEFT, SET_SIGN_RIGHT, SET_SIGN_FORWARD, SET_SIGN_BACK, SET_SIGN_NO_ENTRY;                      // Set sign post picture
 }
-public class messages implements java.io.Serializable {
-enum LedColour{
-	NONE, RED, GREEN, BLUE;
-}
-
 
 public class messages implements java.io.Serializable{
     private int Id;
     private Date Date;
     private MessageType Type;
     private int Num;
-    private LedColour Light;
-    private int Symbol;
-    private int ParkType;
 
-    public messages(int id, Date date, MessageType type, int num, LedColour light, int symbol,int parkType) {
+    public messages(int id, Date date, MessageType type, int num) {
         Id = id;
-        this.Date = date;
+        Date = date;
         Type = type;
-        Num=num;
-        Light=light;
-        Symbol=symbol;
-        ParkType=parkType;
+        Num = num;
     }
 
     public int getId() {
@@ -68,52 +61,26 @@ public class messages implements java.io.Serializable{
         return this.Type == type;
     }
 
-    public boolean compare(messages msg) {
-        return this.compareDate(msg.getDate()) && this.compareId(msg.getId()) && this.compareType(msg.getType());
-    }
-
     public void setNum(int num) {
         Num = num;
     }
-    public void getNum(int num) {
-    	Num = num;
+    public int getNum() {
+    	return Num;
     }
     public boolean compareNum(int num) {
         return Num == num;
     }
-    public void setLight(LedColour light) {
-        Light = light;
+
+    public boolean compare(messages msg) {
+        return this.compareDate(msg.getDate()) && this.compareId(msg.getId()) && this.compareType(msg.getType()) && this.compareNum(msg.getNum());
     }
-    public void getLight(LedColour light) {
-    	 Light = light;
-    }
-    public boolean comparesLight(LedColour light) {
-        return  Light == light;;
-    }
-    public void setSymbol(int symbol) {
-        Symbol = symbol;
-    }
-    public void getSymbol(int symbol) {
-    	Symbol = symbol;
-    }
-    public boolean compareSymbol(int symbol) {
-        return Symbol == symbol;
-    }
-    public void setParkType(int parkType) {
-    	ParkType = parkType;
-    }
-    public void getParkType(int parkType) {
-    	ParkType = parkType;
-    }
-    public boolean compareParkType(int parkType) {
-        return ParkType == parkType;
-    }
-}
 
     public void print() {
         System.out.println("Message Printout:\n");
         System.out.println("Id:" + this.getId() + "\n");
         System.out.println("Date:" + this.getDate() + "\n");
         System.out.println("Type:" + this.getType() + "\n");
+        System.out.println("Num:" + this.getNum() + "\n");
+        System.out.println("End of message.\n");
     }
 }
