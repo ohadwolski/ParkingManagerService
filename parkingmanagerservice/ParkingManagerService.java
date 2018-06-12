@@ -12,6 +12,7 @@ package parkingmanagerservice;
 public class ParkingManagerService {
 
     public static Threads Threads = new Threads();
+    //public static SenderQueue SenderQueue;
 
     /**
      * @param args the command line arguments
