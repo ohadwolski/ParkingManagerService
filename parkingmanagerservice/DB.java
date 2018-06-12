@@ -30,7 +30,7 @@ public class DB {
 		
 		protected int ID;
 		protected Type GeneralType;
-		//protected Vector<ConfigObj> Areas = new Vector<ConfigObj> (0,1);
+		protected Vector<ConfigObj> Areas = null;
 		
 		public ConfigObj() {                                  //probably not necessary
 			
@@ -59,10 +59,9 @@ public class DB {
 
 	public static class Area extends ConfigObj {
 			
-		public Vector<ConfigObj> Areas = new Vector<ConfigObj> (0,1);
-		
 		public Area (int id, Type genT) {
 			
+			Areas = new Vector<ConfigObj> (0,1);
 			setID(id);
 			setGeneralType(genT);
 		}
@@ -75,9 +74,14 @@ public class DB {
 			
 		public Sign(int id, Type genT) {
 			setID(id);
-			setGeneralType(genT);
-			
+			setGeneralType(genT);	
 		}
+		/*
+		public Sign createNewSign(int signId, Type type) {
+			
+			Sign newSign = new DB.Sign(signId, type);
+			return newSign;		
+		}*/
 	}
 		
 	public static class Spot extends ConfigObj {
@@ -90,14 +94,20 @@ public class DB {
 	}
 		
 	
-	public static abstract class StatusElementObj {
+	public class StatusElementObj {
 		
 		protected int ID;
 		protected Type Status;
 		protected Date LastResponse;
+		protected int Counter;
 		
 		
-		public StatusElementObj() {
+		public StatusElementObj(int id, Type status, Date lastResponse, int counter) {
+			    	
+			ID = id;
+			Status = status;
+			LastResponse = lastResponse;
+			Counter = counter;
 			
 		}
 		
@@ -121,18 +131,40 @@ public class DB {
 			return Status;
 		}
 		
-		void setDate(Date date) {
+		void setLastResponse(Date lastResponse) {
 			
-			LastResponse = date;
+			LastResponse = lastResponse;
 		}
 		
-		Date getDate() {
+		Date getLastResponse() {
 			
 			return LastResponse;
 		}
-	}
+		
+		void setCounter(int counter) {
+			
+			Counter = counter;
+			
+		}
+		
+		int getCounter() {
+			
+			return Counter;
+		}
+
+		void incCounter() {
+			
+			Counter++;
 	
+		}
+
+		void decCounter() {
 	
+			Counter--;
+		}
+
+	}		
+	/*
 	public static class SpotStatus extends StatusElementObj{
 		
 		public SpotStatus(int id, Type status, Date lastResponse) {                                  
@@ -144,10 +176,10 @@ public class DB {
 		}
 		
 	}
-	
+	/*
 	public static class SignStatus extends StatusElementObj{
 		
-		int counter=0;
+		private int counter=0;
 		
 		public SignStatus(int id, Type status, Date lastResponse) {                             
 			
