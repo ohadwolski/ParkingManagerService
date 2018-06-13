@@ -113,9 +113,10 @@ public class ConnectionThread implements Runnable {
             //} catch (IOException e) {
             //   e.printStackTrace();
             //}
-            System.out.println("Thread " + threadName + " exiting.");
+
         }
 
+        System.out.println("Thread " + threadName + " exiting.");
 
     }
 

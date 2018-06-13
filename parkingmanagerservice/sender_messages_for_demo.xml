@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<MESSAGES>
+    <MESSAGE>
+        <ID>1</ID>
+        <TYPE>ECHO</TYPE>
+        <COUNTER>0</COUNTER>
+    </MESSAGE>
+    <MESSAGE>
+        <ID>1</ID>
+        <TYPE>ECHO</TYPE>
+        <COUNTER>0</COUNTER>
+    </MESSAGE>
+</MESSAGES>

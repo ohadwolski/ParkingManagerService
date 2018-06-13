@@ -40,7 +40,7 @@ public class ListenerQueueThread implements Runnable{
                     t.sleep(5000);
                     //continue;
                 } else {
-                    System.out.println("Found " + ReceiveQueue.size() + "messages in receive queue. Handling:\n");
+                    System.out.println("Found " + ReceiveQueue.size() + " messages in receive queue. Handling:\n");
                     // work on vector
                     while (! ReceiveQueue.isEmpty()) {
                         messages msg = ReceiveQueue.firstElement();

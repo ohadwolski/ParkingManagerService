@@ -48,11 +48,13 @@ public class SenderThread implements Runnable{
                         virtualEsp.sendQueue.remove(0);
                     } else {
                         System.out.println("Send queue is empty. Will try again later . . .");
+                        t.sleep(5000);
                     }
                     t.sleep(1000);
                 } catch (IOException e) {
                     if (run) {
                         System.out.println("Network error! Trying to connect again . . .");
+                        virtualEsp.Threads.ConnectionThread.reconnect();
                         break;
                     }
                 } catch (InterruptedException e) {
@@ -61,9 +63,9 @@ public class SenderThread implements Runnable{
 
             }
 
-            if ((!virtualEsp.Threads.ConnectionThread.getConnectionState()) && run) {
-                virtualEsp.Threads.ConnectionThread.reconnect();
-            }
+            //if ((!virtualEsp.Threads.ConnectionThread.getConnectionState()) && run) {
+            //    virtualEsp.Threads.ConnectionThread.reconnect();
+            //}
 
             try {
                 t.sleep(5000);

@@ -1,6 +1,7 @@
 package parkingmanagerservice;
 
 import java.util.Date;
+import java.util.Vector;
 
 public class Threads {
 
@@ -30,6 +31,11 @@ public class Threads {
     }
 
     private void initializeSenderQueueForTest() {
+
+        MessagesParser sender_messages_parser = new MessagesParser("sender_messages_for_demo.xml");
+        Vector<messages> sender_messages_for_demo = sender_messages_parser.getMessagesList();
+        SenderQueueThread.addVector(sender_messages_for_demo);
+        /*
         // Create and add messages for test here:
         messages msg;
 
@@ -50,7 +56,7 @@ public class Threads {
 
         msg = new messages(5,new Date(), MessageType.SET_PAKING_SPOT_LED_GREEN, 0);
         SenderQueueThread.addMessage(msg);
-
+        */
     }
 
     public void exit() {
