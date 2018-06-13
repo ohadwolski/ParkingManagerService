@@ -49,16 +49,17 @@ public class ListenerThread implements Runnable{
                     //e.printStackTrace();
                     if (run) {
                         System.out.println("Network error! Trying to connect again . . .");
-                        //ParkingManagerService.Threads.ConnectionThread.reconnect();
+                        ParkingManagerService.Threads.ConnectionThread.reconnect();
                         break;
                     }
                 }
 
             }
 
-            if ((!ParkingManagerService.Threads.ConnectionThread.getConnectionState()) && run) {
-                ParkingManagerService.Threads.ConnectionThread.reconnect();
-            }
+            //if ((!ParkingManagerService.Threads.ConnectionThread.getConnectionState()) && run) {
+            //    System.out.println("GOT HERE");
+            //    ParkingManagerService.Threads.ConnectionThread.reconnect();
+            //}
 
             try {
                 t.sleep(1000);

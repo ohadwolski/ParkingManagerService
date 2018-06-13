@@ -74,6 +74,10 @@ public class SenderQueueThread {//implements Runnable {
         SendQueue.add(msg); // Do we need to copy the msg or is it ok to use reference?
     }
 
+    public void addVector ( Vector<messages> messagesVector) {
+        SendQueue.addAll(messagesVector);
+    }
+
 /*
     public void exit() {
         run = false;

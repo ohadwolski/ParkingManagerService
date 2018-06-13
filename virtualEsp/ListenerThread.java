@@ -51,16 +51,16 @@ public class ListenerThread implements Runnable{
                     //e.printStackTrace();
                     if (run) {
                         System.out.println("Network error! Trying to connect again . . .");
-                        //virtualEsp.Threads.ConnectionThread.reconnect();
+                        virtualEsp.Threads.ConnectionThread.reconnect();
                         break;
                     }
                 }
 
             }
 
-            if ((!virtualEsp.Threads.ConnectionThread.getConnectionState()) && run) {
-                virtualEsp.Threads.ConnectionThread.reconnect();
-            }
+            //if ((!virtualEsp.Threads.ConnectionThread.getConnectionState()) && run) {
+            //    virtualEsp.Threads.ConnectionThread.reconnect();
+            //}
 
             try {
                 t.sleep(1000);
