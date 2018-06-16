@@ -3,21 +3,19 @@ package virtualEsp;
 import parkingmanagerservice.messages;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 /**
  *
  * @author Ohad Wolski
  */
-public class ListenerThread implements Runnable{
-
-
+public class SenderThread implements Runnable{
     private Thread t;
     private String threadName;
-    private ObjectInputStream in;
+    private ObjectOutputStream out;
     private boolean run;
 
-    ListenerThread( String name) {
+    SenderThread (String name) {
         threadName = name;
         System.out.println("Creating " +  threadName );
         run = true;
@@ -31,29 +29,36 @@ public class ListenerThread implements Runnable{
         }
     }
 
-
     @Override
     public void run() {
+
         while (run) {
 
             while (virtualEsp.Threads.ConnectionThread.getConnectionState()) {
                 try {
-                    in = virtualEsp.Threads.ConnectionThread.getInputStream();
-                    //out = virtualEsp.Threads.ConnectionThread.getOutputStream();
+                    out = virtualEsp.Threads.ConnectionThread.getOutputStream();
 
-                    messages msg;
-                    msg = (messages) in.readObject();
-                    // print message received from server:
-                    System.out.println("Received message from server: \n");
-                    msg.print();
-                    //
-                } catch (IOException | ClassNotFoundException e) {
-                    //e.printStackTrace();
+                    // get message from sender queue:
+                    if (! virtualEsp.sendQueue.isEmpty()) {
+                        messages msg_to_send = virtualEsp.sendQueue.firstElement();
+                        System.out.println("Sending message:\n");
+                        msg_to_send.print();
+                        out.writeObject(msg_to_send);
+                        System.out.println("Sent successfully.\n");
+                        virtualEsp.sendQueue.remove(0);
+                    } else {
+                        System.out.println("Send queue is empty. Will try again later . . .");
+                        t.sleep(5000);
+                    }
+                    t.sleep(1000);
+                } catch (IOException e) {
                     if (run) {
                         System.out.println("Network error! Trying to connect again . . .");
                         virtualEsp.Threads.ConnectionThread.reconnect();
                         break;
                     }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
 
             }
@@ -63,7 +68,7 @@ public class ListenerThread implements Runnable{
             //}
 
             try {
-                t.sleep(1000);
+                t.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

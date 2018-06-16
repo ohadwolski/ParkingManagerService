@@ -5,6 +5,8 @@
  */
 package parkingmanagerservice;
 
+import java.util.Vector;
+
 /**
  *
  * @author Ohad Wolski
@@ -12,6 +14,8 @@ package parkingmanagerservice;
 public class ParkingManagerService {
 
     public static Threads Threads = new Threads();
+    //public static Vector<messages> sender_messages_for_demo;
+    //public static SenderQueue SenderQueue;
 
     /**
      * @param args the command line arguments
@@ -29,8 +33,9 @@ public class ParkingManagerService {
      */
     public static void initialize() {
         // TODO code application logic here
-        // initialize all of the data structures?
-        // is this how it is made?
+
+
+
         
     }
 

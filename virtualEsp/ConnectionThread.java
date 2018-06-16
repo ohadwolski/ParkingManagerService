@@ -18,68 +18,75 @@ import java.util.Date;
  * @author Ohad Wolski
  */
 public class ConnectionThread implements Runnable {
-    
-    
-   private Thread t;
-   private String threadName;
-   private Socket client;
-   private OutputStream outputStream;
-   private InputStream inputStream;
-   private DataInputStream in;
-   private DataOutputStream out;
-
-   private boolean connectionInitialized;
-
-   ConnectionThread( String name) {
-      threadName = name;
-      System.out.println("Creating " +  threadName );
-      connectionInitialized = false;
-
-   }
-
-   public void join() throws InterruptedException {
-       t.join();
-   }
 
 
-   @Override
-   public void run() {
-      System.out.println("Running " +  threadName );
-      while (true)
-      {
-         while (connectionInitialized == false) {
-            try {
-               System.out.println("Trying to connect to server on localhost with port 5000 ...");
-               client = new Socket("localhost", 5000);
-               System.out.println("Just connected to " + client.getRemoteSocketAddress());
-               outputStream = client.getOutputStream();
-               out = new DataOutputStream(outputStream);
-               inputStream = client.getInputStream();
-               in = new DataInputStream(inputStream);
+    private Thread t;
+    private String threadName;
+    private Socket client;
+    private OutputStream outputStream;
+    private InputStream inputStream;
+    private ObjectInputStream in;
+    private ObjectOutputStream out;
 
-               connectionInitialized = true;
+    private boolean connected;
+    private boolean run;
 
-            } catch (SocketTimeoutException s) { // not suppose to happen because haven't set timeout
-               System.out.println("Socket timed out!");
-               connectionInitialized = false;
-               break;
-            } catch (IOException e) {
-               //e.printStackTrace();
-               System.out.println("Could not connect!");
-               connectionInitialized = false;
+    ConnectionThread(String name) {
+        threadName = name;
+        System.out.println("Creating " + threadName);
+        connected = false;
+        run = true;
+
+    }
+
+    public void start() {
+        System.out.println("Starting " + threadName);
+        if (t == null) {
+            t = new Thread(this, threadName);
+            t.start();
+        }
+    }
+
+
+    @Override
+    public void run() {
+        System.out.println("Running " + threadName);
+        while (run) {
+            while (connected == false) {
                 try {
-                    t.wait(1000);
-                } catch (InterruptedException e1) {
-                    e1.printStackTrace();
+                    System.out.println("Trying to connect to server on localhost with port 5000 ...");
+                    client = new Socket("localhost", 5000);
+                    System.out.println("Just connected to " + client.getRemoteSocketAddress());
+                    outputStream = client.getOutputStream();
+                    out = new ObjectOutputStream(outputStream);
+                    inputStream = client.getInputStream();
+                    in = new ObjectInputStream(inputStream);
+
+                    connected = true;
+
+                } catch (SocketTimeoutException s) { // not suppose to happen because haven't set timeout
+                    System.out.println("Socket timed out! Trying again . . .");
+                    connected = false;
+                    break;
+                } catch (IOException e) {
+                    //e.printStackTrace();
+                    System.out.println("Could not connect! Trying again . . .");
+                    connected = false;
+                    break;
                 }
-                break;
             }
-         }
 
+            try {
+                t.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
-
-         try {
+          /*
+          try {
              //wait(1000);
+             System.out.println("Waiting for message . . .");
+             t.sleep(1000);
              messages msg; // = new messages(0, new Date(), ECHO, 0);
              //ObjectOutputStream outObject = new ObjectOutputStream(server.getOutputStream());
              //outObject.writeObject(echo);
@@ -96,22 +103,51 @@ public class ConnectionThread implements Runnable {
              e.printStackTrace();
          } catch (IOException e) {
 
+         } catch (InterruptedException e) {
+             e.printStackTrace();
          }
       }
-      //try {
-      //   client.close();
-      //} catch (IOException e) {
-      //   e.printStackTrace();
-      //}
-      //System.out.println("Thread " +  threadName + " exiting.");
-   }
-   
-   public void start () {
-      System.out.println("Starting " +  threadName );
-      if (t == null) {
-         t = new Thread (this, threadName);
-         t.start ();
-      }
-   }
+      */
+            //try {
+            //   client.close();
+            //} catch (IOException e) {
+            //   e.printStackTrace();
+            //}
+
+        }
+
+        System.out.println("Thread " + threadName + " exiting.");
+
+    }
+
+
+    @SuppressWarnings("Duplicates")
+    public void disconnect() {
+        try {
+            System.out.println("Closing connection . . .");
+            client.close();
+            System.out.println("Done!");
+            run = false;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean getConnectionState() {
+        return connected;
+    }
+
+    public void reconnect() {
+        connected = false;
+    }
+
+    public ObjectOutputStream getOutputStream()
+    {
+        return  out;
+    }
+    public ObjectInputStream getInputStream()
+    {
+        return  in;
+    }
 
 }
