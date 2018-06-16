@@ -1,13 +1,15 @@
+package parkingmanagerservice;
+
 import java.util.Date;
 import java.util.Vector;
 
 
-enum Type {
+enum TypeData {
 	OPEN, CLOSED,											//open-closed status 
 	REGULAR, VIP, GUEST, DISABLED, VIRTUAL,               //Parking spot type
 	OK, ERROR,											//generic status				
 	FREE, TAKEN,  								//sensor status
-	NO_ENTRY, STOP, LEFT, RIGHT, UP, DOWN,				//sign arrow
+	NO_ENTRY, LEFT, RIGHT, FORWARD, BACK,				//sign arrow
 	PARKING_ADDED, PARKING_REMOVED, PARKING_TYPE_MODIFIED ,SIGN_ADDED ,SIGN_REMOVED ,AREA_ADDED ,AREA_REMOVED ,LEVEL_ADDED , LEVEL_REMOVED , ADMIN_LOGIN , ADMIN_LOGOUT, USER_LOGIN , USER_LOGOUT, //admins logs event
 	PARKING_FREED, PARKING_CAUGHT, PARKING_FULL;			//Parking logs event
 }
@@ -27,7 +29,7 @@ public class ParkingLotData {
 	public abstract class ConfigObj {								
 		
 		protected int ID;
-		protected Type GeneralType;
+		protected TypeData GeneralType;
 		protected ConfigObj Parent;
 		protected Vector<ConfigObj> Areas = new Vector<ConfigObj>(0,1);
 		
@@ -44,12 +46,12 @@ public class ParkingLotData {
 			return ID;
 		}
 		
-		void setGeneralType(Type genType) {
+		void setGeneralType(TypeData genType) {
 			
 			GeneralType = genType;
 		}
 		
-		Type getGeneralType() {
+		TypeData getGeneralType() {
 			
 			return GeneralType;
 		}
@@ -67,7 +69,7 @@ public class ParkingLotData {
 
 	public class Area extends ConfigObj {
 			
-		public Area (int id, Type genT) {
+		public Area (int id, TypeData genT) {
 			
 			Areas = new Vector<ConfigObj> (0,1);
 			setID(id);
@@ -77,7 +79,7 @@ public class ParkingLotData {
 		
 	public class Sign extends ConfigObj {                       
 			
-		public Sign(int id, Type genT) {
+		public Sign(int id, TypeData genT) {
 			setID(id);
 			setGeneralType(genT);	
 		}
@@ -85,7 +87,7 @@ public class ParkingLotData {
 		
 	public class Spot extends ConfigObj {
 			
-		public Spot(int id, Type genT) {
+		public Spot(int id, TypeData genT) {
 			setID(id);
 			setGeneralType(genT);	
 		}
@@ -94,12 +96,11 @@ public class ParkingLotData {
 	public class StatusElementObj {
 		
 		protected int ID;
-		protected Type Status;
+		protected TypeData Status;
 		protected Date LastResponse;
 		protected int Counter;
 		
-		
-		public StatusElementObj(int id, Type status, Date lastResponse, int counter) {
+		public StatusElementObj(int id, TypeData status, Date lastResponse, int counter) {
 			    	
 			ID = id;
 			Status = status;
@@ -117,12 +118,12 @@ public class ParkingLotData {
 			return ID;
 		}
 		
-		public void setStatus(Type status) {
+		public void setStatus(TypeData status) {
 			
 			Status = status;
 		}
 		
-		public Type getStatus() {
+		public TypeData getStatus() {
 			
 			return Status;
 		}
@@ -188,13 +189,13 @@ public class ParkingLotData {
 			return ParkingLotDataStatus.get(findTheIndexOfIDInParkingLotDataStatus(id)).getLastResponse();
 		}
 		
-		public void setStatusElement(int id, Type status) {
+		public void setStatusElement(int id, TypeData status) {
 			
 			ParkingLotDataStatus.get(findTheIndexOfIDInParkingLotDataStatus(id)).setStatus(status);
 			
 		}
 		
-		public Type getStatusElement(int id) {
+		public TypeData getStatusElement(int id) {
 			
 			return ParkingLotDataStatus.get(findTheIndexOfIDInParkingLotDataStatus(id)).getStatus();
 		}
@@ -204,19 +205,19 @@ public class ParkingLotData {
 	
 	//DB Configuration functions
 	
-	public Area createNewArea(int id, Type genT) {
+	public Area createNewArea(int id, TypeData genT) {
 		
 		Area newArea = new Area(id, genT);
 		return newArea;
 	}
 	
-	public Sign createNewSign(int id, Type genT) {
+	public Sign createNewSign(int id, TypeData genT) {
 		
 		Sign newSign = new Sign(id, genT);
 		return newSign;
 	}
 	
-	public Spot createNewSpot(int id, Type genT) {
+	public Spot createNewSpot(int id, TypeData genT) {
 		
 		Spot newSpot = new Spot(id, genT);
 		return newSpot;
@@ -247,7 +248,8 @@ public class ParkingLotData {
 		return null;	
 	}
 	
-	void increaseSignCounters(int id, int flag) {
+	void changeSignCounters(int id, int flag) {
+		
 		
 		ParkingLotData.ConfigObj temp = findAnObject(ParkingLotDataConfiguration, id);
 		ParkingLotData.ConfigObj parent = temp.Parent;
@@ -256,13 +258,21 @@ public class ParkingLotData {
 			for (ParkingLotData.ConfigObj item : parent.Areas) {
 				
 				if (item instanceof Sign) {
-					
+					Date date = new Date();
+					MessageType signArrow = messageTypeToTypeData(item.getGeneralType());
 					if (flag == 0) {
-						
-						ParkingLotDataStatus.get(findTheIndexOfIDInParkingLotDataStatus(item.getID())).incCounter();
+						ParkingLotDataStatus.get(findTheIndexOfIDInParkingLotDataStatus(item.getID())).incCounter();				
+					}
+					else if (ParkingLotDataStatus.get(findTheIndexOfIDInParkingLotDataStatus(item.getID())).getCounter() > 0){
+						ParkingLotDataStatus.get(findTheIndexOfIDInParkingLotDataStatus(item.getID())).decCounter();
+					}
+					if ((ParkingLotDataStatus.get(findTheIndexOfIDInParkingLotDataStatus(item.getID())).getCounter() > 0)) {
+						messages updateCounterWithDefaultArrow = new messages(item.getID(), date, signArrow, ParkingLotDataStatus.get(findTheIndexOfIDInParkingLotDataStatus(item.getID())).getCounter());
+						ParkingManagerService.Threads.SenderQueueThread.addMessage(updateCounterWithDefaultArrow);
 					}
 					else {
-						ParkingLotDataStatus.get(findTheIndexOfIDInParkingLotDataStatus(item.getID())).decCounter();
+						messages updateCounterWithNoEntry = new messages(item.getID(), date, MessageType.SET_SIGN_NO_ENTRY, ParkingLotDataStatus.get(findTheIndexOfIDInParkingLotDataStatus(item.getID())).getCounter());
+						ParkingManagerService.Threads.SenderQueueThread.addMessage(updateCounterWithNoEntry);
 					}
 				}
 			}
@@ -282,7 +292,7 @@ public class ParkingLotData {
 		return index;
 	}
 	
-	void setType(int id, Type type) {    
+	void setType(int id, TypeData type) {    
 		(findAnObject(ParkingLotDataConfiguration, id)).setGeneralType(type);		
 	}
 	
@@ -292,7 +302,7 @@ public class ParkingLotData {
 		(findAnObject(ParkingLotDataConfiguration, containingElementId)).Areas.removeElementAt(findIndexInParkingLotDataConfiguration((findAnObject(ParkingLotDataConfiguration, containingElementId)).Areas,obj.getID())); 
 	}
 	
-	void addSign(int signId, Type type, int containingElementId) { 
+	void addSign(int signId, TypeData type, int containingElementId) { 
 		
 		Sign newSign = createNewSign(signId, type);
 		if (containingElementId == 0) {
@@ -311,14 +321,14 @@ public class ParkingLotData {
 		(findAnObject(ParkingLotDataConfiguration, containingElementId)).Areas.removeElementAt(findIndexInParkingLotDataConfiguration((findAnObject(ParkingLotDataConfiguration, containingElementId)).Areas,Id));
 	}
 	
-	void addParkingSpot(int spotId, Type type, int containingElementId) { 
+	void addParkingSpot(int spotId, TypeData type, int containingElementId) { 
 		
 		Spot newSpot = createNewSpot(spotId, type);
 		(findAnObject(ParkingLotDataConfiguration, containingElementId)).Areas.addElement(newSpot); 
 		newSpot.setParent(containingElementId);
 	}
 	
-	void addArea (int areaId, Type type, int containingElementId) {
+	void addArea (int areaId, TypeData type, int containingElementId) {
 		
 		Area newArea = createNewArea(areaId, type);
 		if (containingElementId == 0) {
@@ -352,13 +362,13 @@ public class ParkingLotData {
 
 	//ParkingLotData Status Functions
 	
-	public StatusElementObj createNewStatusElement(int id, Type status, Date lastResponse, int counter) {
+	public StatusElementObj createNewStatusElement(int id, TypeData status, Date lastResponse, int counter) {
 		
 		StatusElementObj newElement = new StatusElementObj(id, status, lastResponse, counter);
 		return newElement;
 	}
 	
-	public void addStatusElementToParkingLotDataStatus( int id, Type status, Date lastResponse, int counter ) {
+	public void addStatusElementToParkingLotDataStatus( int id, TypeData status, Date lastResponse, int counter ) {
 		
 		StatusElementObj newElement = createNewStatusElement(id, status, lastResponse, counter);
 		ParkingLotDataStatus.addElement(newElement);
@@ -395,6 +405,25 @@ public class ParkingLotData {
 				removeRecursivelyElementFromParkingDataStatus(item, Id);
 			}
 		}	
+	}
+	
+	public MessageType messageTypeToTypeData (TypeData type) {
+		
+		if (type == TypeData.LEFT) {
+			return MessageType.SET_SIGN_LEFT;
+		}
+		else if (type == TypeData.RIGHT) {
+			return MessageType.SET_SIGN_RIGHT;
+		}
+		else if(type == TypeData.FORWARD) {
+			return MessageType.SET_SIGN_FORWARD;
+		}
+		else if(type == TypeData.BACK) {
+			return MessageType.SET_SIGN_BACK;
+		}
+		else {
+			return MessageType.SET_SIGN_NO_ENTRY;
+		}		
 	}
 	
 }
