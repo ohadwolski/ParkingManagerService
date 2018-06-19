@@ -2,6 +2,7 @@ package parkingmanagerservice;
 
 
 import java.util.Date;
+import java.util.Vector;
 //import java.util.Vector;
 
 
@@ -76,6 +77,11 @@ public class ParkingLotDataIntrface {
 	int typeOfObject(ParkingLotData.ConfigObj obj) {
 		
 		return ParkingLotData.typeOfObject(obj);	
+	}
+
+	public Vector<ParkingLotData.ConfigObj> getConfigObjVectorForWatchdog() {
+
+		return null;
 	}
 	
 	

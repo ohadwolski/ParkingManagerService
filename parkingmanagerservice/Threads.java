@@ -1,6 +1,7 @@
 package parkingmanagerservice;
 
-import java.util.Date;
+import virtualEsp.MessagesParser;
+
 import java.util.Vector;
 
 public class Threads {
@@ -10,6 +11,7 @@ public class Threads {
     public SenderThread SenderThread;
     public ListenerQueueThread ListenerQueueThread;
     public SenderQueueThread SenderQueueThread;
+    public WatchdogThread WatchdogThread;
 
     public void Start(){ // need to check that we open input here first and in ESP we open output first so we don't get deadlocked
         ConnectionThread = new ConnectionThread( "ConnectionThread");
@@ -25,16 +27,21 @@ public class Threads {
         SenderThread.start();
 
         SenderQueueThread = new SenderQueueThread( "SenderQueueThread");
-        initializeSenderQueueForTest();
+        //initializeSenderQueueForTest();
         //SenderQueueThread.start();
+
+        WatchdogThread = new WatchdogThread("WatchdogThread");
+        WatchdogThread.start();
 
     }
 
     private void initializeSenderQueueForTest() {
 
-        MessagesParser sender_messages_parser = new MessagesParser("sender_messages_for_demo.xml");
+        /*
+        MessagesParser sender_messages_parser = new MessagesParser("sender_messages_for_demo_esp.xml");
         Vector<messages> sender_messages_for_demo = sender_messages_parser.getMessagesList();
         SenderQueueThread.addVector(sender_messages_for_demo);
+        */
         /*
         // Create and add messages for test here:
         messages msg;
@@ -64,6 +71,7 @@ public class Threads {
         ParkingManagerService.Threads.ListenerThread.exit();
         ParkingManagerService.Threads.SenderThread.exit();
         ParkingManagerService.Threads.ListenerQueueThread.exit();
+        ParkingManagerService.Threads.WatchdogThread.exit();
     }
 
 }
