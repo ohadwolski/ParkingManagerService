@@ -4,6 +4,7 @@ import parkingmanagerservice.messages;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.Random;
 
 /**
  *
@@ -50,7 +51,11 @@ public class SenderThread implements Runnable{
                         System.out.println("Send queue is empty. Will try again later . . .");
                         t.sleep(5000);
                     }
-                    t.sleep(1000);
+                    // sleep for random time between 1s to 5s
+                    Random rand = new Random();
+                    int  n = rand.nextInt(5000) + 1000;
+                    t.sleep(n);
+
                 } catch (IOException e) {
                     if (run) {
                         System.out.println("Network error! Trying to connect again . . .");

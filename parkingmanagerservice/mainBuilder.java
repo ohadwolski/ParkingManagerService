@@ -13,7 +13,7 @@ public class mainBuilder {
 			
 			
 			
-			
+			/*
 			newPark.setStatusElement(20, Type.TAKEN);
 			System.out.println(date + "ID 20, was changed to TAKEN");
 			newPark.increaseSignCounters(20, 1);
@@ -37,7 +37,7 @@ public class mainBuilder {
 			newPark.increaseSignCounters(20, 0);
 			System.out.println(date + "counters were changed");	
 		
-		
+		*/
 		
 			
 	}

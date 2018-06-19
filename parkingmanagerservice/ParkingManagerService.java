@@ -5,6 +5,8 @@
  */
 package parkingmanagerservice;
 
+import virtualEsp.MessagesParser;
+
 import java.util.Date;
 import java.util.Vector;
 
@@ -86,7 +88,9 @@ public class ParkingManagerService {
 		parkingLot.addStatusElementToDBStatus(24, TypeData.ERROR, date, 0);
     	
     }
-    
+
+
+
 
 }
 

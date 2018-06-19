@@ -1,5 +1,9 @@
 package virtualEsp;
 
+import parkingmanagerservice.messages;
+
+import java.util.Vector;
+
 public class Threads {
 
     public ConnectionThread ConnectionThread;

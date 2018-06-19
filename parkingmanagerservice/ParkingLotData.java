@@ -6,19 +6,22 @@ import java.util.Vector;
 
 enum TypeData {
 	OPEN, CLOSED,											//open-closed status 
-	REGULAR, VIP, GUEST, DISABLED, VIRTUAL,               //Parking spot type
-	OK, ERROR,											//generic status				
-	FREE, TAKEN,  								//sensor status
-	NO_ENTRY, LEFT, RIGHT, FORWARD, BACK,				//sign arrow
-	PARKING_ADDED, PARKING_REMOVED, PARKING_TYPE_MODIFIED ,SIGN_ADDED ,SIGN_REMOVED ,AREA_ADDED ,AREA_REMOVED ,LEVEL_ADDED , LEVEL_REMOVED , ADMIN_LOGIN , ADMIN_LOGOUT, USER_LOGIN , USER_LOGOUT, //admins logs event
+	REGULAR, VIP, GUEST, DISABLED, VIRTUAL,                 //Parking spot type
+	OK, ERROR,											    //generic status
+	FREE, TAKEN,  								            //sensor status
+	NO_ENTRY, LEFT, RIGHT, FORWARD, BACK,				    //sign arrow
+	PARKING_ADDED, PARKING_REMOVED, PARKING_TYPE_MODIFIED,  //admins logs event
+	SIGN_ADDED ,SIGN_REMOVED ,AREA_ADDED ,AREA_REMOVED,
+    LEVEL_ADDED , LEVEL_REMOVED , ADMIN_LOGIN , ADMIN_LOGOUT,
+    USER_LOGIN , USER_LOGOUT,
 	PARKING_FREED, PARKING_CAUGHT, PARKING_FULL;			//Parking logs event
 }
 
 
 public class ParkingLotData {
 	
-	public Vector<ConfigObj> ParkingLotDataConfiguration;
-	public Vector<StatusElementObj> ParkingLotDataStatus;
+	public Vector<ConfigObj> ParkingLotDataConfiguration;   // why is this public?
+	public Vector<StatusElementObj> ParkingLotDataStatus;   // why is this public?
 	
 	public ParkingLotData() {
 		
@@ -26,12 +29,12 @@ public class ParkingLotData {
 		ParkingLotDataStatus = new Vector<StatusElementObj>(0,1);	
 	}
 	
-	public abstract class ConfigObj {								
+	public abstract class ConfigObj {                       // why abstract if no abstract methods?
 		
-		protected int ID;
-		protected TypeData GeneralType;
+		protected int ID;                                   // why protected? why do we need "sons of" accessing father?
+		protected TypeData GeneralType;                     // better to put it inside an object element
 		protected ConfigObj Parent;
-		protected Vector<ConfigObj> Areas = new Vector<ConfigObj>(0,1);
+		protected Vector<ConfigObj> Areas = new Vector<ConfigObj>(0,1);     // better name: treeNodes
 		
 		public ConfigObj() {                                  
 			
@@ -58,7 +61,7 @@ public class ParkingLotData {
 		
 		void setParent (int parent) {
 			
-			Parent = findAnObject(ParkingLotDataConfiguration, parent);
+			Parent = findAnObject(ParkingLotDataConfiguration, parent);  // ParkingLotDataConfiguration is public, why do we need reference?
 		}
 		
 		ConfigObj getParent () {
@@ -69,7 +72,7 @@ public class ParkingLotData {
 
 	public class Area extends ConfigObj {
 			
-		public Area (int id, TypeData genT) {
+		public Area (int id, TypeData genT) { // what about setting the parent??
 			
 			Areas = new Vector<ConfigObj> (0,1);
 			setID(id);
@@ -77,15 +80,15 @@ public class ParkingLotData {
 		}	
 	}
 		
-	public class Sign extends ConfigObj {                       
+	public class Sign extends ConfigObj {    // where are all the inner methods?
 			
-		public Sign(int id, TypeData genT) {
+		public Sign(int id, TypeData genT) { // what about setting the parent??
 			setID(id);
 			setGeneralType(genT);	
 		}
 	}
 		
-	public class Spot extends ConfigObj {
+	public class Spot extends ConfigObj { // what about setting the parent??
 			
 		public Spot(int id, TypeData genT) {
 			setID(id);
@@ -229,7 +232,7 @@ public class ParkingLotData {
 			ParkingLotDataConfiguration.addElement(obj);
 		}
 		else {
-			(findAnObject(ParkingLotDataConfiguration, containingElementId)).Areas.addElement(obj); 
+			(findAnObject(ParkingLotDataConfiguration, containingElementId)).Areas.addElement(obj); // NOT checking if null pointer! runtime error!
 	
 		}
 	}	
@@ -248,7 +251,7 @@ public class ParkingLotData {
 		return null;	
 	}
 	
-	void changeSignCounters(int id, int flag) {
+	void changeSignCounters(int id, int flag) {     // writing messages from here is not good, also should be in Interface
 		
 		
 		ParkingLotData.ConfigObj temp = findAnObject(ParkingLotDataConfiguration, id);
@@ -346,7 +349,7 @@ public class ParkingLotData {
 		(findAnObject(ParkingLotDataConfiguration, containingElementId)).Areas.removeElementAt(findIndexInParkingLotDataConfiguration((findAnObject(ParkingLotDataConfiguration, containingElementId)).Areas,Id));
 	}
 	
-	int typeOfObject(ParkingLotData.ConfigObj obj) {
+	int typeOfObject(ParkingLotData.ConfigObj obj) { // better use enums
 		
 		if(obj instanceof Area) {
 			return 1;

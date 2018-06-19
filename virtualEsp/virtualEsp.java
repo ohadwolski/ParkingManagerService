@@ -32,6 +32,8 @@ public class virtualEsp {
         sendQueue = new Vector<messages>();
 
         // add messages flow here
+        initializeSenderQueueForTest();
+        /*
         // Create and add messages for test here:
         messages msg;
 
@@ -53,6 +55,15 @@ public class virtualEsp {
         msg = new messages(15,new Date(), MessageType.SET_SIGN_RIGHT, 0);
         sendQueue.add(msg);
         // in the future: add messages in delay to simulate a day
+        */
+    }
+
+
+    private static void initializeSenderQueueForTest() {
+
+        MessagesParser sender_messages_parser = new MessagesParser("sender_messages_for_demo_esp.xml");
+        Vector<messages> sender_messages_for_demo = sender_messages_parser.getMessagesList();
+        sendQueue.addAll(sender_messages_for_demo);
 
     }
 }

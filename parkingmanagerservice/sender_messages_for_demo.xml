@@ -2,13 +2,53 @@
 
 <MESSAGES>
     <MESSAGE>
-        <ID>1</ID>
-        <TYPE>ECHO</TYPE>
+        <ID>10</ID>
+        <TYPE>SET_SIGN_FORWARD</TYPE>
         <COUNTER>0</COUNTER>
     </MESSAGE>
     <MESSAGE>
-        <ID>1</ID>
-        <TYPE>ECHO</TYPE>
+        <ID>11</ID>
+        <TYPE>SET_SIGN_LEFT</TYPE>
+        <COUNTER>0</COUNTER>
+    </MESSAGE>
+    <MESSAGE>
+        <ID>20</ID>
+        <TYPE>SET_PARKING_SPOT_LED_GREEN</TYPE>
+        <COUNTER>0</COUNTER>
+    </MESSAGE>
+    <MESSAGE>
+        <ID>21</ID>
+        <TYPE>SET_PARKING_SPOT_LED_BLUE</TYPE>
+        <COUNTER>0</COUNTER>
+    </MESSAGE>
+    <MESSAGE>
+        <ID>12</ID>
+        <TYPE>SET_SIGN_RIGHT</TYPE>
+        <COUNTER>0</COUNTER>
+    </MESSAGE>
+    <MESSAGE>
+        <ID>22</ID>
+        <TYPE>SET_PARKING_SPOT_LED_GREEN</TYPE>
+        <COUNTER>0</COUNTER>
+    </MESSAGE>
+    <MESSAGE>
+        <ID>23</ID>
+        <TYPE>SET_PARKING_SPOT_LED_OFF</TYPE>
+        <COUNTER>0</COUNTER>
+    </MESSAGE>
+    <MESSAGE>
+        <ID>13</ID>
+        <TYPE>SET_SIGN_BACK</TYPE>
+        <COUNTER>0</COUNTER>
+    </MESSAGE>
+    <MESSAGE>
+        <ID>14</ID>
+        <TYPE>SET_SIGN_LEFT</TYPE>
+        <COUNTER>0</COUNTER>
+    </MESSAGE>
+    <MESSAGE>
+        <ID>24</ID>
+        <TYPE>SET_PARKING_SPOT_LED_GREEN</TYPE>
         <COUNTER>0</COUNTER>
     </MESSAGE>
 </MESSAGES>
