@@ -12,11 +12,11 @@ public class AreaId extends IdElement {
     }
 
     public AreaId(AreaId c) {
-        AreaId = c.getAreaId();
+        if (c != null) AreaId = c.getAreaId();
     }
 
     public AreaId(IdElement c) {
-        if (c instanceof  AreaId) {
+        if (c != null && c instanceof  AreaId) {
             AreaId s = (AreaId) c;
             AreaId = s.getAreaId();
         }
@@ -28,16 +28,20 @@ public class AreaId extends IdElement {
 
     public boolean compare (AreaId c)
     {
-        if (AreaId == c.getAreaId()) return true;
+        if (c != null && AreaId == c.getAreaId()) return true;
         return  false;
     }
 
     public boolean compare (IdElement c)
     {
-        if (c instanceof  AreaId) {
+        if (c != null && c instanceof  AreaId) {
             AreaId s = (AreaId) c;
             return compare(s);
         }
         return  false;
+    }
+
+    public void print() {
+        System.out.printf("AreaId " + AreaId);
     }
 }

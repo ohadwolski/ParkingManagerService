@@ -5,7 +5,7 @@ import java.util.Date;
 public class ParkingSign extends ParkingElement {
     protected int counter;
 
-    public ParkingSign(SensorId i, StatusElement s, ConfigurationElement c) {
+    public ParkingSign(SignId i, StatusElement s, ConfigurationElement c) {
         Id = i;
         Status = s;
         Configuration = c;

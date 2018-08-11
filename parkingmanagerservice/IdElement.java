@@ -11,7 +11,7 @@ public class IdElement {
     }
 
     public IdElement(IdElement c) {
-        id_number = c.get();
+        if (c != null) id_number = c.get();
     }
 
     public int get() {
@@ -24,7 +24,7 @@ public class IdElement {
 
     public boolean compare (IdElement c)
     {
-        if (id_number == c.get()) {
+        if (c != null && id_number == c.get()) {
             return true;
         } else {
             return false;

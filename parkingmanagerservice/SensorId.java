@@ -18,13 +18,15 @@ public class SensorId extends IdElement {
     }
 
     public SensorId(SensorId c) {
-        ZoneControllerId = c.getZoneControllerId();
-        ControllerId = c.getControllerId();
-        SensorId = c.getSensorId();
+        if (c != null) {
+            ZoneControllerId = c.getZoneControllerId();
+            ControllerId = c.getControllerId();
+            SensorId = c.getSensorId();
+        }
     }
 
     public SensorId(IdElement c) {
-         if (c instanceof  SensorId) {
+         if (c != null && c instanceof  SensorId) {
             SensorId s = (SensorId) c;
              ZoneControllerId = s.getZoneControllerId();
              ControllerId = s.getControllerId();
@@ -42,7 +44,7 @@ public class SensorId extends IdElement {
 
     public boolean compare (SensorId c)
     {
-        if (ZoneControllerId == c.getZoneControllerId() &
+        if (c != null && ZoneControllerId == c.getZoneControllerId() &
                 ControllerId == c.getControllerId() &
                 SensorId == c.getSensorId()) return true;
         return  false;
@@ -50,7 +52,7 @@ public class SensorId extends IdElement {
 
     public boolean compare (IdElement c)
     {
-        if (c instanceof  SensorId) {
+        if (c != null && c instanceof  SensorId) {
             SensorId s = (SensorId) c;
             return compare(s);
         }

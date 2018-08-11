@@ -45,7 +45,7 @@ public class DataInterface {
         List<Node<ParkingElement>> childrenNodes = node.getChildren();
         for (Node<ParkingElement> child : childrenNodes) {
             Node<ParkingElement> result = FindParkingElementNode(id, child);
-            if (result != null) return child;
+            if (result != null) return result;
         }
         return null;
     }
