@@ -37,7 +37,7 @@ public class WatchdogThread implements Runnable{
         while (run) {
             // Create configuration messages
             System.out.println("Watchdog: Creating configuration messages and adding them to Send Queue");
-            initializeSenderQueueForTest();
+            //initializeSenderQueueForTest();
             // Check communication status with sensors
 
             // Update data in xml/json files
@@ -53,6 +53,7 @@ public class WatchdogThread implements Runnable{
         System.out.println("Thread " +  threadName + " exiting.");
     }
 
+    /*
     private void initializeSenderQueueForTest() {
 
         MessagesParser sender_messages_parser = new MessagesParser("sender_messages_for_demo.xml");
@@ -60,7 +61,7 @@ public class WatchdogThread implements Runnable{
         ParkingManagerService.Threads.SenderQueueThread.addVector(sender_messages_for_demo);
 
     }
-
+    */
     public void exit() {
         run = false;
     }

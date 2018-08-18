@@ -19,6 +19,7 @@ public class MessagesParser {
     private Document data;
     private Vector<messages> messagesList;
 
+    /*
 
     public MessagesParser(String file) {
         try {
@@ -64,4 +65,6 @@ public class MessagesParser {
         return messagesList;
     }
 
+
+*/
 }

@@ -60,10 +60,10 @@ public class virtualEsp {
 
 
     private static void initializeSenderQueueForTest() {
-
+/*
         MessagesParser sender_messages_parser = new MessagesParser("sender_messages_for_demo_esp.xml");
         Vector<messages> sender_messages_for_demo = sender_messages_parser.getMessagesList();
         sendQueue.addAll(sender_messages_for_demo);
-
+*/
     }
 }

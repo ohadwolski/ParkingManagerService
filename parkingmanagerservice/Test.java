@@ -26,13 +26,15 @@ public class Test {
         */
 
 
+        /*
+
         ParkingElement area = new ParkingArea(new AreaId(0),StatusElement.OK, ConfigurationElement.REGULAR);
         ParkingElement area2 = new ParkingArea(new AreaId(1),StatusElement.OK, ConfigurationElement.REGULAR);
         ParkingElement area3 = new ParkingArea(new AreaId(2),StatusElement.OK, ConfigurationElement.REGULAR);
 
-        ParkingElement rootSignGeneral = new ParkingSign(new SignId(0),StatusElement.OK, ConfigurationElement.UP);
-        ParkingElement rootSignRight = new ParkingSign(new SignId(1),StatusElement.OK, ConfigurationElement.RIGHT);
-        ParkingElement rootSignLeft = new ParkingSign(new SignId(2),StatusElement.OK, ConfigurationElement.LEFT);
+        ParkingElement rootSignGeneral = new ParkingSign(new SignId(0, 0),StatusElement.OK, ConfigurationElement.UP);
+        ParkingElement rootSignRight = new ParkingSign(new SignId(1, 0),StatusElement.OK, ConfigurationElement.RIGHT);
+        ParkingElement rootSignLeft = new ParkingSign(new SignId(2, 0),StatusElement.OK, ConfigurationElement.LEFT);
 
         ParkingElement Sensor1 = new ParkingSensor(new SensorId(0,0,0), StatusElement.FREE, ConfigurationElement.REGULAR);
         ParkingElement Sensor2 = new ParkingSensor(new SensorId(0,0,1), StatusElement.FREE, ConfigurationElement.REGULAR);
@@ -97,7 +99,20 @@ public class Test {
         for (ParkingElement sign : listofsigns) {
             sign.print();
         }
+*/
 
+
+        /*
+        messages msg = new messages(new SensorId(1,0,5),  new Date(), MessageType.ATTACH_SENSOR_TO_GROUP,3);
+        System.out.printf(MessageConverter.convertMessageToString(msg));
+        */
+
+
+        /*
+        String msg = "9 3 2 1 0\n";
+        messages parsed = MessageConverter.convertStringToMessage(msg);
+        if (parsed != null) parsed.print();
+        */
 
     }
 
