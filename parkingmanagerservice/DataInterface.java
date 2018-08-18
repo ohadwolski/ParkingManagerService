@@ -10,6 +10,7 @@ public class DataInterface {
     private boolean auto_init;
     private int working_mode; // assume 0: manual by server, 1: on event, 2: every T seconds
     private int update_interval; // in seconds
+    private String esp_ip_address;
 
     public DataInterface() {
         root = null;

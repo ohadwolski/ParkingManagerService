@@ -36,7 +36,7 @@ public class WatchdogThread implements Runnable{
         System.out.println("Running " + threadName);
         while (run) {
             // Create configuration messages
-            System.out.println("Watchdog: Creating configuration messages and adding them to Send Queue");
+            //System.out.println("Watchdog: Creating configuration messages and adding them to Send Queue");
             //initializeSenderQueueForTest();
             // Check communication status with sensors
 
