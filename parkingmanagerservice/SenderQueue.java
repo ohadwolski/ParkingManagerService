@@ -7,13 +7,13 @@ import java.util.Vector;
  *
  * @author Ohad Wolski
  */
-public class SenderQueueThread {//implements Runnable {
+public class SenderQueue {//implements Runnable {
     private Thread t;
     //private String threadName;
     //private boolean run;
     private Vector<messages> SendQueue;
 
-    SenderQueueThread( String name) {
+    SenderQueue( String name) {
         //threadName = name;
         SendQueue = new Vector<messages>();
 

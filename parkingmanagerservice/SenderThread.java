@@ -40,8 +40,8 @@ public class SenderThread implements Runnable {
                     out = new PrintWriter(ParkingManagerService.Threads.ConnectionThread.getOutputStream(), true);
 
                     // get message from sender queue:
-                    if (! ParkingManagerService.Threads.SenderQueueThread.is_empty()) {
-                        messages msg_to_send = ParkingManagerService.Threads.SenderQueueThread.get_first_message();
+                    if (! ParkingManagerService.Threads.SenderQueue.is_empty()) {
+                        messages msg_to_send = ParkingManagerService.Threads.SenderQueue.get_first_message();
                         System.out.println("Sending message:\n");
                         msg_to_send.print();
                         String msg_in_text_format = MessageConverter.convertMessageToString(msg_to_send);
@@ -52,7 +52,7 @@ public class SenderThread implements Runnable {
                         }
 
                         System.out.println("Sent successfully.\n");
-                        ParkingManagerService.Threads.SenderQueueThread.remove_first_message();
+                        ParkingManagerService.Threads.SenderQueue.remove_first_message();
                     } else {
                         System.out.println("Send queue is empty. Will try again later . . .");
                         t.sleep(5000);

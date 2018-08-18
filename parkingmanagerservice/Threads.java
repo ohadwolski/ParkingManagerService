@@ -10,7 +10,7 @@ public class Threads {
     public ListenerThread ListenerThread;
     public SenderThread SenderThread;
     public ListenerQueueThread ListenerQueueThread;
-    public SenderQueueThread SenderQueueThread;
+    public SenderQueue SenderQueue;
     public WatchdogThread WatchdogThread;
 
     public void Start(){ // need to check that we open input here first and in ESP we open output first so we don't get deadlocked
@@ -26,7 +26,7 @@ public class Threads {
         SenderThread = new SenderThread( "SenderThread");
         SenderThread.start();
 
-        SenderQueueThread = new SenderQueueThread( "SenderQueueThread");
+        SenderQueue = new SenderQueue( "SenderQueueThread");
         //initializeSenderQueueForTest();
         //SenderQueueThread.start();
 
