@@ -2,23 +2,28 @@ package parkingmanagerservice;
 
 public class SignId extends IdElement {
     private int SignId;
+    private int SubSignId;
 
     public SignId() {
         SignId = -1;
+        SubSignId = -1;
     }
 
-    public  SignId(int n) {
+    public  SignId(int n, int m) {
         SignId = n;
+        SubSignId = m;
     }
 
     public SignId(SignId c) {
         SignId = c.getSignId();
+        SubSignId = c.getSubSignId();
     }
 
     public SignId(IdElement c) {
         if (c instanceof  SignId) {
             SignId s = (SignId) c;
             SignId = s.getSignId();
+            SubSignId = s.getSubSignId();
         }
     }
 
@@ -28,7 +33,7 @@ public class SignId extends IdElement {
 
     public boolean compare (SignId c)
     {
-        if (SignId == c.getSignId()) return true;
+        if (SignId == c.getSignId() && SubSignId == c.getSubSignId()) return true;
         return  false;
     }
 
@@ -42,7 +47,15 @@ public class SignId extends IdElement {
     }
 
     public void print() {
-        System.out.printf("SignId: " + SignId);
+        System.out.printf("SignId: " + SignId + " SubSignId: " + SubSignId);
+    }
+
+    public int getSubSignId() {
+        return SubSignId;
+    }
+
+    public void setSubSignId(int subSignId) {
+        SubSignId = subSignId;
     }
 }
 

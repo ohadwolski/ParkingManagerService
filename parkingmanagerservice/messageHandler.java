@@ -4,6 +4,8 @@ import java.util.Date;
 
 public class messageHandler {
     public static void handleMessage(messages msg) {
+        /*
+
         System.out.println("Handling message :\n");
         if (msg == null) {
             System.out.println("Message is null :\n");
@@ -97,6 +99,8 @@ public class messageHandler {
 
         }
         
-
+*/
     }
+
+
 }

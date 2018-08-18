@@ -21,7 +21,7 @@ public class MessagesParser {
     private Document data;
     private Vector<messages> messagesList;
 
-
+/*
     public MessagesParser(String  file) {
         try {
             dataBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -65,5 +65,6 @@ public class MessagesParser {
     public Vector<messages> getMessagesList() {
         return messagesList;
     }
+*/
 
 }

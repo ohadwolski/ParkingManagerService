@@ -3,6 +3,7 @@ package parkingmanagerservice;
 import java.io.IOException;
 //import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 
 
 /**
@@ -12,8 +13,7 @@ import java.io.ObjectOutputStream;
 public class SenderThread implements Runnable {
     private Thread t;
     private String threadName;
-    private ObjectOutputStream out;
-    //private ObjectInputStream in;
+    private PrintWriter out;
     private boolean run;
 
     SenderThread (String name) {
@@ -36,15 +36,21 @@ public class SenderThread implements Runnable {
 
             while (ParkingManagerService.Threads.ConnectionThread.getConnectionState()) {
                 try {
-                    //in = ParkingManagerService.Threads.ConnectionThread.getInputStream();
-                    out = ParkingManagerService.Threads.ConnectionThread.getOutputStream();
+
+                    out = new PrintWriter(ParkingManagerService.Threads.ConnectionThread.getOutputStream(), true);
 
                     // get message from sender queue:
                     if (! ParkingManagerService.Threads.SenderQueueThread.is_empty()) {
                         messages msg_to_send = ParkingManagerService.Threads.SenderQueueThread.get_first_message();
                         System.out.println("Sending message:\n");
                         msg_to_send.print();
-                        out.writeObject(msg_to_send);
+                        String msg_in_text_format = MessageConverter.convertMessageToString(msg_to_send);
+                        out.println(msg_in_text_format);
+
+                        if (out.checkError()) {
+                            throw new IOException();
+                        }
+
                         System.out.println("Sent successfully.\n");
                         ParkingManagerService.Threads.SenderQueueThread.remove_first_message();
                     } else {

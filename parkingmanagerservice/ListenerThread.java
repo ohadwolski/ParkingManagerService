@@ -1,8 +1,8 @@
 package parkingmanagerservice;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-//import java.io.ObjectOutputStream;
+import java.io.InputStreamReader;
 
 /**
  *
@@ -13,8 +13,7 @@ public class ListenerThread implements Runnable{
 
     private Thread t;
     private String threadName;
-    //private ObjectOutputStream out;
-    private ObjectInputStream in;
+    private BufferedReader in;
     private boolean run;
 
     ListenerThread( String name) {
@@ -37,21 +36,28 @@ public class ListenerThread implements Runnable{
 
             while (ParkingManagerService.Threads.ConnectionThread.getConnectionState()) {
                 try {
-                    in = ParkingManagerService.Threads.ConnectionThread.getInputStream();
-                    //out = ParkingManagerService.Threads.ConnectionThread.getOutputStream();
+                    in = new BufferedReader(new InputStreamReader(ParkingManagerService.Threads.ConnectionThread.getInputStream()));
 
                     messages msg;
-                    msg = (messages) in.readObject();
-                    // add message to queue:
-                    ParkingManagerService.Threads.ListenerQueueThread.addMessage(msg);
+                    String msg_in_text_format;
+
+                    if ((msg_in_text_format = in.readLine()) != null) {
+                        msg = MessageConverter.convertStringToMessage(msg_in_text_format);
+                        if (msg == null) throw new UnknownMessageFormat();
+                        // add message to queue:
+                        ParkingManagerService.Threads.ListenerQueueThread.addMessage(msg);
+                    }
+
                     //
-                } catch (IOException | ClassNotFoundException e) {
+                } catch (IOException e) {
                     //e.printStackTrace();
                     if (run) {
                         System.out.println("Network error! Trying to connect again . . .");
                         ParkingManagerService.Threads.ConnectionThread.reconnect();
                         break;
                     }
+                } catch (UnknownMessageFormat unknownMessageFormat) {
+                    System.out.println("Unknown message format received! Ignoring . . .");
                 }
 
             }
@@ -76,4 +82,6 @@ public class ListenerThread implements Runnable{
         run = false;
     }
 
+    private class UnknownMessageFormat extends Throwable {
+    }
 }

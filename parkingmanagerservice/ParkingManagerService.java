@@ -17,7 +17,7 @@ import java.util.Vector;
 public class ParkingManagerService {
 
     public static Threads Threads = new Threads();
-    public static ParkingLotDataIntrface parkingLot = new ParkingLotDataIntrface();
+    //public static ParkingLotDataIntrface parkingLot = new ParkingLotDataIntrface();
     //public static Vector<messages> sender_messages_for_demo;
     //public static SenderQueue SenderQueue;
 
@@ -37,12 +37,13 @@ public class ParkingManagerService {
      */
     public static void initialize() {
         // TODO code application logic here
-    	initializeDataStruct();
+    	//initializeDataStruct();
 
 
         
     }
 
+/*
     public static void test() {
         System.out.println("Called root.test() from root.ListenerThread");
     }
@@ -88,7 +89,7 @@ public class ParkingManagerService {
 		parkingLot.addStatusElementToDBStatus(24, TypeData.ERROR, date, 0);
     	
     }
-
+*/
 
 
 

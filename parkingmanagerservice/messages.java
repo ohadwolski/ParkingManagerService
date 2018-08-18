@@ -5,28 +5,28 @@ package parkingmanagerservice;
 import java.util.Date;
 
 public class messages implements java.io.Serializable{
-    private int Id;
+    private IdElement Id;
     private Date Date;
     private MessageType Type;
     private int Num;
 
-    public messages(int id, Date date, MessageType type, int num) {
+    public messages(IdElement id, Date date, MessageType type, int num) {
         Id = id;
         Date = date;
         Type = type;
         Num = num;
     }
 
-    public int getId() {
+    public IdElement getId() {
         return Id;
     }
 
-    public void setId(int id) {
+    public void setId(IdElement id) {
         Id = id;
     }
 
-    public boolean compareId(int id) {
-        return Id == id;
+    public boolean compareId(IdElement id) {
+        return Id.compare(id);
     }
 
     public Date getDate() {
@@ -69,7 +69,11 @@ public class messages implements java.io.Serializable{
 
     public void print() {
         System.out.println("Message Printout:\n");
-        System.out.println("Id:" + this.getId() + "\n");
+        if (this.getId() != null) {
+            System.out.print("Id:");
+            this.getId().print();
+            System.out.print("\n");
+        }
         System.out.println("Date:" + this.getDate() + "\n");
         System.out.println("Type:" + this.getType() + "\n");
         System.out.println("Num:" + this.getNum() + "\n");
