@@ -79,6 +79,49 @@ public class DataInterface {
         if (node.getParent() == null) return;
         FindSignsForParkingElement(ListOfSigns, node.getParent());
     }
+    
+    public void setAutoInit(boolean mode) {
+    	auto_init = mode;
+    }
+    
+    public void setwWrkingMode(int mode) {
+    	working_mode = mode;
+    }
+    
+    public void setUpdateInterval(int interval) {
+    	update_interval = interval;
+    }
+    
+    public void setEspIpAddress(String address) {
+    	esp_ip_address = address;
+    }
+    
+    public List<ParkingElement> getSpotsForParkingElement(ParkingElement s) {
+        if (s != null)
+            return getSpotsForParkingElement(s.getId());
+        return null;
+    }
+
+    public List<ParkingElement> getSpotsForParkingElement(IdElement id) {
+        Node<ParkingElement> element = getParkingElementNode(id);
+        List<ParkingElement> ListOfSpots = new ArrayList<ParkingElement>();
+        if (element == null) return null;
+        FindSpotsForParkingElement(ListOfSpots, element.getParent());
+        return ListOfSpots;
+    }
+
+    private void FindSpotsForParkingElement(List<ParkingElement> ListOfSpots, Node<ParkingElement> node) {
+        if (node == null) return;
+        List<Node<ParkingElement>> childrenNodes = node.getChildren();
+        for (Node<ParkingElement> child : childrenNodes) {
+            if (child.getData() instanceof ParkingSensor) {
+                ListOfSpots.add(child.getData());
+            }
+        }
+        if (node.getParent() == null) return;
+        FindSpotsForParkingElement(ListOfSpots, node.getParent());
+    }
+    
 
 }
 
