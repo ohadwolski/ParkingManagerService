@@ -135,6 +135,23 @@ public class ParkingManagerService {
 
     private static void CreateOperationModeConfiguration() {
         // create message for operating mode
+        // assume 0: manual by server, 1: on event, 2: every T seconds
+        messages workingModeMessage;
+        switch (Data.getWorking_mode()) {
+            case 0:
+                // nothing to send
+                return;
+            case 1:
+                workingModeMessage = new messages(null, new Date(), START_REPORT_ON_EVENT, 0);
+                ExpectedEventsList.add(START_REPORT_ON_EVENT_SUCCEEDED);
+                break;
+            case 2:
+            default:
+                workingModeMessage = new messages(null, new Date(), START_REPORT_WITH_INTERVAL, Data.getUpdate_interval());
+                ExpectedEventsList.add(START_REPORT_WITH_INTERVAL_SUCCEEDED);
+                break;
+        }
+        Threads.SenderQueue.addMessage(workingModeMessage);
         // add to expected list
     }
 
@@ -151,7 +168,13 @@ public class ParkingManagerService {
         } else {
             // create sensors messages for init
             // according to data
+            List<IdElement> ParkingSensorList = Data.getParkingSensorList();
             // add messages to queue
+            for (IdElement sensorId : ParkingSensorList) {
+                messages sensorMessage = new messages(sensorId, new Date(), INIT_SENSOR, 0);
+                Threads.SenderQueue.addMessage(sensorMessage);
+                ExpectedEventsList.add(INIT_SENSOR_SUCCEEDED);
+            }
             // add to Expected List the correct info
             StateMachine = WAIT_FOR_SENSORS_CONFIGURATION;
         }
@@ -169,14 +192,63 @@ public class ParkingManagerService {
             } else {
                 // manual continue: return true
 
+                return true;
             }
-            return true;
         }
         return false;
     }
 
     private static void CreateGroupAndDisplayConfiguration() {
         // create groups messages, attach sensors to groups
+
+        List<IdElement> ParkingAreaList = Data.getParkingAreaList();
+        for (IdElement areaId : ParkingAreaList) {
+            // create groups
+            messages areaMessage = new messages(areaId, new Date(), CREATE_GROUP, 0);
+            Threads.SenderQueue.addMessage(areaMessage);
+            ExpectedEventsList.add(CREATE_GROUP_SUCCEEDED);
+
+            // attach sensors to group (all sensors and sub sensors)
+            List<IdElement> sensorsUnderArea = new ArrayList<IdElement>();
+            Data.FindParkingSensors(sensorsUnderArea, Data.getParkingElementNode(areaId));
+            for (IdElement sensor : sensorsUnderArea) {
+                messages attachSensorToGroupMessage = new messages(sensor, new Date(), ATTACH_SENSOR_TO_GROUP, ((AreaId)areaId).getAreaId());
+                Threads.SenderQueue.addMessage(attachSensorToGroupMessage);
+                ExpectedEventsList.add(ATTACH_SENSOR_TO_GROUP_SUCCEEDED);
+            }
+
+            List<IdElement> signsUnderArea = new ArrayList<IdElement>();
+            Data.getAreaSigns(signsUnderArea, Data.getParkingElementNode(areaId));
+            for (IdElement sign : signsUnderArea ) {
+                // create displays
+                messages createSign = new messages(sign, new Date(), CREATE_DISPLAY, 0);
+                Threads.SenderQueue.addMessage(createSign);
+                ExpectedEventsList.add(CREATE_DISPLAY_SUCCEEDED);
+
+                // attach display to group
+                messages attachSignToGroup;
+                switch ((Data.getParkingElement(sign).getConfiguration())) {
+                    case LEFT:
+                        attachSignToGroup = new messages(sign, new Date(), ATTACH_DISPLAY_TO_GROUP_WITH_SYMBOL_LEFT, ((AreaId)areaId).getAreaId());
+                        break;
+                    case RIGHT:
+                        attachSignToGroup = new messages(sign, new Date(), ATTACH_DISPLAY_TO_GROUP_WITH_SYMBOL_RIGHT, ((AreaId)areaId).getAreaId());
+                        break;
+                    case UP:
+                        attachSignToGroup = new messages(sign, new Date(), ATTACH_DISPLAY_TO_GROUP_WITH_SYMBOL_UP, ((AreaId)areaId).getAreaId());
+                        break;
+                    case DOWN:
+                    default:
+                        attachSignToGroup = new messages(sign, new Date(), ATTACH_DISPLAY_TO_GROUP_WITH_SYMBOL_DOWN, ((AreaId)areaId).getAreaId());
+                        break;
+                    //case NO_ENTRY: -- not supported
+                    //    break;
+                }
+                Threads.SenderQueue.addMessage(attachSignToGroup);
+                ExpectedEventsList.add(ATTACH_DISPLAY_TO_GROUP_SUCCEEDED);
+            }
+        }
+
         // create displays init messages & attachment to groups
         // add everything to expected list
     }

@@ -124,6 +124,53 @@ public class DataInterface {
     public void setAuto_init(boolean auto_init) {
         this.auto_init = auto_init;
     }
+
+    public List<IdElement> getParkingSensorList() {
+        List<IdElement> ParkingSensorIDList = new ArrayList<IdElement>();
+        if (root == null)
+            return null;
+        FindParkingSensors(ParkingSensorIDList, root);
+        return ParkingSensorIDList;
+    }
+
+    public void FindParkingSensors(List<IdElement> ParkingSensorList, Node<ParkingElement> node) {
+        if (node == null)
+            return;
+        if (node.getData() instanceof ParkingSensor) {
+            ParkingSensorList.add(node.getData().getId());
+        }
+        for (Node<ParkingElement> child : node.getChildren()) {
+            FindParkingSensors(ParkingSensorList,child);
+        }
+    }
+
+    public List<IdElement> getParkingAreaList() {
+        List<IdElement> ParkingAreaIDList = new ArrayList<IdElement>();
+        if (root == null)
+            return null;
+        FindParkingAreas(ParkingAreaIDList, root);
+        return ParkingAreaIDList;
+    }
+
+    public void FindParkingAreas(List<IdElement> ParkingAreaIDList, Node<ParkingElement> node) {
+        if (node == null)
+            return;
+        if (node.getData() instanceof ParkingArea) {
+            ParkingAreaIDList.add(node.getData().getId());
+        }
+        for (Node<ParkingElement> child : node.getChildren()) {
+            FindParkingAreas(ParkingAreaIDList,child);
+        }
+    }
+
+    public void getAreaSigns(List<IdElement> signsUnderArea, Node<ParkingElement> parkingElementNode) {
+        if (parkingElementNode == null) return;
+        for (Node<ParkingElement> child : parkingElementNode.getChildren()) {
+            if (child.getData() instanceof ParkingSign) {
+                signsUnderArea.add(child.getData().getId());
+            }
+        }
+    }
 }
 
 /*
