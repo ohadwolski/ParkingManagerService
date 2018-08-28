@@ -21,7 +21,7 @@ public class ConnectionThread implements Runnable{
 
    private Thread t;
    private String threadName;
-   private ServerSocket serverSocket;
+   //private ServerSocket serverSocket;
    private Socket server;
    private ObjectOutputStream out;
    private ObjectInputStream in;
@@ -33,11 +33,12 @@ public class ConnectionThread implements Runnable{
       System.out.println("Creating " +  threadName );
       connected = false;   // possibly we need to put a lock on "connected"!!
       run = true;
-      try {
+      /*try {
          serverSocket = new ServerSocket(5000);
       } catch (IOException e) {
          e.printStackTrace();
       }
+      */
    }
 
    public void start () {
@@ -56,8 +57,11 @@ public class ConnectionThread implements Runnable{
          while (connected == false)
          {
             try {
-               System.out.println("Waiting for client on port " + serverSocket.getLocalPort() + "...");
-               server = serverSocket.accept();
+               //System.out.println("Waiting for client on port " + serverSocket.getLocalPort() + "...");
+               System.out.println("Trying to connect to ESP with ip " + ParkingManagerService.Data.getEsp_ip_address() +
+                       " and port " + ParkingManagerService.Data.getEsp_port_number() + " ...");
+               //server = serverSocket.accept();
+                server = new Socket(ParkingManagerService.Data.getEsp_ip_address(), ParkingManagerService.Data.getEsp_port_number());
                System.out.println("Just connected to " + server.getRemoteSocketAddress());
                in = new ObjectInputStream(server.getInputStream());
                out = new ObjectOutputStream(server.getOutputStream());

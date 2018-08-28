@@ -11,9 +11,14 @@ public class DataInterface {
     private int working_mode; // assume 0: manual by server, 1: on event, 2: every T seconds
     private int update_interval; // in seconds
     private String esp_ip_address;
+    private int esp_port_number;
 
     public DataInterface() {
         root = null;
+        working_mode = 0;
+        update_interval = 0;
+        esp_ip_address = null;
+        esp_port_number = 0;
     }
 
     public DataInterface(Node<ParkingElement> r) {
@@ -80,6 +85,45 @@ public class DataInterface {
         FindSignsForParkingElement(ListOfSigns, node.getParent());
     }
 
+    public int getWorking_mode() {
+        return working_mode;
+    }
+
+    public void setWorking_mode(int working_mode) {
+        this.working_mode = working_mode;
+    }
+
+    public int getUpdate_interval() {
+        return update_interval;
+    }
+
+    public void setUpdate_interval(int update_interval) {
+        this.update_interval = update_interval;
+    }
+
+    public String getEsp_ip_address() {
+        return esp_ip_address;
+    }
+
+    public void setEsp_ip_address(String esp_ip_address) {
+        this.esp_ip_address = esp_ip_address;
+    }
+
+    public int getEsp_port_number() {
+        return esp_port_number;
+    }
+
+    public void setEsp_port_number(int esp_port_number) {
+        this.esp_port_number = esp_port_number;
+    }
+
+    public boolean isAuto_init() {
+        return auto_init;
+    }
+
+    public void setAuto_init(boolean auto_init) {
+        this.auto_init = auto_init;
+    }
 }
 
 /*

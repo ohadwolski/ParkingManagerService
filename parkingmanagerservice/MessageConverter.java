@@ -181,7 +181,6 @@ public class MessageConverter {
                 break;
             case "17":
                 // create new display
-                // not formatted correctly right now
                 switch (s[1]) {
                     case "1\n":
                         return new messages(null, new Date(), CREATE_DISPLAY_SUCCEEDED, 0);
@@ -225,7 +224,7 @@ public class MessageConverter {
             //
             //case "23":
                 // report on state of display
-                // not formatted correctly
+                //
             //
             case "24":
                 // report on all of the sensor every T time
@@ -326,7 +325,7 @@ public class MessageConverter {
                 break;
             //case "33":
                 // report on sub-display
-                // not formatted correctly
+                //
             //
             case "34":
                 // change the manual sub-display parameters
@@ -395,13 +394,32 @@ public class MessageConverter {
             case GET_GROUP_SENSORS_STATE:
                 return "16 " + String.valueOf(((AreaId)(s.getId())).getAreaId()) + "\n";
             case CREATE_DISPLAY:
-                // not formatted correctly right now
                 return "17 " + String.valueOf(((SignId)(s.getId())).getSignId()) + "\n";
-            case ATTACH_DISPLAY_TO_GROUP:
-                // not formatted correctly right now
+            case ATTACH_DISPLAY_TO_GROUP_WITH_SYMBOL_UP:
+                // Need to change format
+                // currently: #display #group #sub-display #direction
                 return "20 " + String.valueOf(((SignId)(s.getId())).getSignId()) + " "
-                        + String.valueOf(((SignId)(s.getId())).getSubSignId()) + " "
-                        + String.valueOf(s.getNum()) + "\n";
+                        + String.valueOf(s.getNum()) + " "
+                        + String.valueOf(((SignId)(s.getId())).getSubSignId()) + "2\n";
+            case ATTACH_DISPLAY_TO_GROUP_WITH_SYMBOL_DOWN:
+                // Need to change format
+                // currently: #display #group #sub-display #direction
+                return "20 " + String.valueOf(((SignId)(s.getId())).getSignId()) + " "
+                        + String.valueOf(s.getNum()) + " "
+                        + String.valueOf(((SignId)(s.getId())).getSubSignId()) + "3\n";
+            case ATTACH_DISPLAY_TO_GROUP_WITH_SYMBOL_LEFT:
+                // Need to change format
+                // currently: #display #group #sub-display #direction
+                return "20 " + String.valueOf(((SignId)(s.getId())).getSignId()) + " "
+                        + String.valueOf(s.getNum()) + " "
+                        + String.valueOf(((SignId)(s.getId())).getSubSignId()) + "0\n";
+            case ATTACH_DISPLAY_TO_GROUP_WITH_SYMBOL_RIGHT:
+                // Need to change format
+                // currently: #display #group #sub-display #direction
+                return "20 " + String.valueOf(((SignId)(s.getId())).getSignId()) + " "
+                        + String.valueOf(s.getNum()) + " "
+                        + String.valueOf(((SignId)(s.getId())).getSubSignId()) + "1\n";
+
             case START_REPORT_WITH_INTERVAL:
                 return  "24 " + String.valueOf(s.getNum()) + "\n";
             case STOP_REPORT_WITH_INTERVAL:
