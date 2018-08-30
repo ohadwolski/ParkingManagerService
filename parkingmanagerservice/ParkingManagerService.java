@@ -31,7 +31,6 @@ public class ParkingManagerService {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
         while (run) {
             switch (StateMachine) {
                 case INIT:
@@ -53,7 +52,7 @@ public class ParkingManagerService {
                         StateMachine = SENSORS_CONFIGURATION;
                     }
                     break;
-                case SENSORS_CONFIGURATION:
+                case SENSORS_CONFIGURATION:  // TODO - Create handling of auto - initialization of Parking Data
                     CreateSensorsConfiguration();
                     break;
                 case WAIT_FOR_AUTO_SENSOR_RESPONSE:
@@ -105,18 +104,32 @@ public class ParkingManagerService {
                     break;
 
                 case REQ_MODE_WAIT_FOR_TIMER:
+                    WaitForTimer();
+                    StateMachine = REQ_MODE_REQUEST_STATUS;
                     break;
                 case REQ_MODE_REQUEST_STATUS:
+                    RequestAllSensorsStatus();
+                    StateMachine = REQ_MODE_WAIT_FOR_STATUS;
                     break;
                 case REQ_MODE_WAIT_FOR_STATUS:
+                    if (ExpectedEventsList.isEmpty()) {
+                        StateMachine = REQ_MODE_WAIT_FOR_TIMER;
+                    }
                     break;
                 case ON_EVENT_MODE_REQUEST_STATUS:
+                    RequestAllSensorsStatus();
+                    StateMachine = ON_EVENT_MODE_WAIT_FOR_STATUS;
                     break;
                 case ON_EVENT_MODE_WAIT_FOR_STATUS:
+                    if (ExpectedEventsList.isEmpty()) {
+                        StateMachine = ON_EVENT_MODE_STANDBY;
+                    }
                     break;
                 case ON_EVENT_MODE_STANDBY:
+                    WaitForTimer();
                     break;
                 case T_TIME_MODE_STANDBY:
+                    WaitForTimer();
                     break;
 
             }
@@ -131,6 +144,21 @@ public class ParkingManagerService {
 
 
 
+    }
+
+    private static void RequestAllSensorsStatus() {
+        messages req_status_of_all_sensors_message = new messages(null, new Date(), GET_ALL_SENSORS_STATE, 0);
+        Threads.SenderQueue.addMessage(req_status_of_all_sensors_message);
+        ExpectedEventsList.add(GET_ALL_SENSORS_STATE_START);
+        ExpectedEventsList.add(GET_ALL_SENSORS_STATE_END);
+    }
+
+    private static void WaitForTimer() {
+        try {
+            Thread.sleep((long) Data.getUpdate_interval());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void CreateOperationModeConfiguration() {
