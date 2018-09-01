@@ -8,6 +8,17 @@ import static parkingmanagerservice.StateMachine.*;
 
 public class messageHandler {
     public static void handleMessage(messages msg) {
+        // TODO - Think and write flow of responses for each and every state, and messages that could be received from that state
+        // TODO - That includes error messages and good messages, and what to do in each case.
+        // TODO - Usually the case will be as follow:
+        //          1. Good message arrives
+        //          2. Update stuff if necessary
+        //          3. Create new messages, and add to expected list if necessary
+        //          4. Remove current messageType from expected list
+        //
+        //          1. Bad message arrives
+        //          2. Update stuff if necessary
+        //          3. Decide on course of action: Retry if possible, ignore if possible, fail and prompt then quit.
             switch (ParkingManagerService.StateMachine) {
                 case INIT:
                     break;
