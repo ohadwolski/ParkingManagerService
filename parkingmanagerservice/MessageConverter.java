@@ -28,13 +28,13 @@ public class MessageConverter {
             case "0":
                 switch (s[1]) {
                     // already initiated
-                    case "0\n":
+                    case "0"://\n":
                         return new messages(null, new Date(), INIT_INITIATED, 0);
                     // waiting for init settings
-                    case "1\n":
+                    case "1"://\n":
                         return new messages(null, new Date(), INIT_WAITING, 0);
                     // init succeeded
-                    case "2\n":
+                    case "2"://\n":
                         return new messages(null, new Date(), INIT_SUCCEEDED, 0);
                     default:
                         break;
@@ -43,9 +43,9 @@ public class MessageConverter {
             case "1":
                 // maxNumOfGroups
                 switch (s[1]) {
-                    case "1\n":
+                    case "1"://\n":
                         return new messages(null, new Date(), INIT_MAX_GROUP_NUM_SUCCEEDED, 0);
-                    case "2\n":
+                    case "2"://\n":
                         return new messages(null, new Date(), INIT_MAX_GROUP_NUM_FAILED, 0);
                     default:
                         break;
@@ -54,9 +54,9 @@ public class MessageConverter {
             case "2":
                 // maxNumOfDisplays
                 switch (s[1]) {
-                    case "1\n":
+                    case "1"://\n":
                         return new messages(null, new Date(), INIT_MAX_DISPLAY_NUM_SUCCEEDED, 0);
-                    case "2\n":
+                    case "2"://\n":
                         return new messages(null, new Date(), INIT_MAX_DISPLAY_NUM_FAILED, 0);
                     default:
                         break;
@@ -65,9 +65,9 @@ public class MessageConverter {
             case "3":
                 // maxNumOfControllers
                 switch (s[1]) {
-                    case "1\n":
+                    case "1"://\n":
                         return new messages(null, new Date(), INIT_MAX_CONTROLLERS_NUM_SUCCEEDED, 0);
-                    case "2\n":
+                    case "2"://\n":
                         return new messages(null, new Date(), INIT_MAX_CONTROLLERS_NUM_FAILED, 0);
                     default:
                         break;
@@ -76,10 +76,10 @@ public class MessageConverter {
             case "4":
                 // init parking sensor
                 switch (s[1]) {
-                    case "0\n":
-                    case "2\n":
+                    case "0"://\n":
+                    case "2"://\n":
                         return new messages(null, new Date(), INIT_SENSOR_FAILED, 0);
-                    case "1\n":
+                    case "1"://\n":
                         return new messages(null, new Date(), INIT_SENSOR_SUCCEEDED, 0);
                     default:
                         break;
@@ -101,23 +101,23 @@ public class MessageConverter {
                 // report on sensor
                 // could have problems here if format is incorrect
                 switch (s[1]) {
-                    case "0\n":
-                    case "2\n":
-                    case "3\n":
+                    case "0"://\n":
+                    case "2"://\n":
+                    case "3"://\n":
                         return new messages(null, new Date(), GET_SENSOR_STATE_FAILED, 0);
                     default:
                         if (s.length < 5) break;
-                        MessageType type = (s[4].equals("0\n") ? PARKING_SPOT_FREED : (s[4].equals("1\n")) ? PARKING_SPOT_TAKEN : PARKING_SPOT_ERROR);
+                        MessageType type = (s[4].equals("0") ? PARKING_SPOT_FREED : (s[4].equals("1")) ? PARKING_SPOT_TAKEN : PARKING_SPOT_ERROR);
                         return new messages(new SensorId(Integer.parseInt(s[1]), Integer.parseInt(s[2]), Integer.parseInt(s[3])), new Date(), type, 0);
                 }
             case "10":
                 // get state of all the sensors
                 switch (s[1]) {
-                case "0\n":
+                case "0"://\n":
                     return new messages(null, new Date(), GET_SENSOR_STATE_FAILED, 0);
-                case "1\n":
+                case "1"://\n":
                     return new messages(null, new Date(), GET_ALL_SENSORS_STATE_START, 0);
-                case "2\n":
+                case "2"://\n":
                     return new messages(null, new Date(), GET_ALL_SENSORS_STATE_END, 0);
                 default:
                     break;
@@ -126,12 +126,12 @@ public class MessageConverter {
             case "11":
                 // create new group
                 switch (s[1]) {
-                    case "1\n":
+                    case "1"://\n":
                         return new messages(null, new Date(), CREATE_GROUP_SUCCEEDED, 0);
-                    case "0\n":
-                    case "2\n":
-                    case "3\n":
-                    case "4\n":
+                    case "0"://\n":
+                    case "2"://\n":
+                    case "3"://\n":
+                    case "4"://\n":
                         return new messages(null, new Date(), CREATE_GROUP_FAILED, 0);
                     default:
                         break;
@@ -146,13 +146,13 @@ public class MessageConverter {
             case "14":
                 // attach a sensor to group
                 switch (s[1]) {
-                    case "1\n":
+                    case "1"://\n":
                         return new messages(null, new Date(), ATTACH_SENSOR_TO_GROUP_SUCCEEDED, 0);
-                    case "0\n":
-                    case "2\n":
-                    case "3\n":
-                    case "4\n":
-                    case "5\n":
+                    case "0"://\n":
+                    case "2"://\n":
+                    case "3"://\n":
+                    case "4"://\n":
+                    case "5"://\n":
                         return new messages(null, new Date(), ATTACH_SENSOR_TO_GROUP_FAILED, 0);
                     default:
                         break;
@@ -164,16 +164,16 @@ public class MessageConverter {
             case "16":
                 // report on a group of sensors
                 switch (s[1]) {
-                    case "1\n":
+                    case "1"://\n":
                         return new messages(null, new Date(), GET_GROUP_SENSORS_STATE_START, 0);
-                    case "2\n":
+                    case "2"://\n":
                         return new messages(null, new Date(), GET_GROUP_SENSORS_STATE_END, 0);
                     case "3":
                         // this message will be discarded - no use
                         return new messages(null, new Date(), GET_GROUP_SENSORS_STATE_FREE_SPOTS, 0);
-                    case "0\n":
-                    case "4\n":
-                    case "5\n":
+                    case "0"://\n":
+                    case "4"://\n":
+                    case "5"://\n":
                         return new messages(null, new Date(), GET_GROUP_SENSORS_STATE_FAILED, 0);
                     default:
                         break;
@@ -182,12 +182,12 @@ public class MessageConverter {
             case "17":
                 // create new display
                 switch (s[1]) {
-                    case "1\n":
+                    case "1"://\n":
                         return new messages(null, new Date(), CREATE_DISPLAY_SUCCEEDED, 0);
-                    case "0\n":
-                    case "2\n":
-                    case "3\n":
-                    case "4\n":
+                    case "0"://\n":
+                    case "2"://\n":
+                    case "3"://\n":
+                    case "4"://\n":
                         return new messages(null, new Date(), CREATE_DISPLAY_FAILED, 0);
                     default:
                         break;
@@ -203,13 +203,13 @@ public class MessageConverter {
                 // Attach group to sub-display in a display
                 // not formatted correctly right now
                 switch (s[1]) {
-                    case "1\n":
+                    case "1"://\n":
                         return new messages(null, new Date(), ATTACH_DISPLAY_TO_GROUP_SUCCEEDED, 0);
-                    case "0\n":
-                    case "2\n":
-                    case "3\n":
-                    case "4\n":
-                    case "5\n":
+                    case "0"://\n":
+                    case "2"://\n":
+                    case "3"://\n":
+                    case "4"://\n":
+                    case "5"://\n":
                         return new messages(null, new Date(), ATTACH_DISPLAY_TO_GROUP_FAILED, 0);
                     default:
                         break;
@@ -229,10 +229,10 @@ public class MessageConverter {
             case "24":
                 // report on all of the sensor every T time
                 switch (s[1]) {
-                    case "1\n":
+                    case "1"://\n":
                         return new messages(null, new Date(), START_REPORT_WITH_INTERVAL_SUCCEEDED, 0);
-                    case "0\n":
-                    case "2\n":
+                    case "0"://\n":
+                    case "2"://\n":
                         return new messages(null, new Date(), START_REPORT_WITH_INTERVAL_FAILED, 0);
                     default:
                         break;
@@ -241,9 +241,9 @@ public class MessageConverter {
             case "25":
                 // stop reporting every T time
                 switch (s[1]) {
-                    case "1\n":
+                    case "1"://\n":
                         return new messages(null, new Date(), STOP_REPORT_WITH_INTERVAL_SUCCEEDED, 0);
-                    case "0\n":
+                    case "0"://\n":
                         return new messages(null, new Date(), STOP_REPORT_WITH_INTERVAL_FAILED, 0);
                     default:
                         break;
@@ -252,7 +252,7 @@ public class MessageConverter {
             case "26":
                 // report on event
                 switch (s[1]) {
-                    case "1\n":
+                    case "1"://\n":
                         return new messages(null, new Date(), START_REPORT_ON_EVENT_SUCCEEDED, 0);
                     case "0\n":
                         return new messages(null, new Date(), START_REPORT_ON_EVENT_FAILED, 0);
@@ -265,7 +265,7 @@ public class MessageConverter {
                 switch (s[1]) {
                     case "1\n":
                         return new messages(null, new Date(), STOP_REPORT_ON_EVENT_SUCCEEDED, 0);
-                    case "0\n":
+                    case "0"://\n":
                         return new messages(null, new Date(), STOP_REPORT_ON_EVENT_FAILED, 0);
                     default:
                         break;
@@ -274,11 +274,11 @@ public class MessageConverter {
             case "28":
                 // error reporting
                 switch (s[1]) {
-                    case "1\n":
+                    case "1"://\n":
                         return new messages(null, new Date(), GET_ERROR_REPORT_START, 0);
-                    case "2\n":
+                    case "2"://\n":
                         return new messages(null, new Date(), GET_ERROR_REPORT_END, 0);
-                    case "0\n":
+                    case "0"://\n":
                         return new messages(null, new Date(), GET_ERROR_REPORT_FAILED, 0);
                     default:
                         break;
@@ -287,23 +287,23 @@ public class MessageConverter {
             case "29":
                 // reset esp
                 switch (s[1]) {
-                    case "0\n":
+                    case "0"://\n":
                         return new messages(null, new Date(), RESET_ESP_SUCCEEDED, 0);
                     default:
                         break;
                 }
                 break;
-            case "30\n":
+            case "30"://\n":
                 // unknown command
                 return new messages(null, new Date(), UNKNOWN_COMMAND, 0);
             case "31":
                 // get auto init finished
                 switch (s[1]) {
-                    case "1\n":
+                    case "1"://\n":
                         return new messages(null, new Date(), AUTO_INIT_NOT_FINISHED, 0);
-                    case "2\n":
+                    case "2"://\n":
                         return new messages(null, new Date(), AUTO_INIT_FINISHED, 0);
-                    case "0\n":
+                    case "0"://\n":
                         return new messages(null, new Date(), GET_AUTO_INIT_FINISHED_FAILED, 0);
                     default:
                         break;
@@ -312,12 +312,12 @@ public class MessageConverter {
             case "32":
                 // change symbol of sub_display
                 switch (s[1]) {
-                    case "1\n":
+                    case "1"://\n":
                         return new messages(null, new Date(), CHANGE_DISPLAY_SYMBOL_SUCCEEDED, 0);
-                    case "0\n":
-                    case "2\n":
-                    case "3\n":
-                    case "4\n":
+                    case "0"://\n":
+                    case "2"://\n":
+                    case "3"://\n":
+                    case "4"://\n":
                         return new messages(null, new Date(), CHANGE_DISPLAY_SYMBOL_FAILED, 0);
                     default:
                         break;
@@ -330,12 +330,12 @@ public class MessageConverter {
             case "34":
                 // change the manual sub-display parameters
                 switch (s[1]) {
-                    case "1\n":
+                    case "1"://\n":
                         return new messages(null, new Date(), CHANGE_DISPLAY_SYMBOL_MANUAL_SUCCEEDED, 0);
-                    case "0\n":
-                    case "2\n":
-                    case "3\n":
-                    case "4\n":
+                    case "0"://\n":
+                    case "2"://\n":
+                    case "3"://\n":
+                    case "4"://\n":
                         return new messages(null, new Date(), CHANGE_DISPLAY_SYMBOL_MANUAL_FAILED, 0);
                     default:
                         break;
@@ -344,12 +344,12 @@ public class MessageConverter {
             case "35":
                 // change sub-display mode to auto or manual
                 switch (s[1]) {
-                    case "1\n":
+                    case "1"://\n":
                         return new messages(null, new Date(), CHANGE_DISPLAY_SUCCEEDED, 0);
-                    case "0\n":
-                    case "2\n":
-                    case "3\n":
-                    case "4\n":
+                    case "0"://\n":
+                    case "2"://\n":
+                    case "3"://\n":
+                    case "4"://\n":
                         return new messages(null, new Date(), CHANGE_DISPLAY_FAILED, 0);
                     default:
                         break;

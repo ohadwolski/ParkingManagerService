@@ -8,6 +8,9 @@ import static parkingmanagerservice.StateMachine.*;
 
 public class messageHandler {
     public static void handleMessage(messages msg) {
+
+        msg.print();
+
         // TODO - Think and write flow of responses for each and every state, and messages that could be received from that state
         // TODO - That includes error messages and good messages, and what to do in each case.
         // TODO - Usually the case will be as follow:
@@ -19,6 +22,7 @@ public class messageHandler {
         //          1. Bad message arrives
         //          2. Update stuff if necessary
         //          3. Decide on course of action: Retry if possible, ignore if possible, fail and prompt then quit.
+
             switch (ParkingManagerService.StateMachine) {
                 case INIT:
                     break;
@@ -33,6 +37,13 @@ public class messageHandler {
                     break;
                 case WAIT_FOR_AUTO_SENSOR_RESPONSE:
                     wait_for_auto_sensor_response(msg);
+                    break;
+                case GET_SENSORS_DATA_FOR_AUTO_BUILD:
+                    break;
+                case WAIT_FOR_SENSORS_DATA_RESPONSE:
+                    WaitForSensorsDataResponse(msg);
+                    break;
+                case BUILD_DATA_TREE_FROM_AUTO_CONFIGURATION:
                     break;
                 case WAIT_FOR_SENSORS_CONFIGURATION:
                     break;
@@ -161,6 +172,34 @@ public class messageHandler {
 */
     }
 
+    private static void WaitForSensorsDataResponse(messages msg) {
+        if      (  msg.getType() == GET_ALL_SENSORS_STATE_START
+                || msg.getType() == GET_ALL_SENSORS_STATE_END) {
+            Iterator itr = ParkingManagerService.ExpectedEventsList.iterator();
+            while (itr.hasNext())
+            {
+                if (itr.next() == msg.getType()) {
+                    itr.remove();
+                    break;
+                }
+            }
+        } else if (msg.getType() == GET_SENSOR_STATE_FAILED) {  // in case of error try again
+            ParkingManagerService.ExpectedEventsList.clear();
+            ParkingManagerService.StateMachine = GET_SENSORS_DATA_FOR_AUTO_BUILD;
+        } else if (msg.getType() == PARKING_SPOT_FREED || msg.getType() == PARKING_SPOT_TAKEN || msg.getType() == PARKING_SPOT_ERROR) {
+            // add msg to list and build parking spot!
+
+            SensorId NewSensorId = new SensorId(msg.getId());
+            StatusElement NewSensorStatus = (msg.getType() == PARKING_SPOT_FREED) ? StatusElement.FREE : (msg.getType() == PARKING_SPOT_TAKEN) ? StatusElement.TAKEN : StatusElement.ERROR;
+            ParkingElement NewSensor = new ParkingSensor(NewSensorId, NewSensorStatus, ConfigurationElement.REGULAR);
+            Node<ParkingElement> NewSensorNode = new Node<ParkingElement>(NewSensor);
+
+            Node<ParkingElement> rootArea = ParkingManagerService.Data.getParkingElementNode(new AreaId(0));
+            rootArea.addChild(NewSensorNode);
+            NewSensorNode.setParent(rootArea);
+        }
+    }
+
     private static void wait_for_auto_sensor_response(messages msg) {
         if (msg.getType() == AUTO_INIT_FINISHED) {
             ParkingManagerService.StateMachine = GET_SENSORS_DATA_FOR_AUTO_BUILD;
@@ -172,10 +211,12 @@ public class messageHandler {
     }
 
     private static void wait_for_general_configuration_finish(messages msg) {
-        if (msg.getType() == INIT_INITIATED || msg.getType() == INIT_WAITING || msg.getType() == INIT_SUCCEEDED
-                ||  msg.getType() == INIT_MAX_GROUP_NUM_SUCCEEDED
-                ||  msg.getType() == INIT_MAX_DISPLAY_NUM_SUCCEEDED
-                || msg.getType() ==  INIT_MAX_CONTROLLERS_NUM_SUCCEEDED) {
+        if      (  msg.getType() == INIT_INITIATED
+                || msg.getType() == INIT_WAITING
+                || msg.getType() == INIT_SUCCEEDED
+                || msg.getType() == INIT_MAX_GROUP_NUM_SUCCEEDED
+                || msg.getType() == INIT_MAX_DISPLAY_NUM_SUCCEEDED
+                || msg.getType() == INIT_MAX_CONTROLLERS_NUM_SUCCEEDED) {
             Iterator itr = ParkingManagerService.ExpectedEventsList.iterator();
             while (itr.hasNext())
             {

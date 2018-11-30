@@ -23,8 +23,8 @@ public class ConnectionThread implements Runnable{
    private String threadName;
    //private ServerSocket serverSocket;
    private Socket server;
-   private ObjectOutputStream out;
-   private ObjectInputStream in;
+   private OutputStream out;
+   private InputStream in;
    private boolean connected;
    private boolean run;
 
@@ -61,10 +61,12 @@ public class ConnectionThread implements Runnable{
                System.out.println("Trying to connect to ESP with ip " + ParkingManagerService.Data.getEsp_ip_address() +
                        " and port " + ParkingManagerService.Data.getEsp_port_number() + " ...");
                //server = serverSocket.accept();
-                server = new Socket(ParkingManagerService.Data.getEsp_ip_address(), ParkingManagerService.Data.getEsp_port_number());
+               server = new Socket(ParkingManagerService.Data.getEsp_ip_address(), ParkingManagerService.Data.getEsp_port_number());
                System.out.println("Just connected to " + server.getRemoteSocketAddress());
-               in = new ObjectInputStream(server.getInputStream());
-               out = new ObjectOutputStream(server.getOutputStream());
+               //out = new ObjectOutputStream(server.getOutputStream());
+               //in = new ObjectInputStream(server.getInputStream());
+               out = server.getOutputStream();
+               in = server.getInputStream();
                connected = true;
                //messages echo = new messages(0, new Date(), ECHO, 0);
                //ObjectOutputStream outObject = new ObjectOutputStream(server.getOutputStream());
@@ -119,11 +121,11 @@ public class ConnectionThread implements Runnable{
       connected = false;
    }
 
-   public ObjectOutputStream getOutputStream()
+   public OutputStream getOutputStream()
    {
       return  out;
    }
-   public ObjectInputStream getInputStream()
+   public InputStream getInputStream()
    {
       return  in;
    }

@@ -56,15 +56,25 @@ public class ParkingManagerService {
                     CreateSensorsConfiguration();
                     break;
                 case WAIT_FOR_AUTO_SENSOR_RESPONSE:
+                    WaitForAutoSensorResponse();  // go to sleep
                     break;
                 case GET_SENSORS_DATA_FOR_AUTO_BUILD:
+                    // initiate data tree for auto build
+                    InitiateDataForAutoBuild();
+                    RequestAllSensorsStatus();
+                    StateMachine = WAIT_FOR_SENSORS_DATA_RESPONSE;
                     break;
                 case WAIT_FOR_SENSORS_DATA_RESPONSE:
+                    if (ExpectedEventsList.isEmpty()) {
+                        StateMachine = BUILD_DATA_TREE_FROM_AUTO_CONFIGURATION;
+                    }
                     break;
                 case BUILD_DATA_TREE_FROM_AUTO_CONFIGURATION:
+                    // print data tree
+                    
                     StateMachine = GROUP_AND_DISPLAYS_CONFIGURATION;
                     break;
-                case WAIT_FOR_SENSORS_CONFIGURATION:
+                case WAIT_FOR_SENSORS_CONFIGURATION:  // finish state for manual configuration
                     if (SensorsConfigurationDone()) {
                         StateMachine = GROUP_AND_DISPLAYS_CONFIGURATION;
                     }
@@ -132,6 +142,7 @@ public class ParkingManagerService {
                     WaitForTimer();
                     break;
 
+
             }
 
             try {
@@ -144,6 +155,24 @@ public class ParkingManagerService {
 
 
 
+    }
+
+    private static void InitiateDataForAutoBuild() {
+        // Overwrites old data tree!
+        ParkingElement NewRootArea = new ParkingArea(new AreaId(0), StatusElement.OK, ConfigurationElement.REGULAR);
+        Node<ParkingElement> NewRoot = new Node<ParkingElement>(NewRootArea);
+        DataInterface NewInterface = new DataInterface(Data, NewRoot);
+        Data = NewInterface;
+    }
+
+
+    private static void WaitForAutoSensorResponse() {
+        try {
+            Thread.sleep(5000);  // wait 5 sec, than check if auto setup is complete
+                                   // check is being made in messageHandler
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void RequestAllSensorsStatus() {
@@ -306,6 +335,13 @@ public class ParkingManagerService {
     private static void LoadData() {
 
         // code for loading data
+
+        Data.setEsp_ip_address("192.168.4.1");
+        Data.setEsp_port_number(9001);
+        Data.setWorking_mode(0);
+        Data.setUpdate_interval(5);
+        Data.setAuto_init(true);
+
     }
 
 

@@ -24,6 +24,14 @@ public class DataInterface {
     public DataInterface(Node<ParkingElement> r) {
         root = r;
     }
+    public DataInterface(DataInterface d, Node<ParkingElement> r) {
+        root = r;
+        auto_init = d.auto_init;
+        working_mode = d.working_mode;
+        update_interval = d.update_interval;
+        esp_ip_address = d.esp_ip_address;
+        esp_port_number = d.esp_port_number;
+    }
 
     public ParkingElement getParkingElement(IdElement id) {
         return FindParkingElement(id, root);
