@@ -52,7 +52,7 @@ public class ParkingManagerService {
                         StateMachine = SENSORS_CONFIGURATION;
                     }
                     break;
-                case SENSORS_CONFIGURATION:  // TODO - Create handling of auto - initialization of Parking Data
+                case SENSORS_CONFIGURATION:
                     CreateSensorsConfiguration();
                     break;
                 case WAIT_FOR_AUTO_SENSOR_RESPONSE:
@@ -64,18 +64,9 @@ public class ParkingManagerService {
                     RequestAllSensorsStatus();
                     StateMachine = WAIT_FOR_SENSORS_DATA_RESPONSE;
                     break;
-                case WAIT_FOR_SENSORS_DATA_RESPONSE:
+                case WAIT_FOR_SENSORS_DATA_RESPONSE:  // finish state for both manual and auto init
                     if (ExpectedEventsList.isEmpty()) {
-                        StateMachine = BUILD_DATA_TREE_FROM_AUTO_CONFIGURATION;
-                    }
-                    break;
-                case BUILD_DATA_TREE_FROM_AUTO_CONFIGURATION:
-                    // print data tree
-                    
-                    StateMachine = GROUP_AND_DISPLAYS_CONFIGURATION;
-                    break;
-                case WAIT_FOR_SENSORS_CONFIGURATION:  // finish state for manual configuration
-                    if (SensorsConfigurationDone()) {
+                        // TODO: print data tree
                         StateMachine = GROUP_AND_DISPLAYS_CONFIGURATION;
                     }
                     break;
@@ -141,8 +132,6 @@ public class ParkingManagerService {
                 case T_TIME_MODE_STANDBY:
                     WaitForTimer();
                     break;
-
-
             }
 
             try {
@@ -200,15 +189,16 @@ public class ParkingManagerService {
                 return;
             case 1:
                 workingModeMessage = new messages(null, new Date(), START_REPORT_ON_EVENT, 0);
+                Threads.SenderQueue.addMessage(workingModeMessage);
                 ExpectedEventsList.add(START_REPORT_ON_EVENT_SUCCEEDED);
                 break;
             case 2:
             default:
                 workingModeMessage = new messages(null, new Date(), START_REPORT_WITH_INTERVAL, Data.getUpdate_interval());
+                Threads.SenderQueue.addMessage(workingModeMessage);
                 ExpectedEventsList.add(START_REPORT_WITH_INTERVAL_SUCCEEDED);
                 break;
         }
-        Threads.SenderQueue.addMessage(workingModeMessage);
         // add to expected list
     }
 
@@ -233,26 +223,8 @@ public class ParkingManagerService {
                 ExpectedEventsList.add(INIT_SENSOR_SUCCEEDED);
             }
             // add to Expected List the correct info
-            StateMachine = WAIT_FOR_SENSORS_CONFIGURATION;
+            StateMachine = WAIT_FOR_SENSORS_DATA_RESPONSE;
         }
-    }
-
-    private static boolean SensorsConfigurationDone() {
-        if (ExpectedEventsList.isEmpty()) {
-            // check if auto or manual
-            if (Data.isAuto_init())
-            {
-
-                // auto: go through messages and build parking area than return true
-                // send indication to receive queue to process messages
-
-            } else {
-                // manual continue: return true
-
-                return true;
-            }
-        }
-        return false;
     }
 
     private static void CreateGroupAndDisplayConfiguration() {
