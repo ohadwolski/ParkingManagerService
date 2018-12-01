@@ -2,6 +2,7 @@ package parkingmanagerservice;
 
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 import static parkingmanagerservice.MessageType.*;
 import static parkingmanagerservice.StateMachine.*;
@@ -43,17 +44,15 @@ public class messageHandler {
                 case WAIT_FOR_SENSORS_DATA_RESPONSE:
                     WaitForSensorsDataResponse(msg);
                     break;
-                case BUILD_DATA_TREE_FROM_AUTO_CONFIGURATION:
-                    break;
-                case WAIT_FOR_SENSORS_CONFIGURATION:
-                    break;
                 case GROUP_AND_DISPLAYS_CONFIGURATION:
                     break;
                 case WAIT_FOR_GROUP_AND_DISPLAYS_CONFIGURATION:
+                    WaitForGroupAndDisplaysConfiguration(msg);
                     break;
                 case OPERATION_MODE_CONFIGURATION:
                     break;
                 case WAIT_FOR_OPERATION_MODE_CONFIGURATION:
+                    WaitForOperationModeConfiguration(msg);
                     break;
                 case STANDBY:
                     break;
@@ -62,14 +61,22 @@ public class messageHandler {
                 case REQ_MODE_REQUEST_STATUS:
                     break;
                 case REQ_MODE_WAIT_FOR_STATUS:
+                    UpdateDataAccordingToMessage(msg);
+
                     break;
                 case ON_EVENT_MODE_REQUEST_STATUS:
                     break;
                 case ON_EVENT_MODE_WAIT_FOR_STATUS:
+                    UpdateDataAccordingToMessage(msg);
+
                     break;
                 case ON_EVENT_MODE_STANDBY:
+                    UpdateDataAccordingToMessage(msg);
+
                     break;
                 case T_TIME_MODE_STANDBY:
+                    UpdateDataAccordingToMessage(msg);
+
                     break;
             }
 
@@ -170,6 +177,92 @@ public class messageHandler {
         }
         
 */
+    }
+
+    private static void UpdateDataAccordingToMessage(messages msg) {
+        if      (  msg.getType() == GET_ALL_SENSORS_STATE_START
+                || msg.getType() == GET_ALL_SENSORS_STATE_END) {
+            Iterator itr = ParkingManagerService.ExpectedEventsList.iterator();
+            while (itr.hasNext())
+            {
+                if (itr.next() == msg.getType()) {
+                    itr.remove();
+                    break;
+                }
+            }
+        } else if (msg.getType() == GET_SENSOR_STATE_FAILED) {  // in case of error try again
+            if (ParkingManagerService.StateMachine == REQ_MODE_WAIT_FOR_STATUS) {
+                ParkingManagerService.ExpectedEventsList.clear();
+                ParkingManagerService.StateMachine = REQ_MODE_REQUEST_STATUS;
+            } else {
+                ParkingManagerService.ExpectedEventsList.clear();
+                ParkingManagerService.StateMachine = ON_EVENT_MODE_REQUEST_STATUS;
+            }
+        } else if (msg.getType() == PARKING_SPOT_FREED || msg.getType() == PARKING_SPOT_TAKEN || msg.getType() == PARKING_SPOT_ERROR) {
+            // find parking element
+            ParkingElement SensorToUpdate = ParkingManagerService.Data.getParkingElement(msg.getId());
+            // change to new status
+            StatusElement prevStatus = SensorToUpdate.getStatus();
+            SensorToUpdate.setStatus(msg.getType() == PARKING_SPOT_FREED ? StatusElement.FREE : msg.getType() == PARKING_SPOT_TAKEN ? StatusElement.TAKEN : StatusElement.ERROR);
+            SensorToUpdate.setTimeStamp(new Date());
+            // find all relevant signs
+            List<ParkingElement> SignsToUpdate = ParkingManagerService.Data.getSignsForParkingElement(SensorToUpdate);
+            // change counters of signs
+            for (ParkingElement sign : SignsToUpdate) {
+                if (sign instanceof ParkingSign) {
+                    int n = ((ParkingSign) sign).getCounter();
+                    if (msg.getType() == PARKING_SPOT_FREED) {
+                        if (prevStatus == StatusElement.TAKEN) {
+                            n++;
+                        } else if (prevStatus == StatusElement.ERROR){
+                            n++;
+                        }
+                    } else if (msg.getType() == PARKING_SPOT_TAKEN) {
+                        if (prevStatus == StatusElement.FREE) {
+                            n--;
+                        }
+                    } else {  // changed to error state
+                        if (prevStatus == StatusElement.FREE) {
+                            n--;
+                        }
+                    }
+                    ((ParkingSign) sign).setCounter(n);
+                    sign.setTimeStamp(new Date());
+                }
+            }
+            // assumption: all signs are initialized at esp as auto-update and
+            //             do not need a message to update the actual counter
+            //             Our program doesn't support manual change of counters
+        }
+    }
+
+
+    private static void WaitForOperationModeConfiguration(messages msg) {
+        if      (  msg.getType() == START_REPORT_ON_EVENT_SUCCEEDED
+                || msg.getType() == START_REPORT_WITH_INTERVAL_SUCCEEDED) {
+            Iterator itr = ParkingManagerService.ExpectedEventsList.iterator();
+            while (itr.hasNext()) {
+                if (itr.next() == msg.getType()) {
+                    itr.remove();
+                    break;
+                }
+            }
+        }
+    }
+
+    private static void WaitForGroupAndDisplaysConfiguration(messages msg) {
+        if      (  msg.getType() == CREATE_GROUP_SUCCEEDED
+                || msg.getType() == ATTACH_SENSOR_TO_GROUP_SUCCEEDED
+                || msg.getType() == CREATE_DISPLAY_SUCCEEDED
+                || msg.getType() == ATTACH_DISPLAY_TO_GROUP_SUCCEEDED) {
+            Iterator itr = ParkingManagerService.ExpectedEventsList.iterator();
+            while (itr.hasNext()) {
+                if (itr.next() == msg.getType()) {
+                    itr.remove();
+                    break;
+                }
+            }
+        }
     }
 
     private static void WaitForSensorsDataResponse(messages msg) {

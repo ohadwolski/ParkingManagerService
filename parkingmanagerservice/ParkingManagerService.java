@@ -93,7 +93,7 @@ public class ParkingManagerService {
                     // assume 0: manual by server, 1: on event, 2: every T seconds
                     switch (Data.getWorking_mode()) {
                         case 0:
-                            StateMachine = REQ_MODE_WAIT_FOR_TIMER;
+                            StateMachine = REQ_MODE_REQUEST_STATUS;
                             break;
                         case 1:
                             StateMachine = ON_EVENT_MODE_REQUEST_STATUS;
@@ -103,11 +103,6 @@ public class ParkingManagerService {
                             break;
                     }
                     break;
-
-                case REQ_MODE_WAIT_FOR_TIMER:
-                    WaitForTimer();
-                    StateMachine = REQ_MODE_REQUEST_STATUS;
-                    break;
                 case REQ_MODE_REQUEST_STATUS:
                     RequestAllSensorsStatus();
                     StateMachine = REQ_MODE_WAIT_FOR_STATUS;
@@ -116,6 +111,10 @@ public class ParkingManagerService {
                     if (ExpectedEventsList.isEmpty()) {
                         StateMachine = REQ_MODE_WAIT_FOR_TIMER;
                     }
+                    break;
+                case REQ_MODE_WAIT_FOR_TIMER:
+                    WaitForTimer();
+                    StateMachine = REQ_MODE_REQUEST_STATUS;
                     break;
                 case ON_EVENT_MODE_REQUEST_STATUS:
                     RequestAllSensorsStatus();
