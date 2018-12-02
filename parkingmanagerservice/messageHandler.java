@@ -12,18 +12,6 @@ public class messageHandler {
 
         msg.print();
 
-        // TODO - Think and write flow of responses for each and every state, and messages that could be received from that state
-        // TODO - That includes error messages and good messages, and what to do in each case.
-        // TODO - Usually the case will be as follow:
-        //          1. Good message arrives
-        //          2. Update stuff if necessary
-        //          3. Create new messages, and add to expected list if necessary
-        //          4. Remove current messageType from expected list
-        //
-        //          1. Bad message arrives
-        //          2. Update stuff if necessary
-        //          3. Decide on course of action: Retry if possible, ignore if possible, fail and prompt then quit.
-
             switch (ParkingManagerService.StateMachine) {
                 case INIT:
                     break;
@@ -32,12 +20,12 @@ public class messageHandler {
                 case GENERAL_CONFIGURATION:
                     break;
                 case WAIT_FOR_GENERAL_CONFIGURATION_FINISH:
-                    wait_for_general_configuration_finish(msg);
+                    WaitForGeneralConfigurationFinish(msg);
                     break;
                 case SENSORS_CONFIGURATION:
                     break;
                 case WAIT_FOR_AUTO_SENSOR_RESPONSE:
-                    wait_for_auto_sensor_response(msg);
+                    WaitForAutoSensorResponse(msg);
                     break;
                 case GET_SENSORS_DATA_FOR_AUTO_BUILD:
                     break;
@@ -293,7 +281,7 @@ public class messageHandler {
         }
     }
 
-    private static void wait_for_auto_sensor_response(messages msg) {
+    private static void WaitForAutoSensorResponse(messages msg) {
         if (msg.getType() == AUTO_INIT_FINISHED) {
             ParkingManagerService.StateMachine = GET_SENSORS_DATA_FOR_AUTO_BUILD;
         } else if (msg.getType() == AUTO_INIT_NOT_FINISHED) {
@@ -303,7 +291,7 @@ public class messageHandler {
         }
     }
 
-    private static void wait_for_general_configuration_finish(messages msg) {
+    private static void WaitForGeneralConfigurationFinish(messages msg) {
         if      (  msg.getType() == INIT_INITIATED
                 || msg.getType() == INIT_WAITING
                 || msg.getType() == INIT_SUCCEEDED
@@ -314,6 +302,7 @@ public class messageHandler {
             while (itr.hasNext())
             {
                 if (itr.next() == msg.getType()) {
+                    System.out.println("Received expected response: " + msg.getType());
                     itr.remove();
                     break;
                 }

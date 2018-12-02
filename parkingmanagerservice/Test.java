@@ -26,7 +26,7 @@ public class Test {
         */
 
 
-        /*
+
 
         ParkingElement area = new ParkingArea(new AreaId(0),StatusElement.OK, ConfigurationElement.REGULAR);
         ParkingElement area2 = new ParkingArea(new AreaId(1),StatusElement.OK, ConfigurationElement.REGULAR);
@@ -85,12 +85,15 @@ public class Test {
         leaf2.addChild(leaf5);
         leaf5.setParent(leaf2);
 
-        print(root);
+        //print(root);
 
 
         DataInterface IF = new DataInterface(root);
+        IF.PrintParkingStructure(true, true, true);
 
 
+
+/*
         System.out.println("now checking search:");
         Node<ParkingElement> finding = IF.getParkingElementNode(new AreaId(1));
         finding.getData().print();

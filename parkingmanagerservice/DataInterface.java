@@ -179,6 +179,36 @@ public class DataInterface {
             }
         }
     }
+
+
+    public void PrintParkingStructure(boolean PrintStatus, boolean PrintConfiguration, boolean PrintTimeStamp) {
+        System.out.println("Printing Parking Lot Structure:");
+        PrintRecursive("--", root, PrintStatus, PrintConfiguration, PrintTimeStamp);
+    }
+
+    public void PrintRecursive(String prefix, Node<ParkingElement> NodeToPrint, boolean PrintStatus, boolean PrintConfiguration, boolean PrintTimeStamp) {
+        if (NodeToPrint == null) return;
+
+        System.out.printf(prefix + " ");
+        NodeToPrint.getData().print();
+
+        if (PrintStatus) {
+            System.out.printf(prefix + "--> Status: " + NodeToPrint.getData().getStatus() + "%n");
+        }
+        if (PrintConfiguration) {
+            System.out.printf(prefix + "--> Configuration: " + NodeToPrint.getData().getConfiguration() + "%n");
+        }
+        if (PrintTimeStamp) {
+            System.out.printf(prefix + "--> TimeStamp: " + NodeToPrint.getData().getTimeStamp() + "%n");
+        }
+
+        if (! NodeToPrint.isLeaf()) {
+            List<Node<ParkingElement>> children = NodeToPrint.getChildren();
+            for (Node<ParkingElement> child : children) {
+                PrintRecursive((prefix + "--"), child, PrintStatus, PrintConfiguration, PrintTimeStamp);
+            }
+        }
+    }
 }
 
 /*

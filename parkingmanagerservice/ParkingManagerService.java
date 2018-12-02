@@ -31,61 +31,81 @@ public class ParkingManagerService {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+
+        System.out.println("Welcome to Parking Manager Service.");
+        System.out.println("Initializing...");
+
         while (run) {
             switch (StateMachine) {
                 case INIT:
                     LoadData();
                     Threads.Start();
                     StateMachine = WAIT_FOR_INITIAL_CONNECTION;
+                    System.out.println(StateMachine + ":");
                     break;
                 case WAIT_FOR_INITIAL_CONNECTION:
                     if (Threads.ConnectionThread.getConnectionState() == true) {
                         StateMachine = GENERAL_CONFIGURATION;
+                        System.out.println(StateMachine + ":");
                     }
                     break;
                 case GENERAL_CONFIGURATION:
                     CreateGeneralConfigurationMessages();
                     StateMachine = WAIT_FOR_GENERAL_CONFIGURATION_FINISH;
+                    System.out.println(StateMachine + ":");
                     break;
                 case WAIT_FOR_GENERAL_CONFIGURATION_FINISH:
                     if (ExpectedEventsList.isEmpty()) {
+                        System.out.println("General configuration done.");
                         StateMachine = SENSORS_CONFIGURATION;
+                        System.out.println(StateMachine + ":");
                     }
                     break;
                 case SENSORS_CONFIGURATION:
                     CreateSensorsConfiguration();
+                    System.out.println(StateMachine + ":");
                     break;
                 case WAIT_FOR_AUTO_SENSOR_RESPONSE:
                     WaitForAutoSensorResponse();  // go to sleep
                     break;
                 case GET_SENSORS_DATA_FOR_AUTO_BUILD:
                     // initiate data tree for auto build
+                    System.out.println(StateMachine + ":");
                     InitiateDataForAutoBuild();
                     RequestAllSensorsStatus();
+                    System.out.println("Requesting server for sensors data configured by auto detection.");
                     StateMachine = WAIT_FOR_SENSORS_DATA_RESPONSE;
+                    System.out.println(StateMachine + ":");
                     break;
                 case WAIT_FOR_SENSORS_DATA_RESPONSE:  // finish state for both manual and auto init
                     if (ExpectedEventsList.isEmpty()) {
-                        // TODO: print data tree
+                        Data.PrintParkingStructure(false, false, false);
                         StateMachine = GROUP_AND_DISPLAYS_CONFIGURATION;
+                        System.out.println(StateMachine + ":");
                     }
                     break;
                 case GROUP_AND_DISPLAYS_CONFIGURATION:
                     CreateGroupAndDisplayConfiguration();
                     StateMachine = WAIT_FOR_GROUP_AND_DISPLAYS_CONFIGURATION;
+                    System.out.println(StateMachine + ":");
                     break;
                 case WAIT_FOR_GROUP_AND_DISPLAYS_CONFIGURATION:
                     if (ExpectedEventsList.isEmpty()) {
+                        System.out.println("Groups and displays configuration succeeded.");
                         StateMachine = OPERATION_MODE_CONFIGURATION;
+                        System.out.println(StateMachine + ":");
                     }
                     break;
                 case OPERATION_MODE_CONFIGURATION:
                     CreateOperationModeConfiguration();
                     StateMachine = WAIT_FOR_OPERATION_MODE_CONFIGURATION;
+                    System.out.println(StateMachine + ":");
                     break;
                 case WAIT_FOR_OPERATION_MODE_CONFIGURATION:
                     if (ExpectedEventsList.isEmpty()) {
+                        System.out.println("Setting operation mode succeeded. Proceeding to standby.");
                         StateMachine = STANDBY;
+                        System.out.println(StateMachine + ":");
                     }
                     break;
                 case STANDBY:
@@ -93,36 +113,52 @@ public class ParkingManagerService {
                     // assume 0: manual by server, 1: on event, 2: every T seconds
                     switch (Data.getWorking_mode()) {
                         case 0:
+                            System.out.println("On-request mode: Will ask server for status every T seconds.");
                             StateMachine = REQ_MODE_REQUEST_STATUS;
+                            System.out.println(StateMachine + ":");
                             break;
                         case 1:
                             StateMachine = ON_EVENT_MODE_REQUEST_STATUS;
+                            System.out.println(StateMachine + ":");
                             break;
                         case 2:
                             StateMachine = T_TIME_MODE_STANDBY;
+                            System.out.println(StateMachine + ":");
+                            System.out.println("Standing by, waiting for updates from all the sensors every T seconds by server.");
                             break;
                     }
                     break;
                 case REQ_MODE_REQUEST_STATUS:
+                    System.out.println("Requesting status of all the sensors.");
                     RequestAllSensorsStatus();
                     StateMachine = REQ_MODE_WAIT_FOR_STATUS;
+                    System.out.println(StateMachine + ":");
                     break;
                 case REQ_MODE_WAIT_FOR_STATUS:
                     if (ExpectedEventsList.isEmpty()) {
+                        System.out.println("Received response from all the sensors.");
                         StateMachine = REQ_MODE_WAIT_FOR_TIMER;
+                        System.out.println(StateMachine + ":");
                     }
                     break;
                 case REQ_MODE_WAIT_FOR_TIMER:
+                    System.out.println("Waiting T seconds then requesting again...");
                     WaitForTimer();
                     StateMachine = REQ_MODE_REQUEST_STATUS;
+                    System.out.println(StateMachine + ":");
                     break;
                 case ON_EVENT_MODE_REQUEST_STATUS:
+                    System.out.println("Requesting status of all the sensors.");
                     RequestAllSensorsStatus();
                     StateMachine = ON_EVENT_MODE_WAIT_FOR_STATUS;
+                    System.out.println(StateMachine + ":");
                     break;
                 case ON_EVENT_MODE_WAIT_FOR_STATUS:
                     if (ExpectedEventsList.isEmpty()) {
+                        System.out.println("Received response from all the sensors.");
                         StateMachine = ON_EVENT_MODE_STANDBY;
+                        System.out.println(StateMachine + ":");
+                        System.out.println("Standing by, waiting for on-event updates from server.");
                     }
                     break;
                 case ON_EVENT_MODE_STANDBY:
@@ -132,7 +168,6 @@ public class ParkingManagerService {
                     WaitForTimer();
                     break;
             }
-
             try {
                 sleep(1000);
             } catch (InterruptedException e) {
@@ -156,6 +191,7 @@ public class ParkingManagerService {
 
     private static void WaitForAutoSensorResponse() {
         try {
+            System.out.println("Waiting for server to finish auto detection of sensors.");
             Thread.sleep(5000);  // wait 5 sec, than check if auto setup is complete
                                    // check is being made in messageHandler
         } catch (InterruptedException e) {
@@ -180,6 +216,7 @@ public class ParkingManagerService {
 
     private static void CreateOperationModeConfiguration() {
         // create message for operating mode
+        System.out.println("Creating and sending operation mode configuration messages.");
         // assume 0: manual by server, 1: on event, 2: every T seconds
         messages workingModeMessage;
         switch (Data.getWorking_mode()) {
@@ -204,6 +241,7 @@ public class ParkingManagerService {
 
     private static void CreateSensorsConfiguration() {
         if (Data.isAuto_init()) {
+            System.out.println("Asking the server for sensors configuration.");
             // if init is automatic: get info from server and build tree
             messages chk_if_auto_is_finished = new messages(null, new Date(), GET_AUTO_INIT_FINISHED, 0);
             Threads.SenderQueue.addMessage(chk_if_auto_is_finished);
@@ -212,6 +250,7 @@ public class ParkingManagerService {
             // create messages for getting auto detect
             // add messages of finish auto detect to expected list
         } else {
+            System.out.println("Creating and sending sensors configuration messages.");
             // create sensors messages for init
             // according to data
             List<IdElement> ParkingSensorList = Data.getParkingSensorList();
@@ -228,7 +267,7 @@ public class ParkingManagerService {
 
     private static void CreateGroupAndDisplayConfiguration() {
         // create groups messages, attach sensors to groups
-
+        System.out.println("Creating and sending groups and displays configuration messages.");
         List<IdElement> ParkingAreaList = Data.getParkingAreaList();
         for (IdElement areaId : ParkingAreaList) {
             // create groups
@@ -283,6 +322,8 @@ public class ParkingManagerService {
 
 
     private static void CreateGeneralConfigurationMessages() {
+        System.out.println("Creating general configuration messages:");
+        System.out.println("init, init max groups, init max displays, init max controllers.");
         // creating messages:
         messages init = new messages(null,new Date(),((Data.isAuto_init())? INIT_AUTO : INIT_MANUAL),0);
         messages init_max_group = new messages(null,new Date(), INIT_MAX_GROUP_NUM, 100);
@@ -312,6 +353,9 @@ public class ParkingManagerService {
         Data.setWorking_mode(0);
         Data.setUpdate_interval(5);
         Data.setAuto_init(true);
+
+
+
 
     }
 
