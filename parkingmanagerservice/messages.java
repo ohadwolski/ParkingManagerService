@@ -68,15 +68,16 @@ public class messages implements java.io.Serializable{
     }
 
     public void print() {
-        System.out.println("Message Printout:\n");
+        //System.out.println("Message Printout:\n");
+        System.out.printf("Message Printout: ");
         if (this.getId() != null) {
-            System.out.print("Id:");
+            //System.out.print("Id: ");
             this.getId().print();
-            System.out.print("\n");
+            //System.out.print("\n");
         }
-        System.out.println("Date:" + this.getDate() + "\n");
-        System.out.println("Type:" + this.getType() + "\n");
-        System.out.println("Num:" + this.getNum() + "\n");
-        System.out.println("End of message.\n");
+        System.out.printf(" Type: " + this.getType());
+        System.out.printf(" Num: " + this.getNum());
+        System.out.printf(" Date: " + this.getDate());
+        System.out.printf(" End of message.\n");
     }
 }
