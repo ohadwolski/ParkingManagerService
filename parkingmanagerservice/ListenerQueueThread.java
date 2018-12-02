@@ -34,13 +34,13 @@ public class ListenerQueueThread implements Runnable{
     public void run() {
         try {
             while (run) {
-                System.out.println("Checking receive queue . . .");
+                //System.out.println("Checking receive queue . . .");
                 if (ReceiveQueue.isEmpty()) {
-                    System.out.println("No messages found in receive queue. Trying again later.");
+                    //System.out.println("No messages found in receive queue. Trying again later.");
                     t.sleep(5000);
                     //continue;
                 } else {
-                    System.out.println("Found " + ReceiveQueue.size() + " messages in receive queue. Handling:\n");
+                    System.out.println("Found " + ReceiveQueue.size() + " new messages in receive queue. Handling:\n");
                     // work on vector
                     while (! ReceiveQueue.isEmpty()) {
                         messages msg = ReceiveQueue.firstElement();

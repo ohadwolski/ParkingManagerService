@@ -5,8 +5,6 @@
  */
 package parkingmanagerservice;
 
-import virtualEsp.MessagesParser;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

@@ -78,7 +78,7 @@ public class ConnectionThread implements Runnable{
 
                //server.close();
 
-            } catch (SocketTimeoutException s) { // not suppose to happen because haven't set timeout
+            } catch (SocketTimeoutException | ConnectException s) { // not suppose to happen because haven't set timeout
                System.out.println("Socket timed out!");
                connected = false;
                continue; // try again
