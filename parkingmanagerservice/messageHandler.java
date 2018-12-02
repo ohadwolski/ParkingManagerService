@@ -14,57 +14,64 @@ public class messageHandler {
 
             switch (ParkingManagerService.StateMachine) {
                 case INIT:
+                    NotApplicable(msg);
                     break;
                 case WAIT_FOR_INITIAL_CONNECTION:
+                    NotApplicable(msg);
                     break;
                 case GENERAL_CONFIGURATION:
+                    NotApplicable(msg);
                     break;
                 case WAIT_FOR_GENERAL_CONFIGURATION_FINISH:
                     WaitForGeneralConfigurationFinish(msg);
                     break;
                 case SENSORS_CONFIGURATION:
+                    NotApplicable(msg);
                     break;
                 case WAIT_FOR_AUTO_SENSOR_RESPONSE:
                     WaitForAutoSensorResponse(msg);
                     break;
                 case GET_SENSORS_DATA_FOR_AUTO_BUILD:
+                    NotApplicable(msg);
                     break;
                 case WAIT_FOR_SENSORS_DATA_RESPONSE:
                     WaitForSensorsDataResponse(msg);
                     break;
                 case GROUP_AND_DISPLAYS_CONFIGURATION:
+                    NotApplicable(msg);
                     break;
                 case WAIT_FOR_GROUP_AND_DISPLAYS_CONFIGURATION:
                     WaitForGroupAndDisplaysConfiguration(msg);
                     break;
                 case OPERATION_MODE_CONFIGURATION:
+                    NotApplicable(msg);
                     break;
                 case WAIT_FOR_OPERATION_MODE_CONFIGURATION:
                     WaitForOperationModeConfiguration(msg);
                     break;
                 case STANDBY:
+                    NotApplicable(msg);
                     break;
                 case REQ_MODE_WAIT_FOR_TIMER:
+                    NotApplicable(msg);
                     break;
                 case REQ_MODE_REQUEST_STATUS:
+                    NotApplicable(msg);
                     break;
                 case REQ_MODE_WAIT_FOR_STATUS:
                     UpdateDataAccordingToMessage(msg);
-
                     break;
                 case ON_EVENT_MODE_REQUEST_STATUS:
+                    NotApplicable(msg);
                     break;
                 case ON_EVENT_MODE_WAIT_FOR_STATUS:
                     UpdateDataAccordingToMessage(msg);
-
                     break;
                 case ON_EVENT_MODE_STANDBY:
                     UpdateDataAccordingToMessage(msg);
-
                     break;
                 case T_TIME_MODE_STANDBY:
                     UpdateDataAccordingToMessage(msg);
-
                     break;
             }
 
@@ -167,6 +174,10 @@ public class messageHandler {
 */
     }
 
+    private static void NotApplicable(messages msg) {
+        System.out.println("Message received (" + msg.getType() + ") do not apply to current state: " + ParkingManagerService.StateMachine + ". Ignoring.");
+    }
+
     private static void UpdateDataAccordingToMessage(messages msg) {
         if      (  msg.getType() == GET_ALL_SENSORS_STATE_START
                 || msg.getType() == GET_ALL_SENSORS_STATE_END) {
@@ -179,6 +190,7 @@ public class messageHandler {
                 }
             }
         } else if (msg.getType() == GET_SENSOR_STATE_FAILED) {  // in case of error try again
+            System.out.println("Received error while trying to request for sensors status. Trying again.");
             if (ParkingManagerService.StateMachine == REQ_MODE_WAIT_FOR_STATUS) {
                 ParkingManagerService.ExpectedEventsList.clear();
                 ParkingManagerService.StateMachine = REQ_MODE_REQUEST_STATUS;
@@ -193,6 +205,11 @@ public class messageHandler {
             StatusElement prevStatus = SensorToUpdate.getStatus();
             SensorToUpdate.setStatus(msg.getType() == PARKING_SPOT_FREED ? StatusElement.FREE : msg.getType() == PARKING_SPOT_TAKEN ? StatusElement.TAKEN : StatusElement.ERROR);
             SensorToUpdate.setTimeStamp(new Date());
+
+            System.out.printf("Updating status of sensor: ");
+            SensorToUpdate.getId().print();
+            System.out.printf(" to " + SensorToUpdate.getStatus() + "%n");
+
             // find all relevant signs
             List<ParkingElement> SignsToUpdate = ParkingManagerService.Data.getSignsForParkingElement(SensorToUpdate);
             // change counters of signs
@@ -216,6 +233,10 @@ public class messageHandler {
                     }
                     ((ParkingSign) sign).setCounter(n);
                     sign.setTimeStamp(new Date());
+
+                    System.out.printf("Updating counter of sign: ");
+                    sign.getId().print();
+                    System.out.printf(" to " + n + "%n");
                 }
             }
             // assumption: all signs are initialized at esp as auto-update and
@@ -265,6 +286,7 @@ public class messageHandler {
                 }
             }
         } else if (msg.getType() == GET_SENSOR_STATE_FAILED) {  // in case of error try again
+            System.out.println("Server error while trying to get sensors data from auto detection. Trying again.");
             ParkingManagerService.ExpectedEventsList.clear();
             ParkingManagerService.StateMachine = GET_SENSORS_DATA_FOR_AUTO_BUILD;
         } else if (msg.getType() == PARKING_SPOT_FREED || msg.getType() == PARKING_SPOT_TAKEN || msg.getType() == PARKING_SPOT_ERROR) {
@@ -283,10 +305,13 @@ public class messageHandler {
 
     private static void WaitForAutoSensorResponse(messages msg) {
         if (msg.getType() == AUTO_INIT_FINISHED) {
+            System.out.println("Server finished auto detection of sensors.");
             ParkingManagerService.StateMachine = GET_SENSORS_DATA_FOR_AUTO_BUILD;
         } else if (msg.getType() == AUTO_INIT_NOT_FINISHED) {
+            System.out.println("Server has not finished auto detection of sensors yet.");
             ParkingManagerService.StateMachine = SENSORS_CONFIGURATION;
         } else if (msg.getType() == GET_AUTO_INIT_FINISHED_FAILED) {
+            System.out.println("Server failed auto detection of sensors. Trying again.");
             ParkingManagerService.StateMachine = GENERAL_CONFIGURATION;
         }
     }

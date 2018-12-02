@@ -79,6 +79,7 @@ public class ParkingManagerService {
                     break;
                 case WAIT_FOR_SENSORS_DATA_RESPONSE:  // finish state for both manual and auto init
                     if (ExpectedEventsList.isEmpty()) {
+                        System.out.println("Finished configuring sensors.");
                         Data.PrintParkingStructure(false, false, false);
                         StateMachine = GROUP_AND_DISPLAYS_CONFIGURATION;
                         System.out.println(StateMachine + ":");
