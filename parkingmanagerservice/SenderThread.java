@@ -54,7 +54,7 @@ public class SenderThread implements Runnable {
                         System.out.println("Sent successfully.\n");
                         ParkingManagerService.Threads.SenderQueue.remove_first_message();
                     } else {
-                        System.out.println("Send queue is empty. Will try again later . . .");
+                        //System.out.println("Send queue is empty. Will try again later . . .");
                         t.sleep(5000);
                     }
                     t.sleep(1000);

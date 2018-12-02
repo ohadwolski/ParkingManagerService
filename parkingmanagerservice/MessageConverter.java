@@ -100,16 +100,17 @@ public class MessageConverter {
             case "9":
                 // report on sensor
                 // could have problems here if format is incorrect
-                switch (s[1]) {
-                    case "0"://\n":
-                    case "2"://\n":
-                    case "3"://\n":
-                        return new messages(null, new Date(), GET_SENSOR_STATE_FAILED, 0);
-                    default:
-                        if (s.length < 5) break;
-                        MessageType type = (s[4].equals("0") ? PARKING_SPOT_FREED : (s[4].equals("1")) ? PARKING_SPOT_TAKEN : PARKING_SPOT_ERROR);
-                        return new messages(new SensorId(Integer.parseInt(s[1]), Integer.parseInt(s[2]), Integer.parseInt(s[3])), new Date(), type, 0);
-                }
+                if (s.length < 5) return new messages(null, new Date(), GET_SENSOR_STATE_FAILED, 0);
+                MessageType type = (s[4].equals("0") ? PARKING_SPOT_FREED : (s[4].equals("1")) ? PARKING_SPOT_TAKEN : PARKING_SPOT_ERROR);
+                return new messages(new SensorId(Integer.parseInt(s[1]), Integer.parseInt(s[2]), Integer.parseInt(s[3])), new Date(), type, 0);
+                //switch (s[1]) {
+                //    case "0"://\n":
+                //    case "2"://\n":
+                //    case "3"://\n":
+                //        return new messages(null, new Date(), GET_SENSOR_STATE_FAILED, 0);
+                //    default:
+                //        if (s.length < 5) break;
+                //}
             case "10":
                 // get state of all the sensors
                 switch (s[1]) {

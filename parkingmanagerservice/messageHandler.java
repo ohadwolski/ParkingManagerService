@@ -260,6 +260,7 @@ public class messageHandler {
     }
 
     private static void WaitForGroupAndDisplaysConfiguration(messages msg) {
+        // TODO: ERRORS THAT CAN HAPPEN? ERROR MESSAGES THAT CAN RETURN?
         if      (  msg.getType() == CREATE_GROUP_SUCCEEDED
                 || msg.getType() == ATTACH_SENSOR_TO_GROUP_SUCCEEDED
                 || msg.getType() == CREATE_DISPLAY_SUCCEEDED

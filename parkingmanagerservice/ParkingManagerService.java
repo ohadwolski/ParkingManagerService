@@ -190,7 +190,7 @@ public class ParkingManagerService {
 
     private static void WaitForAutoSensorResponse() {
         try {
-            System.out.println("Waiting for server to finish auto detection of sensors.");
+
             Thread.sleep(5000);  // wait 5 sec, than check if auto setup is complete
                                    // check is being made in messageHandler
         } catch (InterruptedException e) {
@@ -207,7 +207,7 @@ public class ParkingManagerService {
 
     private static void WaitForTimer() {
         try {
-            Thread.sleep((long) Data.getUpdate_interval());
+            Thread.sleep((long) Data.getUpdate_interval() * 1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -245,6 +245,7 @@ public class ParkingManagerService {
             messages chk_if_auto_is_finished = new messages(null, new Date(), GET_AUTO_INIT_FINISHED, 0);
             Threads.SenderQueue.addMessage(chk_if_auto_is_finished);
             //ExpectedEventsList.add(AUTO_INIT_FINISHED);
+            System.out.println("Waiting for server to finish auto detection of sensors.");
             StateMachine = WAIT_FOR_AUTO_SENSOR_RESPONSE;
             // create messages for getting auto detect
             // add messages of finish auto detect to expected list
@@ -347,8 +348,10 @@ public class ParkingManagerService {
 
         // code for loading data
 
-        Data.setEsp_ip_address("192.168.4.1");
-        Data.setEsp_port_number(9001);
+        //Data.setEsp_ip_address("192.168.4.1");
+        Data.setEsp_ip_address("localhost");
+        //Data.setEsp_port_number(9001);
+        Data.setEsp_port_number(59745);
         Data.setWorking_mode(0);
         Data.setUpdate_interval(5);
         Data.setAuto_init(true);
