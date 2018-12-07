@@ -1,12 +1,8 @@
 package parkingmanagerservice;
 
 
-
-
-import java.io.IOException;
-import java.net.ServerSocket;
+import java.util.Date;
 import java.util.List;
-import java.util.Vector;
 
 import static parkingmanagerservice.StateMachine.ON_EVENT_MODE_REQUEST_STATUS;
 
@@ -57,7 +53,7 @@ public class WatchdogThread implements Runnable{
                         // being made then after the check interval the sensors are being
                         // checked to prevent the possibility of a sensor that is OK but
                         // just hadn't changed all this time (prevent false positives).
-                        if (RequestModeChecked == false) {
+                        if (!RequestModeChecked) {
                             ParkingManagerService.StateMachine = ON_EVENT_MODE_REQUEST_STATUS;
                             System.out.println(ParkingManagerService.StateMachine + ":");
                             RequestModeChecked = true;
@@ -71,7 +67,7 @@ public class WatchdogThread implements Runnable{
                         break;
                 }
                 // Wait for check interval
-                t.sleep(ParkingManagerService.Data.getUpdate_interval() * 3);
+                t.sleep(ParkingManagerService.Data.getUpdate_interval() * 1000 * 3);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -81,8 +77,24 @@ public class WatchdogThread implements Runnable{
     }
 
     private void CheckSensorsErrorState() {
+        long currentTime = (new Date()).getTime();
         List<ParkingElement> ListOfSensors = ParkingManagerService.Data.getParkingSensorList();
-        
+        for (ParkingElement element : ListOfSensors) {
+            if (!(element instanceof ParkingSensor)) {
+                continue;
+            }
+            ParkingSensor sensor = (ParkingSensor) element;
+            if (currentTime - sensor.getTimeStamp().getTime() > ParkingManagerService.Data.getUpdate_interval() * 1000 * 3) {
+                // Did not receive update from sensor 3*T seconds
+                // Set sensor status to Error
+                if (sensor.getStatus() != StatusElement.ERROR) {
+                    sensor.setStatus(StatusElement.ERROR);
+                    System.out.printf("Watchdog: Did not receive update from ");
+                    sensor.print();
+                    System.out.println("Please check sensor. Status changed to Error.");
+                }
+            }
+        }
     }
 
     public void exit() {
