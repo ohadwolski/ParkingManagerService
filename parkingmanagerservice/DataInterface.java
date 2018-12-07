@@ -1,11 +1,11 @@
 package parkingmanagerservice;
 
 
-import javax.xml.crypto.Data;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataInterface {
+public class DataInterface implements Serializable {
     private Node<ParkingElement> root;
     private boolean auto_init;
     private int working_mode; // assume 0: manual by server, 1: on event, 2: every T seconds
@@ -133,19 +133,38 @@ public class DataInterface {
         this.auto_init = auto_init;
     }
 
-    public List<IdElement> getParkingSensorList() {
+    public List<IdElement> getParkingSensorIdList() {
         List<IdElement> ParkingSensorIDList = new ArrayList<IdElement>();
         if (root == null)
             return null;
-        FindParkingSensors(ParkingSensorIDList, root);
+        FindParkingSensorsIds(ParkingSensorIDList, root);
         return ParkingSensorIDList;
     }
 
-    public void FindParkingSensors(List<IdElement> ParkingSensorList, Node<ParkingElement> node) {
+    public void FindParkingSensorsIds(List<IdElement> ParkingSensorList, Node<ParkingElement> node) {
         if (node == null)
             return;
         if (node.getData() instanceof ParkingSensor) {
             ParkingSensorList.add(node.getData().getId());
+        }
+        for (Node<ParkingElement> child : node.getChildren()) {
+            FindParkingSensorsIds(ParkingSensorList,child);
+        }
+    }
+
+    public List<ParkingElement> getParkingSensorList() {
+        List<ParkingElement> ParkingSensorList = new ArrayList<ParkingElement>();
+        if (root == null)
+            return null;
+        FindParkingSensors(ParkingSensorList, root);
+        return ParkingSensorList;
+    }
+
+    public void FindParkingSensors(List<ParkingElement> ParkingSensorList, Node<ParkingElement> node) {
+        if (node == null)
+            return;
+        if (node.getData() instanceof ParkingSensor) {
+            ParkingSensorList.add(node.getData());
         }
         for (Node<ParkingElement> child : node.getChildren()) {
             FindParkingSensors(ParkingSensorList,child);

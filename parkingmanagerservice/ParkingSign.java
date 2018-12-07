@@ -1,8 +1,9 @@
 package parkingmanagerservice;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class ParkingSign extends ParkingElement {
+public class ParkingSign extends ParkingElement implements Serializable {
     protected int counter;
 
     public ParkingSign(SignId i, StatusElement s, ConfigurationElement c) {

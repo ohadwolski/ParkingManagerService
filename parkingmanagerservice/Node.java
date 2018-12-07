@@ -1,9 +1,10 @@
 package parkingmanagerservice;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Node<T> {
+public class Node<T> implements Serializable {
     private List<Node<T>> children = new ArrayList<Node<T>>();
     private Node<T> parent = null;
     private T data = null;

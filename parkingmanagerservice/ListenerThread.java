@@ -36,12 +36,14 @@ public class ListenerThread implements Runnable{
 
             while (ParkingManagerService.Threads.ConnectionThread.getConnectionState()) {
                 try {
-                    in = new BufferedReader(new InputStreamReader(ParkingManagerService.Threads.ConnectionThread.getInputStream()));
-
+                    //if (in == null || in.ready() != true) {
+                    //    in = new BufferedReader(new InputStreamReader(ParkingManagerService.Threads.ConnectionThread.getInputStream()));
+                    //}
                     messages msg;
                     String msg_in_text_format;
 
                     if ((msg_in_text_format = in.readLine()) != null) {
+                        System.out.println("Raw message received: " + msg_in_text_format);
                         msg = MessageConverter.convertStringToMessage(msg_in_text_format);
                         if (msg == null) throw new UnknownMessageFormat();
                         // add message to queue:
@@ -50,9 +52,9 @@ public class ListenerThread implements Runnable{
 
                     //
                 } catch (IOException e) {
-                    //e.printStackTrace();
+                    e.printStackTrace();
                     if (run) {
-                        System.out.println("Network error! Trying to connect again . . .");
+                        System.out.println("Network error in ListenerThread! Trying to connect again . . .");
                         ParkingManagerService.Threads.ConnectionThread.reconnect();
                         break;
                     }
@@ -83,5 +85,9 @@ public class ListenerThread implements Runnable{
     }
 
     private class UnknownMessageFormat extends Throwable {
+    }
+
+    public void SetInput(BufferedReader b) {
+        in = b;
     }
 }

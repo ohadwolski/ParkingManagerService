@@ -1,6 +1,8 @@
 package parkingmanagerservice;
 
-public class SensorId extends IdElement {
+import java.io.Serializable;
+
+public class SensorId extends IdElement implements Serializable {
     private int ZoneControllerId;
     private int ControllerId;
     private int SensorId;

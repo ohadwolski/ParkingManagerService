@@ -1,8 +1,9 @@
 package parkingmanagerservice;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class ParkingElement {
+public class ParkingElement implements Serializable {
     protected IdElement Id = null;
     protected StatusElement Status = null;
     protected ConfigurationElement Configuration = null;

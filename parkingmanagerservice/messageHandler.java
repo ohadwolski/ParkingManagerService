@@ -9,9 +9,8 @@ import static parkingmanagerservice.StateMachine.*;
 
 public class messageHandler {
     public static void handleMessage(messages msg) {
-
         msg.print();
-
+        //ParkingManagerService.PushOneMessage = true;
             switch (ParkingManagerService.StateMachine) {
                 case INIT:
                     NotApplicable(msg);
@@ -22,6 +21,16 @@ public class messageHandler {
                 case GENERAL_CONFIGURATION:
                     NotApplicable(msg);
                     break;
+                case GENERAL_CONFIGURATION_INIT:
+                case GENERAL_CONFIGURATION_MAX_GROUPS:
+                case GENERAL_CONFIGURATION_MAX_DISPLAYS:
+                case GENERAL_CONFIGURATION_MAX_CONTROLLERS:
+                    NotApplicable(msg);
+                    break;
+                case WAIT_FOR_GENERAL_CONFIGURATION_INIT:
+                case WAIT_FOR_GENERAL_CONFIGURATION_MAX_GROUPS:
+                case WAIT_FOR_GENERAL_CONFIGURATION_MAX_DISPLAYS:
+                case WAIT_FOR_GENERAL_CONFIGURATION_MAX_CONTROLLERS:
                 case WAIT_FOR_GENERAL_CONFIGURATION_FINISH:
                     WaitForGeneralConfigurationFinish(msg);
                     break;
@@ -73,6 +82,18 @@ public class messageHandler {
                 case T_TIME_MODE_STANDBY:
                     UpdateDataAccordingToMessage(msg);
                     break;
+                case RESET:
+                    NotApplicable(msg);
+                    break;
+                case WAIT_FOR_RESET:
+                    Iterator itr = ParkingManagerService.ExpectedEventsList.iterator();
+                    while (itr.hasNext())
+                    {
+                        if (itr.next() == msg.getType()) {
+                            itr.remove();
+                            break;
+                        }
+                    }
             }
 
 

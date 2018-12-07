@@ -37,31 +37,33 @@ public class SenderThread implements Runnable {
             while (ParkingManagerService.Threads.ConnectionThread.getConnectionState()) {
                 try {
 
-                    out = new PrintWriter(ParkingManagerService.Threads.ConnectionThread.getOutputStream(), true);
+                    //out = new PrintWriter(ParkingManagerService.Threads.ConnectionThread.getOutputStream(), true);
 
                     // get message from sender queue:
-                    if (! ParkingManagerService.Threads.SenderQueue.is_empty()) {
+                    if (! ParkingManagerService.Threads.SenderQueue.is_empty()) { // && ParkingManagerService.PushOneMessage) {
                         messages msg_to_send = ParkingManagerService.Threads.SenderQueue.get_first_message();
                         System.out.println("Sending message:");
                         msg_to_send.print();
                         String msg_in_text_format = MessageConverter.convertMessageToString(msg_to_send);
-                        out.println(msg_in_text_format);
-
+                        out.printf(msg_in_text_format);
+                        System.out.println("Raw message sent: " + msg_in_text_format);
                         if (out.checkError()) {
                             throw new IOException();
                         }
 
                         System.out.println("Sent successfully.");
                         ParkingManagerService.Threads.SenderQueue.remove_first_message();
+
+
                     } else {
                         //System.out.println("Send queue is empty. Will try again later . . .");
-                        t.sleep(5000);
+                        t.sleep(500);
                     }
-                    t.sleep(1000);
+                    t.sleep(500);
                 } catch (IOException e) {
-                    //e.printStackTrace();
+                    e.printStackTrace();
                     if (run) {
-                        System.out.println("Network error! Trying to connect again . . .");
+                        System.out.println("Network error in SenderThread! Trying to connect again . . .");
                         ParkingManagerService.Threads.ConnectionThread.reconnect();
                         break;
                     }
@@ -88,5 +90,9 @@ public class SenderThread implements Runnable {
 
     public void exit() {
         run = false;
+    }
+
+    public void SetOutput(PrintWriter b) {
+        out = b;
     }
 }

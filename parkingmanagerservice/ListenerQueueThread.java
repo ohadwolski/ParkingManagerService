@@ -61,6 +61,9 @@ public class ListenerQueueThread implements Runnable{
         ReceiveQueue.add(msg); // Do we need to copy the msg or is it ok to use reference?
     }
 
+    public void ClearQueue() {
+        ReceiveQueue.clear();
+    }
 
     public void exit() {
         run = false;

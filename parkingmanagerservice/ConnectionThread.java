@@ -67,6 +67,10 @@ public class ConnectionThread implements Runnable{
                //in = new ObjectInputStream(server.getInputStream());
                out = server.getOutputStream();
                in = server.getInputStream();
+
+               ParkingManagerService.Threads.ListenerThread.SetInput(new BufferedReader(new InputStreamReader(in)));
+               ParkingManagerService.Threads.SenderThread.SetOutput(new PrintWriter(out, true));
+
                connected = true;
                //messages echo = new messages(0, new Date(), ECHO, 0);
                //ObjectOutputStream outObject = new ObjectOutputStream(server.getOutputStream());
@@ -119,6 +123,7 @@ public class ConnectionThread implements Runnable{
 
    public void reconnect() {
       connected = false;
+      ParkingManagerService.StateMachine = StateMachine.RESET;
    }
 
    public OutputStream getOutputStream()

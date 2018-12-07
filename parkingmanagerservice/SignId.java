@@ -1,6 +1,8 @@
 package parkingmanagerservice;
 
-public class SignId extends IdElement {
+import java.io.Serializable;
+
+public class SignId extends IdElement implements Serializable {
     private int SignId;
     private int SubSignId;
 

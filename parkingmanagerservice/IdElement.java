@@ -1,6 +1,8 @@
 package parkingmanagerservice;
 
-public class IdElement {
+import java.io.Serializable;
+
+public class IdElement implements Serializable {
     private int id_number;
 
     public IdElement() {

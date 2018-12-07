@@ -1,8 +1,9 @@
 package parkingmanagerservice;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class ParkingSensor extends ParkingElement {
+public class ParkingSensor extends ParkingElement implements Serializable {
     //private SensorId Id;
     //private StatusElement Status;
     //private ConfigurationElement Configuration;

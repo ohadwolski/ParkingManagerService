@@ -5,6 +5,8 @@
  */
 package parkingmanagerservice;
 
+import sun.awt.windows.ThemeReader;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -48,9 +50,53 @@ public class ParkingManagerService {
                     }
                     break;
                 case GENERAL_CONFIGURATION:
-                    CreateGeneralConfigurationMessages();
-                    StateMachine = WAIT_FOR_GENERAL_CONFIGURATION_FINISH;
+                    //CreateGeneralConfigurationMessages();
+                    StateMachine = GENERAL_CONFIGURATION_MAX_GROUPS; //WAIT_FOR_GENERAL_CONFIGURATION_FINISH;
                     System.out.println(StateMachine + ":");
+                    break;
+                case GENERAL_CONFIGURATION_INIT:
+                    CreateGeneralConfigurationMessages();
+                    StateMachine = WAIT_FOR_GENERAL_CONFIGURATION_INIT;
+                    System.out.println(StateMachine + ":");
+                    break;
+                case WAIT_FOR_GENERAL_CONFIGURATION_INIT:
+                    if (ExpectedEventsList.isEmpty()) {
+                        StateMachine = WAIT_FOR_GENERAL_CONFIGURATION_FINISH;
+                        System.out.println(StateMachine + ":");
+                    }
+                    break;
+                case GENERAL_CONFIGURATION_MAX_GROUPS:
+                    CreateGeneralConfigurationMessages();
+                    StateMachine = WAIT_FOR_GENERAL_CONFIGURATION_MAX_GROUPS;
+                    System.out.println(StateMachine + ":");
+                    break;
+                case WAIT_FOR_GENERAL_CONFIGURATION_MAX_GROUPS:
+                    if (ExpectedEventsList.isEmpty()) {
+                        StateMachine = GENERAL_CONFIGURATION_MAX_DISPLAYS;
+                        System.out.println(StateMachine + ":");
+                    }
+                    break;
+                case GENERAL_CONFIGURATION_MAX_DISPLAYS:
+                    CreateGeneralConfigurationMessages();
+                    StateMachine = WAIT_FOR_GENERAL_CONFIGURATION_MAX_DISPLAYS;
+                    System.out.println(StateMachine + ":");
+                    break;
+                case WAIT_FOR_GENERAL_CONFIGURATION_MAX_DISPLAYS:
+                    if (ExpectedEventsList.isEmpty()) {
+                        StateMachine = GENERAL_CONFIGURATION_MAX_CONTROLLERS;
+                        System.out.println(StateMachine + ":");
+                    }
+                    break;
+                case GENERAL_CONFIGURATION_MAX_CONTROLLERS:
+                    CreateGeneralConfigurationMessages();
+                    StateMachine = WAIT_FOR_GENERAL_CONFIGURATION_MAX_CONTROLLERS;
+                    System.out.println(StateMachine + ":");
+                    break;
+                case WAIT_FOR_GENERAL_CONFIGURATION_MAX_CONTROLLERS:
+                    if (ExpectedEventsList.isEmpty()) {
+                        StateMachine = GENERAL_CONFIGURATION_INIT;
+                        System.out.println(StateMachine + ":");
+                    }
                     break;
                 case WAIT_FOR_GENERAL_CONFIGURATION_FINISH:
                     if (ExpectedEventsList.isEmpty()) {
@@ -166,6 +212,16 @@ public class ParkingManagerService {
                 case T_TIME_MODE_STANDBY:
                     WaitForTimer();
                     break;
+                case RESET:
+                    Reset();
+                    break;
+                case WAIT_FOR_RESET:
+                    if (ExpectedEventsList.isEmpty()) {
+                        System.out.println("Resetting done, rebooting.");
+                        StateMachine = GENERAL_CONFIGURATION;
+                        System.out.println(StateMachine + ":");
+                    }
+                    break;
             }
             try {
                 sleep(1000);
@@ -175,8 +231,20 @@ public class ParkingManagerService {
         }
 
 
+        System.out.println("Parking Manager Service is exiting...");
+
+    }
 
 
+    private static void Reset() {
+        System.out.println("Resetting ESP.");
+        messages reset_msg = new messages(null, new Date(), RESET_ESP, 0);
+        Threads.ListenerQueueThread.ClearQueue();
+        Threads.SenderQueue.ClearQueue();
+        Threads.SenderQueue.addMessage(reset_msg);
+        ExpectedEventsList.add(RESET_ESP_SUCCEEDED);
+        StateMachine = WAIT_FOR_RESET;
+        System.out.println(StateMachine + ":");
     }
 
     private static void InitiateDataForAutoBuild() {
@@ -253,7 +321,7 @@ public class ParkingManagerService {
             System.out.println("Creating and sending sensors configuration messages.");
             // create sensors messages for init
             // according to data
-            List<IdElement> ParkingSensorList = Data.getParkingSensorList();
+            List<IdElement> ParkingSensorList = Data.getParkingSensorIdList();
             // add messages to queue
             for (IdElement sensorId : ParkingSensorList) {
                 messages sensorMessage = new messages(sensorId, new Date(), INIT_SENSOR, 0);
@@ -277,7 +345,7 @@ public class ParkingManagerService {
 
             // attach sensors to group (all sensors and sub sensors)
             List<IdElement> sensorsUnderArea = new ArrayList<IdElement>();
-            Data.FindParkingSensors(sensorsUnderArea, Data.getParkingElementNode(areaId));
+            Data.FindParkingSensorsIds(sensorsUnderArea, Data.getParkingElementNode(areaId));
             for (IdElement sensor : sensorsUnderArea) {
                 messages attachSensorToGroupMessage = new messages(sensor, new Date(), ATTACH_SENSOR_TO_GROUP, ((AreaId)areaId).getAreaId());
                 Threads.SenderQueue.addMessage(attachSensorToGroupMessage);
@@ -322,46 +390,80 @@ public class ParkingManagerService {
 
 
     private static void CreateGeneralConfigurationMessages() {
-        System.out.println("Creating general configuration messages:");
-        System.out.println("init, init max groups, init max displays, init max controllers.");
-        // creating messages:
-        messages init = new messages(null,new Date(),((Data.isAuto_init())? INIT_AUTO : INIT_MANUAL),0);
-        messages init_max_group = new messages(null,new Date(), INIT_MAX_GROUP_NUM, 100);
-        messages init_max_display = new messages(null,new Date(), INIT_MAX_DISPLAY_NUM, 100);
-        messages init_max_controllers = new messages(null,new Date(), INIT_MAX_CONTROLLERS_NUM, 100);
-
+        // creating messages
         // adding messages to list
-
-        Threads.SenderQueue.addMessage(init);
-        Threads.SenderQueue.addMessage(init_max_group);
-        Threads.SenderQueue.addMessage(init_max_display);
-        Threads.SenderQueue.addMessage(init_max_controllers);
-
         // adding messages to expected list
-        ExpectedEventsList.add(INIT_SUCCEEDED);
-        ExpectedEventsList.add(INIT_MAX_GROUP_NUM_SUCCEEDED);
-        ExpectedEventsList.add(INIT_MAX_DISPLAY_NUM_SUCCEEDED);
-        ExpectedEventsList.add(INIT_MAX_CONTROLLERS_NUM_SUCCEEDED);
+
+        switch (StateMachine) {
+            case GENERAL_CONFIGURATION_INIT:
+                System.out.println("Creating general configuration messages:");
+                System.out.println("init, init max groups, init max displays, init max controllers.");
+                messages init = new messages(null,new Date(),((Data.isAuto_init())? INIT_AUTO : INIT_MANUAL),0);
+                Threads.SenderQueue.addMessage(init);
+                ExpectedEventsList.add(INIT_SUCCEEDED);
+                break;
+            case GENERAL_CONFIGURATION_MAX_GROUPS:
+                messages init_max_group = new messages(null,new Date(), INIT_MAX_GROUP_NUM, 5);
+                Threads.SenderQueue.addMessage(init_max_group);
+                ExpectedEventsList.add(INIT_MAX_GROUP_NUM_SUCCEEDED);
+                break;
+            case GENERAL_CONFIGURATION_MAX_DISPLAYS:
+                messages init_max_display = new messages(null,new Date(), INIT_MAX_DISPLAY_NUM, 5);
+                Threads.SenderQueue.addMessage(init_max_display);
+                ExpectedEventsList.add(INIT_MAX_DISPLAY_NUM_SUCCEEDED);
+                break;
+            case GENERAL_CONFIGURATION_MAX_CONTROLLERS:
+                messages init_max_controllers = new messages(null,new Date(), INIT_MAX_CONTROLLERS_NUM, 5);
+                Threads.SenderQueue.addMessage(init_max_controllers);
+                ExpectedEventsList.add(INIT_MAX_CONTROLLERS_NUM_SUCCEEDED);
+                break;
+        }
     }
 
     private static void LoadData() {
 
         // code for loading data
 
-        //Data.setEsp_ip_address("192.168.4.1");
-        Data.setEsp_ip_address("localhost");
-        //Data.setEsp_port_number(9001);
-        Data.setEsp_port_number(60224);
+        Data.setEsp_ip_address("192.168.4.1");
+        //Data.setEsp_ip_address("localhost");
+        Data.setEsp_port_number(9001);
+        //Data.setEsp_port_number(56144);
         Data.setWorking_mode(0);
         Data.setUpdate_interval(5);
         Data.setAuto_init(true);
 
+/*
+        try {
+         FileInputStream fileIn = new FileInputStream("/ParkingManagerDatabase.ser");
+         ObjectInputStream in = new ObjectInputStream(fileIn);
+         Data = (DataInterface) in.readObject();
+         in.close();
+         fileIn.close();
+      } catch (IOException i) {
+         System.out.println("Can't access file /ParkingManagerDatabase.ser");
+         i.printStackTrace();
+         exit();
+         return;
+      } catch (ClassNotFoundException c) {
+         System.out.println("DataInterface class not found");
+         c.printStackTrace();
+         exit();
+         return;
+      }
 
+
+
+
+ */
 
 
     }
 
 
+    public static void exit() {
+        run = false;
+        Threads.exit();
+    }
 
 }
 

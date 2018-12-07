@@ -36,13 +36,18 @@ public class Test {
         ParkingElement rootSignRight = new ParkingSign(new SignId(1, 0),StatusElement.OK, ConfigurationElement.RIGHT);
         ParkingElement rootSignLeft = new ParkingSign(new SignId(2, 0),StatusElement.OK, ConfigurationElement.LEFT);
 
-        ParkingElement Sensor1 = new ParkingSensor(new SensorId(0,0,0), StatusElement.FREE, ConfigurationElement.REGULAR);
-        ParkingElement Sensor2 = new ParkingSensor(new SensorId(0,0,1), StatusElement.FREE, ConfigurationElement.REGULAR);
-        ParkingElement Sensor3 = new ParkingSensor(new SensorId(0,0,2), StatusElement.FREE, ConfigurationElement.REGULAR);
+        ParkingElement Sensor1 = new ParkingSensor(new SensorId(0,2,31), StatusElement.FREE, ConfigurationElement.REGULAR);
+        ParkingElement Sensor2 = new ParkingSensor(new SensorId(0,2,1), StatusElement.FREE, ConfigurationElement.REGULAR);
+        ParkingElement Sensor3 = new ParkingSensor(new SensorId(0,2,2), StatusElement.FREE, ConfigurationElement.REGULAR);
+        ParkingElement Sensor4 = new ParkingSensor(new SensorId(0,2,5), StatusElement.FREE, ConfigurationElement.REGULAR);
+        ParkingElement Sensor5 = new ParkingSensor(new SensorId(0,2,7), StatusElement.FREE, ConfigurationElement.REGULAR);
 
-        ParkingElement Sensor11 = new ParkingSensor(new SensorId(0,1,0), StatusElement.FREE, ConfigurationElement.REGULAR);
-        ParkingElement Sensor22 = new ParkingSensor(new SensorId(0,1,1), StatusElement.FREE, ConfigurationElement.REGULAR);
-        ParkingElement Sensor33 = new ParkingSensor(new SensorId(0,1,2), StatusElement.FREE, ConfigurationElement.REGULAR);
+        ParkingElement Sensor11 = new ParkingSensor(new SensorId(0,0,7), StatusElement.FREE, ConfigurationElement.REGULAR);
+        ParkingElement Sensor22 = new ParkingSensor(new SensorId(0,0,15), StatusElement.FREE, ConfigurationElement.REGULAR);
+        ParkingElement Sensor33 = new ParkingSensor(new SensorId(0,0,31), StatusElement.FREE, ConfigurationElement.REGULAR);
+        ParkingElement Sensor44 = new ParkingSensor(new SensorId(0,0,1), StatusElement.FREE, ConfigurationElement.REGULAR);
+        ParkingElement Sensor55 = new ParkingSensor(new SensorId(0,0,2), StatusElement.FREE, ConfigurationElement.REGULAR);
+        ParkingElement Sensor66 = new ParkingSensor(new SensorId(0,0,5), StatusElement.FREE, ConfigurationElement.REGULAR);
 
         Node<ParkingElement> root = new Node<ParkingElement>(area);
         Node<ParkingElement> leaf1 = new Node<ParkingElement>(area2);
@@ -58,6 +63,12 @@ public class Test {
         Node<ParkingElement> leaf9 = new Node<ParkingElement>(Sensor11);
         Node<ParkingElement> leaf10 = new Node<ParkingElement>(Sensor22);
         Node<ParkingElement> leaf11 = new Node<ParkingElement>(Sensor33);
+
+        Node<ParkingElement> leaf12 = new Node<ParkingElement>(Sensor4);
+        Node<ParkingElement> leaf13 = new Node<ParkingElement>(Sensor5);
+        Node<ParkingElement> leaf14 = new Node<ParkingElement>(Sensor44);
+        Node<ParkingElement> leaf15 = new Node<ParkingElement>(Sensor55);
+        Node<ParkingElement> leaf16 = new Node<ParkingElement>(Sensor66);
 
         root.addChild(leaf1);
         leaf1.setParent(root);
@@ -75,6 +86,10 @@ public class Test {
         leaf8.setParent(leaf1);
         leaf1.addChild(leaf4);
         leaf4.setParent(leaf1);
+        leaf1.addChild(leaf12);
+        leaf12.setParent(leaf1);
+        leaf1.addChild(leaf13);
+        leaf13.setParent(leaf1);
 
         leaf2.addChild(leaf9);
         leaf9.setParent(leaf2);
@@ -84,12 +99,17 @@ public class Test {
         leaf11.setParent(leaf2);
         leaf2.addChild(leaf5);
         leaf5.setParent(leaf2);
-
+        leaf2.addChild(leaf14);
+        leaf14.setParent(leaf2);
+        leaf2.addChild(leaf15);
+        leaf15.setParent(leaf2);
+        leaf2.addChild(leaf16);
+        leaf16.setParent(leaf2);
         //print(root);
 
 
         DataInterface IF = new DataInterface(root);
-        IF.PrintParkingStructure(true, true, true);
+        IF.PrintParkingStructure(false, false, false);
 
 
 

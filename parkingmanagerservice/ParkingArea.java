@@ -1,8 +1,9 @@
 package parkingmanagerservice;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class ParkingArea extends ParkingElement {
+public class ParkingArea extends ParkingElement implements Serializable {
 
 
 

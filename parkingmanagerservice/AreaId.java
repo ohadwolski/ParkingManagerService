@@ -1,6 +1,8 @@
 package parkingmanagerservice;
 
-public class AreaId extends IdElement {
+import java.io.Serializable;
+
+public class AreaId extends IdElement implements Serializable {
     private int AreaId;
 
     public AreaId() {

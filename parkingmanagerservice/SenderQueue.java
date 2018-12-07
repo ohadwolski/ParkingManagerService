@@ -78,6 +78,9 @@ public class SenderQueue {//implements Runnable {
         SendQueue.addAll(messagesVector);
     }
 
+    public void ClearQueue() {
+        SendQueue.clear();
+    }
 /*
     public void exit() {
         run = false;
