@@ -45,8 +45,13 @@ public class WatchdogThread implements Runnable{
             try {
                 switch (ParkingManagerService.StateMachine) {
                     case REQ_MODE_WAIT_FOR_TIMER:
+                    case REQ_MODE_REQUEST_STATUS:
+                    case REQ_MODE_WAIT_FOR_STATUS:
                     case T_TIME_MODE_STANDBY:
+                    case ON_EVENT_MODE_REQUEST_STATUS:
+                    case ON_EVENT_MODE_WAIT_FOR_STATUS:
                         CheckSensorsErrorState();
+                        RequestModeChecked = false;
                         break;
                     case ON_EVENT_MODE_STANDBY:
                         // In On_Event mode, a request for all-sensor status update is
@@ -99,5 +104,9 @@ public class WatchdogThread implements Runnable{
 
     public void exit() {
         run = false;
+    }
+
+    public void join() throws InterruptedException {
+        t.join();
     }
 }

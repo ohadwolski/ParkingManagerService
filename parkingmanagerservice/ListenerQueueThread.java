@@ -37,7 +37,7 @@ public class ListenerQueueThread implements Runnable{
                 //System.out.println("Checking receive queue . . .");
                 if (ReceiveQueue.isEmpty()) {
                     //System.out.println("No messages found in receive queue. Trying again later.");
-                    t.sleep(5000);
+                    t.sleep(1000);
                     //continue;
                 } else {
                     System.out.println("Found " + ReceiveQueue.size() + " new messages in receive queue. Handling:\n");
@@ -67,5 +67,9 @@ public class ListenerQueueThread implements Runnable{
 
     public void exit() {
         run = false;
+    }
+
+    public void join() throws InterruptedException {
+        t.join();
     }
 }

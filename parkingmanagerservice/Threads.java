@@ -12,7 +12,7 @@ public class Threads {
     public ListenerQueueThread ListenerQueueThread;
     public SenderQueue SenderQueue;
     public WatchdogThread WatchdogThread;
-    public  DataSaverThread DataSaverThread;
+    public DataSaverThread DataSaverThread;
 
     public void Start(){ // need to check that we open input here first and in ESP we open output first so we don't get deadlocked
         ConnectionThread = new ConnectionThread( "ConnectionThread");
@@ -41,12 +41,25 @@ public class Threads {
 
 
     public void exit() {
-        ParkingManagerService.Threads.ConnectionThread.disconnect();
         ParkingManagerService.Threads.ListenerThread.exit();
         ParkingManagerService.Threads.SenderThread.exit();
         ParkingManagerService.Threads.ListenerQueueThread.exit();
         ParkingManagerService.Threads.WatchdogThread.exit();
         ParkingManagerService.Threads.DataSaverThread.exit();
+        ParkingManagerService.Threads.ConnectionThread.disconnect();
+    }
+
+    public void join() {
+        try {
+            ParkingManagerService.Threads.ListenerThread.join();
+            ParkingManagerService.Threads.SenderThread.join();
+            ParkingManagerService.Threads.ListenerQueueThread.join();
+            ParkingManagerService.Threads.WatchdogThread.join();
+            ParkingManagerService.Threads.DataSaverThread.join();
+            ParkingManagerService.Threads.ConnectionThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 }

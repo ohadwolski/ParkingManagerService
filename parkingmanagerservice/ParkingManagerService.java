@@ -231,6 +231,8 @@ public class ParkingManagerService {
         }
 
 
+        System.out.println("Waiting for threads to finish...");
+        Threads.join();
         System.out.println("Parking Manager Service is exiting...");
 
     }
@@ -424,10 +426,10 @@ public class ParkingManagerService {
 
         // code for loading data
 
-        Data.setEsp_ip_address("192.168.4.1");
-        //Data.setEsp_ip_address("localhost");
-        Data.setEsp_port_number(9001);
-        //Data.setEsp_port_number(56144);
+        //Data.setEsp_ip_address("192.168.4.1");
+        Data.setEsp_ip_address("localhost");
+        //Data.setEsp_port_number(9001);
+        Data.setEsp_port_number(64810);
         Data.setWorking_mode(0);
         Data.setUpdate_interval(5);
         Data.setAuto_init(true);

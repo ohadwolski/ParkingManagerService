@@ -65,10 +65,11 @@ public class SenderThread implements Runnable {
                     if (run) {
                         System.out.println("Network error in SenderThread! Trying to connect again . . .");
                         ParkingManagerService.Threads.ConnectionThread.reconnect();
-                        break;
                     }
+                    break;
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                    break;
                 }
 
             }
@@ -94,5 +95,9 @@ public class SenderThread implements Runnable {
 
     public void SetOutput(PrintWriter b) {
         out = b;
+    }
+
+    public void join() throws InterruptedException {
+        t.join();
     }
 }

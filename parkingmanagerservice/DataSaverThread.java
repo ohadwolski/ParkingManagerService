@@ -30,7 +30,11 @@ public class DataSaverThread implements Runnable {
         while (run) {
             switch (ParkingManagerService.StateMachine) {
                 case REQ_MODE_WAIT_FOR_TIMER:
+                case REQ_MODE_REQUEST_STATUS:
+                case REQ_MODE_WAIT_FOR_STATUS:
                 case ON_EVENT_MODE_STANDBY:
+                case ON_EVENT_MODE_REQUEST_STATUS:
+                case ON_EVENT_MODE_WAIT_FOR_STATUS:
                 case T_TIME_MODE_STANDBY:
                     SaveDataToFile();
                     break;
@@ -67,4 +71,7 @@ public class DataSaverThread implements Runnable {
         run = false;
     }
 
+    public void join() throws InterruptedException {
+        t.join();
+    }
 }

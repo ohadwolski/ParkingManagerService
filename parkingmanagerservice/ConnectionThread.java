@@ -85,7 +85,7 @@ public class ConnectionThread implements Runnable{
             } catch (SocketTimeoutException | ConnectException s) { // not suppose to happen because haven't set timeout
                System.out.println("Socket timed out!");
                connected = false;
-               continue; // try again
+               break; // try again
             } catch (IOException e) {
                connected = false;
                e.printStackTrace();
@@ -109,13 +109,19 @@ public class ConnectionThread implements Runnable{
 
       try {
          System.out.println("Closing connection . . .");
-         server.close();
+         t.sleep(5000);
+         if (server!= null) server.close();
          System.out.println("Done!");
          run = false;
-      } catch (IOException e) {
+      } catch (InterruptedException|IOException e) {
          e.printStackTrace();
       }
    }
+
+   public void join() throws InterruptedException {
+      t.join();
+   }
+
 
    public boolean getConnectionState() {
       return connected;

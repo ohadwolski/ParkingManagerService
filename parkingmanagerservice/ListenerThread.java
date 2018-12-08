@@ -56,8 +56,8 @@ public class ListenerThread implements Runnable{
                     if (run) {
                         System.out.println("Network error in ListenerThread! Trying to connect again . . .");
                         ParkingManagerService.Threads.ConnectionThread.reconnect();
-                        break;
                     }
+                    break;
                 } catch (UnknownMessageFormat unknownMessageFormat) {
                     System.out.println("Unknown message format received! Ignoring . . .");
                 }
@@ -82,6 +82,10 @@ public class ListenerThread implements Runnable{
 
     public void exit() {
         run = false;
+    }
+
+    public void join() throws InterruptedException {
+        t.join();
     }
 
     private class UnknownMessageFormat extends Throwable {
