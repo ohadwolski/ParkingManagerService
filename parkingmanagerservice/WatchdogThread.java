@@ -73,7 +73,7 @@ public class WatchdogThread implements Runnable{
                         break;
                 }
                 // Wait for check interval
-                t.sleep(ParkingManagerService.Data.getUpdate_interval() * 1000 * 3);
+                t.sleep(SensorTimeoutConstant * 1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
