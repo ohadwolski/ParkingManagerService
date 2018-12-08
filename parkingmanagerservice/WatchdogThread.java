@@ -14,6 +14,7 @@ public class WatchdogThread implements Runnable{
     private Thread t;
     private String threadName;
     private boolean run;
+    private long SensorTimeoutConstant = 60;
 
     WatchdogThread(String name) {
         threadName = name;
@@ -89,8 +90,8 @@ public class WatchdogThread implements Runnable{
                 continue;
             }
             ParkingSensor sensor = (ParkingSensor) element;
-            if (currentTime - sensor.getTimeStamp().getTime() > ParkingManagerService.Data.getUpdate_interval() * 1000 * 3) {
-                // Did not receive update from sensor 3*T seconds
+            if (currentTime - sensor.getTimeStamp().getTime() > SensorTimeoutConstant * 1000) {
+                // Did not receive update from sensor <SensorTimeoutConstant> seconds
                 // Set sensor status to Error
                 if (sensor.getStatus() != StatusElement.ERROR) {
                     sensor.setStatus(StatusElement.ERROR);
