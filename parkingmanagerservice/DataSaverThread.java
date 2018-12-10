@@ -54,7 +54,7 @@ public class DataSaverThread implements Runnable {
     private void SaveDataToFile() {
         System.out.println("Saving data to file...");
         try {
-            FileOutputStream fileOut = new FileOutputStream("/ParkingManagerDatabase.ser");
+            FileOutputStream fileOut = new FileOutputStream("./ParkingManagerDatabase.ser");
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             out.writeObject(ParkingManagerService.Data);
             out.close();

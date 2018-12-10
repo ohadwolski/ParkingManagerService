@@ -7,6 +7,9 @@ package parkingmanagerservice;
 
 import sun.awt.windows.ThemeReader;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -426,6 +429,7 @@ public class ParkingManagerService {
 
         // code for loading data
 
+        
         //Data.setEsp_ip_address("192.168.4.1");
         Data.setEsp_ip_address("localhost");
         //Data.setEsp_port_number(9001);
@@ -434,9 +438,25 @@ public class ParkingManagerService {
         Data.setUpdate_interval(5);
         Data.setAuto_init(true);
 
+
+
+
 /*
+        Data = Test.getTestData();
+        //Data.setEsp_ip_address("192.168.4.1");
+        Data.setEsp_ip_address("localhost");
+        //Data.setEsp_port_number(9001);
+        Data.setEsp_port_number(64810);
+        Data.setWorking_mode(0);
+        Data.setUpdate_interval(5);
+        Data.setAuto_init(true);
+*/
+
+
+/*
+
         try {
-         FileInputStream fileIn = new FileInputStream("/ParkingManagerDatabase.ser");
+         FileInputStream fileIn = new FileInputStream("./ParkingManagerDatabase.ser");
          ObjectInputStream in = new ObjectInputStream(fileIn);
          Data = (DataInterface) in.readObject();
          in.close();
@@ -453,10 +473,10 @@ public class ParkingManagerService {
          return;
       }
 
+*/
 
 
 
- */
 
 
     }
