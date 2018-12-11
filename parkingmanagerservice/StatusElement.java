@@ -1,8 +1,7 @@
 package parkingmanagerservice;
 
-import java.io.Serializable;
 
-public enum StatusElement implements Serializable {
+public enum StatusElement {
     FREE, TAKEN,
     OK, ERROR
 }

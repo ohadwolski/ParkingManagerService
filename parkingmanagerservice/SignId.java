@@ -1,8 +1,7 @@
 package parkingmanagerservice;
 
-import java.io.Serializable;
 
-public class SignId extends IdElement implements Serializable {
+public class SignId extends IdElement {
     private int SignId;
     private int SubSignId;
 
@@ -58,6 +57,13 @@ public class SignId extends IdElement implements Serializable {
 
     public void setSubSignId(int subSignId) {
         SubSignId = subSignId;
+    }
+
+    public String stringToTree() {
+        String id = Integer.toString(SignId);
+        String subId = Integer.toString(SubSignId);
+        String toReturn = "Sign " + id + " - Sub Sign " + subId;
+        return toReturn;
     }
 }
 

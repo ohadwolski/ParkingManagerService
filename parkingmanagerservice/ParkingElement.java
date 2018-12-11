@@ -65,5 +65,11 @@ public class ParkingElement implements Serializable {
         Id.print();
         System.out.printf("%n");
     }
+
+
+    @Override
+    public String toString() {
+        return Id.stringToTree();
+    }
 }
 

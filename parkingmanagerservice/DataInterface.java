@@ -1,44 +1,82 @@
 package parkingmanagerservice;
 
 
-import java.io.Serializable;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DataInterface implements Serializable {
-    private Node<ParkingElement> root;
-    private boolean auto_init;
-    private int working_mode; // assume 0: manual by server, 1: on event, 2: every T seconds
-    private int update_interval; // in seconds
-    private String esp_ip_address;
-    private int esp_port_number;
+    //private Node<ParkingElement> root;
+    //private boolean auto_init;
+    //private int working_mode; // assume 0: manual by server, 1: on event, 2: every T seconds
+    //private int update_interval; // in seconds
+    //private String esp_ip_address;
+    //private int esp_port_number;
+
+    private ParkingManagerData Data = new ParkingManagerData();
 
     public DataInterface() {
-        root = null;
-        working_mode = 0;
-        update_interval = 0;
-        esp_ip_address = null;
-        esp_port_number = 0;
+        Data.root = null;
+        Data.working_mode = 0;
+        Data.update_interval = 0;
+        Data.esp_ip_address = null;
+        Data.esp_port_number = 0;
     }
 
     public DataInterface(Node<ParkingElement> r) {
-        root = r;
+        Data.root = r;
     }
     public DataInterface(DataInterface d, Node<ParkingElement> r) {
-        root = r;
-        auto_init = d.auto_init;
-        working_mode = d.working_mode;
-        update_interval = d.update_interval;
-        esp_ip_address = d.esp_ip_address;
-        esp_port_number = d.esp_port_number;
+        Data.root = r;
+        Data.auto_init = d.Data.auto_init;
+        Data.working_mode = d.Data.working_mode;
+        Data.update_interval = d.Data.update_interval;
+        Data.esp_ip_address = d.Data.esp_ip_address;
+        Data.esp_port_number = d.Data.esp_port_number;
+    }
+
+    public void LoadData() {
+        System.out.println("Loading data from file...");
+        try {
+            FileInputStream fileIn = new FileInputStream("./ParkingManagerData.ser");
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            Data = (ParkingManagerData) in.readObject();
+            in.close();
+            fileIn.close();
+        } catch (IOException i) {
+            System.out.println("Can't access file /ParkingManagerData.ser");
+            i.printStackTrace();
+            ParkingManagerService.exit();
+            return;
+        } catch (ClassNotFoundException c) {
+            System.out.println("ParkingManagerData class not found");
+            c.printStackTrace();
+            ParkingManagerService.exit();
+            return;
+        }
+    }
+
+    public void SaveData() {
+        try {
+            FileOutputStream fileOut = new FileOutputStream("./ParkingManagerData.ser");
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(Data);
+            out.close();
+            fileOut.close();
+            System.out.println("Data saved to /ParkingManagerData.ser");
+        } catch (IOException i) {
+            System.out.println("Can't save file /ParkingManagerData.ser");
+            i.printStackTrace();
+            ParkingManagerService.exit();
+        }
     }
 
     public ParkingElement getParkingElement(IdElement id) {
-        return FindParkingElement(id, root);
+        return FindParkingElement(id, Data.root);
     }
 
     public Node<ParkingElement> getParkingElementNode(IdElement id) {
-        return FindParkingElementNode(id, root);
+        return FindParkingElementNode(id, Data.root);
     }
 
     private ParkingElement FindParkingElement(IdElement id, Node<ParkingElement> node) {
@@ -94,50 +132,50 @@ public class DataInterface implements Serializable {
     }
 
     public int getWorking_mode() {
-        return working_mode;
+        return Data.working_mode;
     }
 
     public void setWorking_mode(int working_mode) {
-        this.working_mode = working_mode;
+        this.Data.working_mode = working_mode;
     }
 
     public int getUpdate_interval() {
-        return update_interval;
+        return Data.update_interval;
     }
 
     public void setUpdate_interval(int update_interval) {
-        this.update_interval = update_interval;
+        this.Data.update_interval = update_interval;
     }
 
     public String getEsp_ip_address() {
-        return esp_ip_address;
+        return Data.esp_ip_address;
     }
 
     public void setEsp_ip_address(String esp_ip_address) {
-        this.esp_ip_address = esp_ip_address;
+        this.Data.esp_ip_address = esp_ip_address;
     }
 
     public int getEsp_port_number() {
-        return esp_port_number;
+        return Data.esp_port_number;
     }
 
     public void setEsp_port_number(int esp_port_number) {
-        this.esp_port_number = esp_port_number;
+        this.Data.esp_port_number = esp_port_number;
     }
 
     public boolean isAuto_init() {
-        return auto_init;
+        return Data.auto_init;
     }
 
     public void setAuto_init(boolean auto_init) {
-        this.auto_init = auto_init;
+        this.Data.auto_init = auto_init;
     }
 
     public List<IdElement> getParkingSensorIdList() {
         List<IdElement> ParkingSensorIDList = new ArrayList<IdElement>();
-        if (root == null)
+        if (Data.root == null)
             return null;
-        FindParkingSensorsIds(ParkingSensorIDList, root);
+        FindParkingSensorsIds(ParkingSensorIDList, Data.root);
         return ParkingSensorIDList;
     }
 
@@ -154,9 +192,9 @@ public class DataInterface implements Serializable {
 
     public List<ParkingElement> getParkingSensorList() {
         List<ParkingElement> ParkingSensorList = new ArrayList<ParkingElement>();
-        if (root == null)
+        if (Data.root == null)
             return null;
-        FindParkingSensors(ParkingSensorList, root);
+        FindParkingSensors(ParkingSensorList, Data.root);
         return ParkingSensorList;
     }
 
@@ -173,9 +211,9 @@ public class DataInterface implements Serializable {
 
     public List<IdElement> getParkingAreaList() {
         List<IdElement> ParkingAreaIDList = new ArrayList<IdElement>();
-        if (root == null)
+        if (Data.root == null)
             return null;
-        FindParkingAreas(ParkingAreaIDList, root);
+        FindParkingAreas(ParkingAreaIDList, Data.root);
         return ParkingAreaIDList;
     }
 
@@ -202,7 +240,7 @@ public class DataInterface implements Serializable {
 
     public void PrintParkingStructure(boolean PrintStatus, boolean PrintConfiguration, boolean PrintTimeStamp) {
         System.out.println("Printing Parking Lot Structure:");
-        PrintRecursive("--", root, PrintStatus, PrintConfiguration, PrintTimeStamp);
+        PrintRecursive("--", Data.root, PrintStatus, PrintConfiguration, PrintTimeStamp);
     }
 
     public void PrintRecursive(String prefix, Node<ParkingElement> NodeToPrint, boolean PrintStatus, boolean PrintConfiguration, boolean PrintTimeStamp) {

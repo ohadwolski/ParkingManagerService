@@ -1,8 +1,7 @@
 package parkingmanagerservice;
 
-import java.io.Serializable;
 
-public enum ConfigurationElement implements Serializable {
+public enum ConfigurationElement {
     CLOSED, REGULAR, DISABLED,
     LEFT, RIGHT, UP, DOWN, NO_ENTRY
 

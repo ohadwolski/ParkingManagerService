@@ -429,7 +429,7 @@ public class ParkingManagerService {
 
         // code for loading data
 
-        
+
         //Data.setEsp_ip_address("192.168.4.1");
         Data.setEsp_ip_address("localhost");
         //Data.setEsp_port_number(9001);
@@ -439,6 +439,10 @@ public class ParkingManagerService {
         Data.setAuto_init(true);
 
 
+
+/*
+        Data.LoadData();
+*/
 
 
 /*
@@ -450,13 +454,13 @@ public class ParkingManagerService {
         Data.setWorking_mode(0);
         Data.setUpdate_interval(5);
         Data.setAuto_init(true);
-*/
 
+*/
 
 /*
 
         try {
-         FileInputStream fileIn = new FileInputStream("./ParkingManagerDatabase.ser");
+         FileInputStream fileIn = new FileInputStream("./ParkingManagerData.ser");
          ObjectInputStream in = new ObjectInputStream(fileIn);
          Data = (DataInterface) in.readObject();
          in.close();

@@ -1,8 +1,7 @@
 package parkingmanagerservice;
 
-import java.io.Serializable;
 
-public class AreaId extends IdElement implements Serializable {
+public class AreaId extends IdElement {
     private int AreaId;
 
     public AreaId() {
@@ -46,4 +45,12 @@ public class AreaId extends IdElement implements Serializable {
     public void print() {
         System.out.printf("AreaId " + AreaId);
     }
+
+    public String stringToTree() {
+
+        String id = Integer.toString(AreaId);
+        String toReturn = "Area " + id;
+        return toReturn;
+    }
+
 }

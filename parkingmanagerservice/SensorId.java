@@ -1,8 +1,7 @@
 package parkingmanagerservice;
 
-import java.io.Serializable;
 
-public class SensorId extends IdElement implements Serializable {
+public class SensorId extends IdElement {
     private int ZoneControllerId;
     private int ControllerId;
     private int SensorId;
@@ -63,5 +62,13 @@ public class SensorId extends IdElement implements Serializable {
 
     public void print() {
         System.out.printf("SensorId: ZoneControllerId=" + ZoneControllerId + " ControllerId=" + ControllerId + " SensorId=" + SensorId);
+    }
+
+    public String stringToTree() {
+        String id = Integer.toString(SensorId);
+        String zoneId = Integer.toString(ZoneControllerId);
+        String contId = Integer.toString(ControllerId);
+        String toReturn = "Zone " + zoneId + " - Port " + contId + " - Sensor " + id;
+        return toReturn;
     }
 }

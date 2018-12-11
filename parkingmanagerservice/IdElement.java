@@ -36,5 +36,12 @@ public class IdElement implements Serializable {
     public void print() {
         System.out.printf("IdElement " + id_number);
     }
+
+    public String stringToTree() {
+
+        String id = Integer.toString(id_number);
+        String toReturn = "Element " + id;
+        return toReturn;
+    }
 }
 
