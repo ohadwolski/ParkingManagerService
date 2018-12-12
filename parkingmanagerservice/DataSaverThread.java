@@ -58,14 +58,14 @@ public class DataSaverThread implements Runnable {
 
         /*
         try {
-            FileOutputStream fileOut = new FileOutputStream("./ParkingManagerData.ser");
+            FileOutputStream fileOut = new FileOutputStream("./parkingmanagerdata.ser");
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             out.writeObject(ParkingManagerService.Data);
             out.close();
             fileOut.close();
-            System.out.println("Data saved to /ParkingManagerData.ser");
+            System.out.println("Data saved to /parkingmanagerdata.ser");
         } catch (IOException i) {
-            System.out.println("Can't save file /ParkingManagerData.ser");
+            System.out.println("Can't save file /parkingmanagerdata.ser");
             i.printStackTrace();
             ParkingManagerService.exit();
         }

@@ -1,0 +1,6 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+.bodyBg {
+     -fx-background-image: url('images/parkingBackground.jpg');
+     -fx-background-size: 100% 100%;    
+}

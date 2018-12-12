@@ -5,15 +5,11 @@
  */
 package parkingmanagerservice;
 
-import sun.awt.windows.ThemeReader;
+import parkingmanagerdata.*;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Vector;
 
 import static java.lang.Thread.sleep;
 import static parkingmanagerservice.MessageType.*;
@@ -429,20 +425,20 @@ public class ParkingManagerService {
 
         // code for loading data
 
-
+/*
         //Data.setEsp_ip_address("192.168.4.1");
         Data.setEsp_ip_address("localhost");
         //Data.setEsp_port_number(9001);
-        Data.setEsp_port_number(64810);
+        Data.setEsp_port_number(62891);
         Data.setWorking_mode(0);
         Data.setUpdate_interval(5);
         Data.setAuto_init(true);
-
-
-
-/*
-        Data.LoadData();
 */
+
+
+
+        Data.LoadData();
+
 
 
 /*
@@ -454,8 +450,8 @@ public class ParkingManagerService {
         Data.setWorking_mode(0);
         Data.setUpdate_interval(5);
         Data.setAuto_init(true);
-
 */
+
 
 /*
 

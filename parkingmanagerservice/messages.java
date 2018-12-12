@@ -2,6 +2,8 @@
 
 package parkingmanagerservice;
 
+import parkingmanagerdata.IdElement;
+
 import java.util.Date;
 
 public class messages implements java.io.Serializable{

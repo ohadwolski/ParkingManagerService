@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="parkingmanagerconfig.chooseParkController">
+   <center>
+      <BorderPane prefHeight="400.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <center>
+            <FlowPane id="FlowPane" styleClass="bodyBg" stylesheets="@application.css" BorderPane.alignment="CENTER">
+               <children>
+                  <Button mnemonicParsing="false" onMouseClicked="#goShowNewSetup" prefHeight="80.0" prefWidth="150.0" style="-fx-background-color: #7c7393;" text="Build a New Park" textFill="#4d1b1b" translateX="345.0" translateY="350.0">
+                     <font>
+                        <Font size="14.0" />
+                     </font></Button>
+                  <Label prefHeight="111.0" prefWidth="323.0" text="Welcome to Parking Lot Setup" textFill="#d7c8c8" translateX="100.0">
+                     <font>
+                        <Font name="Times New Roman Bold" size="24.0" />
+                     </font>
+                  </Label>
+                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#goShowOldSetup" onMouseClicked="#goShowOldSetup" prefHeight="80.0" prefWidth="150.0" style="-fx-background-color: #7c7393;" text="Edit an Old Park" textFill="#4d1b1b" translateX="-130.0" translateY="150.0">
+                     <font>
+                        <Font size="14.0" />
+                     </font></Button>
+               </children>
+            </FlowPane>
+         </center>
+      </BorderPane>
+   </center>
+</BorderPane>

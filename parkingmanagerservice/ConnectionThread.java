@@ -68,6 +68,12 @@ public class ConnectionThread implements Runnable{
                out = server.getOutputStream();
                in = server.getInputStream();
 
+               try {
+                  t.sleep(1000);
+               } catch (InterruptedException e) {
+                  e.printStackTrace();
+               }
+
                ParkingManagerService.Threads.ListenerThread.SetInput(new BufferedReader(new InputStreamReader(in)));
                ParkingManagerService.Threads.SenderThread.SetOutput(new PrintWriter(out, true));
 

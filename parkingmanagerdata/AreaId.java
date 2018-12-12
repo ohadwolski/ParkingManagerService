@@ -1,4 +1,4 @@
-package parkingmanagerservice;
+package parkingmanagerdata;
 
 
 public class AreaId extends IdElement {

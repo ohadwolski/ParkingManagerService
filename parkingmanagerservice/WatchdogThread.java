@@ -1,6 +1,10 @@
 package parkingmanagerservice;
 
 
+import parkingmanagerdata.ParkingElement;
+import parkingmanagerdata.ParkingSensor;
+import parkingmanagerdata.StatusElement;
+
 import java.util.Date;
 import java.util.List;
 

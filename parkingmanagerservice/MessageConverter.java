@@ -1,5 +1,9 @@
 package parkingmanagerservice;
 
+import parkingmanagerdata.AreaId;
+import parkingmanagerdata.SensorId;
+import parkingmanagerdata.SignId;
+
 import java.util.Date;
 
 import static parkingmanagerservice.MessageType.*;

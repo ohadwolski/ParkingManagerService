@@ -1,4 +1,4 @@
-package parkingmanagerservice;
+package parkingmanagerdata;
 
 
 public enum StatusElement {

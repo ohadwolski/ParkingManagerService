@@ -1,4 +1,4 @@
-package parkingmanagerservice;
+package parkingmanagerdata;
 
 import java.io.Serializable;
 
@@ -14,7 +14,7 @@ public class ParkingManagerData implements Serializable {
         root = null;
         working_mode = 0;
         update_interval = 0;
-        esp_ip_address = null;
+        esp_ip_address = "";
         esp_port_number = 0;
         auto_init = false;
     }

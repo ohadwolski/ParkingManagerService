@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="parkingmanagerconfig.ServerSettingsController">
+   <center>
+      <FlowPane id="FlowPane" prefHeight="600.0" prefWidth="800.0" styleClass="bodyBg" stylesheets="@application.css" BorderPane.alignment="CENTER">
+         <children>
+            <RadioButton fx:id="auto" mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #7c7393;" text="Auto" textFill="#4d1b1b" translateX="123.0" translateY="60.0">
+               <toggleGroup>
+                  <ToggleGroup fx:id="Setup" />
+               </toggleGroup>
+            </RadioButton>
+            <Label prefHeight="12.0" prefWidth="40.0" style="-fx-background-color: #7c7393;" text="Setup:" textFill="#4d1b1b" translateX="-83.0" translateY="60.0" />
+            <RadioButton fx:id="manual" mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #7c7393;" text="Manual" textFill="#4d1b1b" toggleGroup="$Setup" translateX="-17.0" translateY="85.0" />
+            <Label style="-fx-background-color: #7c7393;" text="Working Mode:" textFill="#4d1b1b" translateX="-224.0" translateY="123.0" />
+            <RadioButton fx:id="manualByServer" mnemonicParsing="false" prefHeight="17.0" prefWidth="123.0" style="-fx-background-color: #7c7393;" text="Manual by Server" textFill="#4d1b1b" translateX="-200.0" translateY="123.0">
+               <toggleGroup>
+                  <ToggleGroup fx:id="WorkingMode" />
+               </toggleGroup></RadioButton>
+            <RadioButton fx:id="onEvent" mnemonicParsing="false" style="-fx-background-color: #7c7393;" text="On Event" textFill="#4d1b1b" toggleGroup="$WorkingMode" translateX="-323.0" translateY="150.0" />
+            <Label prefHeight="17.0" prefWidth="90.0" style="-fx-background-color: #7c7393;" text="Update Interval:" textFill="#4d1b1b" translateX="-500.0" translateY="220.0" />
+            <TextField fx:id="espIPAddress" prefHeight="25.0" prefWidth="163.0" style="-fx-background-color: #7c7393;" translateX="-485.0" translateY="360.0" />
+            <TextField fx:id="updateInterval" prefHeight="25.0" prefWidth="163.0" style="-fx-background-color: #7c7393;" translateX="122.0" translateY="177.0" />
+            <RadioButton fx:id="everyTSeconds" mnemonicParsing="false" style="-fx-background-color: #7c7393;" text="Every T Seconds" textFill="#4d1b1b" toggleGroup="$WorkingMode" translateX="-40.0" translateY="135.0" />
+            <Label prefHeight="17.0" prefWidth="33.0" style="-fx-background-color: #7c7393;" text="Port:" textFill="#4d1b1b" translateX="-255.0" translateY="245.0" />
+            <TextField fx:id="port" prefHeight="25.0" prefWidth="163.0" style="-fx-background-color: #7c7393;" translateX="-182.0" translateY="245.0" />
+            <Label prefHeight="17.0" prefWidth="84.0" style="-fx-background-color: #7c7393;" text="ESP IP Address:" textFill="#4d1b1b" translateX="-450.0" translateY="315.0" />
+            <Button mnemonicParsing="false" onAction="#goMainView" prefHeight="60.0" prefWidth="80.0" style="-fx-background-color: #7c7393;" text="Back" textFill="#4d1b1b" translateX="-230.0" translateY="450.0">
+               <font>
+                  <Font size="14.0" />
+               </font></Button>
+            <Button layoutX="595.0" layoutY="51.0" mnemonicParsing="false" onAction="#serverSettingsSaveAfterSubmit" prefHeight="60.0" prefWidth="80.0" style="-fx-background-color: #7c7393;" text="Submit" textFill="#4d1b1b" translateX="-200.0" translateY="450.0">
+               <font>
+                  <Font size="14.0" />
+               </font></Button>
+            <Label prefHeight="28.0" prefWidth="161.0" style="-fx-background-color: #7c7393;" text="Server Settings" textFill="#4d1b1b" translateX="300.0" translateY="-80.0">
+               <font>
+                  <Font name="Times New Roman" size="24.0" />
+               </font>
+            </Label>
+            <Label prefHeight="20.0" prefWidth="402.0" style="-fx-background-color: #7c7393;" text="Note : Upadate Interval and Port must be between 0 and 65535" textFill="#4d1b1b" translateX="-145.0" translateY="340.0">
+               <font>
+                  <Font size="14.0" />
+               </font></Label>
+         </children>
+      </FlowPane>
+   </center>
+</BorderPane>

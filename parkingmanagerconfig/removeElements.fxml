@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane id="BoarderPane" styleClass="bodyBg" stylesheets="@application.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="parkingmanagerconfig.RemoveElementsController">
+   <center>
+      <TabPane prefHeight="600.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+          <Tab text="Remove Level\Area">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <GridPane layoutX="80.0" layoutY="97.0" prefHeight="315.0" prefWidth="344.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="178.0" minWidth="10.0" prefWidth="178.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="179.0" minWidth="10.0" prefWidth="166.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Label style="-fx-background-color: #7c7393;" text="ID:" textFill="#4d1b1b" />
+                              <ChoiceBox fx:id="removeAreaIdBox" prefWidth="150.0" GridPane.columnIndex="1" />
+                           </children>
+                        </GridPane>
+                        <Button layoutX="380.0" layoutY="444.0" mnemonicParsing="false" onAction="#goDataSettings" prefHeight="60.0" prefWidth="80.0" style="-fx-background-color: #7c7393;" text="Back" textFill="#4d1b1b" translateX="-50.0">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Button>
+                        <Button layoutX="390.0" layoutY="454.0" mnemonicParsing="false" onAction="#removeArea" prefHeight="60.0" prefWidth="80.0" style="-fx-background-color: #7c7393;" text="Submit" textFill="#4d1b1b" translateX="50.0" translateY="-10.0">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Button>
+                        <TreeView fx:id="removeAreaParkTree" layoutX="440.0" layoutY="89.0" prefHeight="331.0" prefWidth="338.0" />
+                        <Label layoutX="283.0" layoutY="25.0" style="-fx-background-color: #7c7393;" text="Remove Area" textFill="#4d1b1b">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+            <Tab text="Remove Sign">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <GridPane layoutX="26.0" layoutY="86.0" prefHeight="315.0" prefWidth="344.0">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <Label style="-fx-background-color: #7c7393;" text="Sign ID:" textFill="#4d1b1b" />
+                              <Label prefWidth="93.0" style="-fx-background-color: #7c7393;" text="Sub Sign ID:" textFill="#4d1b1b" GridPane.rowIndex="1" />
+                              <ChoiceBox fx:id="removeSignAreaIdBox" prefWidth="150.0" GridPane.columnIndex="1" />
+                              <ChoiceBox fx:id="removeSubSignIdBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                           </children>
+                        </GridPane>
+                        <Button layoutX="380.0" layoutY="444.0" mnemonicParsing="false" onAction="#goDataSettings" prefHeight="60.0" prefWidth="80.0" style="-fx-background-color: #7c7393;" text="Back" textFill="#4d1b1b" translateX="-50.0">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Button>
+                        <Button layoutX="390.0" layoutY="454.0" mnemonicParsing="false" onAction="#removeSign" prefHeight="60.0" prefWidth="80.0" style="-fx-background-color: #7c7393;" text="Submit" textFill="#4d1b1b" translateX="50.0" translateY="-10.0">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Button>
+                        <TreeView fx:id="removeSignParkTree" layoutX="440.0" layoutY="86.0" prefHeight="331.0" prefWidth="338.0" />
+                        <Button fx:id="signSet" layoutX="384.0" layoutY="152.0" mnemonicParsing="false" onMouseClicked="#setSubSignList" style="-fx-background-color: #7c7393;" text="Set" textFill="#4d1b1b" />
+                        <Label layoutX="283.0" layoutY="25.0" style="-fx-background-color: #7c7393;" text="Remove Sign" textFill="#4d1b1b">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+            <Tab text="Remove Sensor">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <GridPane layoutX="43.0" layoutY="91.0" prefHeight="315.0" prefWidth="344.0">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <Label style="-fx-background-color: #7c7393;" text="Zone Controller ID:" textFill="#4d1b1b" />
+                              <Label style="-fx-background-color: #7c7393;" text="Port ID:" textFill="#4d1b1b" GridPane.rowIndex="1" />
+                              <Label style="-fx-background-color: #7c7393;" text="Sensor ID:" textFill="#4d1b1b" GridPane.rowIndex="2" />
+                              <ChoiceBox fx:id="removeZoneControllerIdBox" prefWidth="150.0" GridPane.columnIndex="1" />
+                              <ChoiceBox fx:id="removePortIdBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <ChoiceBox fx:id="removeSensorIdBox" prefHeight="25.0" prefWidth="134.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                           </children>
+                        </GridPane>
+                        <Button layoutX="380.0" layoutY="444.0" mnemonicParsing="false" onAction="#goDataSettings" prefHeight="60.0" prefWidth="80.0" style="-fx-background-color: #7c7393;" text="Back" textFill="#4d1b1b" translateX="-50.0">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Button>
+                        <Button layoutX="390.0" layoutY="454.0" mnemonicParsing="false" onAction="#removeSensor" prefHeight="60.0" prefWidth="80.0" style="-fx-background-color: #7c7393;" text="Submit" textFill="#4d1b1b" translateX="50.0" translateY="-10.0">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Button>
+                        <TreeView fx:id="removeSensorParkTree" layoutX="440.0" layoutY="83.0" prefHeight="331.0" prefWidth="338.0" />
+                        <Button fx:id="zoneControllerSet" layoutX="384.0" layoutY="131.0" mnemonicParsing="false" onMouseClicked="#setPortList" style="-fx-background-color: #7c7393;" text="Set" textFill="#4d1b1b" />
+                        <Button fx:id="sensorSet" layoutX="384.0" layoutY="236.0" mnemonicParsing="false" onMouseClicked="#setSensorList" style="-fx-background-color: #7c7393;" text="Set" textFill="#4d1b1b" />
+                        <Label layoutX="283.0" layoutY="25.0" style="-fx-background-color: #7c7393;" text="Remove Sensor" textFill="#4d1b1b">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+   </center>
+</BorderPane>

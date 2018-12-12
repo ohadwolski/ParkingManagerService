@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="parkingmanagerstatus.MainItemsController">
+   <center>
+      <BorderPane prefHeight="600.0" prefWidth="900.0" BorderPane.alignment="CENTER">
+         <center>
+            <FlowPane id="FlowPane" prefHeight="600.0" prefWidth="800.0" styleClass="bodyBg" stylesheets="@application.css" BorderPane.alignment="CENTER">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#goSensorStatus" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: #7c7393;" text="Sensor's Data" textFill="#4d1b1b" translateX="310.0" translateY="360.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#goSpotsList" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: #7c7393;" text="Spots Status" textFill="#4d1b1b" translateX="110.0" translateY="160.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#goSignStatus" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: #7c7393;" text="Sign's Data" textFill="#4d1b1b" translateX="-90.0" translateY="260.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Button>
+                  <Label prefHeight="60.0" prefWidth="249.0" text="Parking Lot Status" textFill="#d7c8c8" translateX="310.0" translateY="-30.0">
+                     <font>
+                        <Font name="Times New Roman Bold" size="24.0" />
+                     </font>
+                  </Label>
+               </children>
+            </FlowPane>
+         </center>
+      </BorderPane>
+   </center>
+</BorderPane>

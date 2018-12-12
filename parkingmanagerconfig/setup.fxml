@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.text.Font?>
+
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.1">
+   <center>
+      <FlowPane id="FlowPane" prefHeight="600.0" prefWidth="800.0" styleClass="bodyBg" stylesheets="@application.css" BorderPane.alignment="CENTER">
+         <children>
+            <Label prefHeight="111.0" prefWidth="323.0" text="Welcome to Parking Lot Setup" textFill="#d7c8c8" translateX="250.0">
+               <font>
+                  <Font name="Times New Roman Bold" size="24.0" />
+               </font>
+            </Label>
+         </children>
+      </FlowPane>
+   </center>
+</BorderPane>

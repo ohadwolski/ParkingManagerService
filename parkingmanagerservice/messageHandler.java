@@ -1,5 +1,7 @@
 package parkingmanagerservice;
 
+import parkingmanagerdata.*;
+
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -299,7 +301,8 @@ public class messageHandler {
 
     private static void WaitForSensorsDataResponse(messages msg) {
         if      (  msg.getType() == GET_ALL_SENSORS_STATE_START
-                || msg.getType() == GET_ALL_SENSORS_STATE_END) {
+                || msg.getType() == GET_ALL_SENSORS_STATE_END
+                || msg.getType() == INIT_SENSOR_SUCCEEDED) {
             Iterator itr = ParkingManagerService.ExpectedEventsList.iterator();
             while (itr.hasNext())
             {

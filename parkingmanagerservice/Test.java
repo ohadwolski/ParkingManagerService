@@ -1,6 +1,7 @@
 package parkingmanagerservice;
 
-import java.util.Date;
+import parkingmanagerdata.*;
+
 import java.util.List;
 
 public class Test {

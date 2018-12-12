@@ -1,4 +1,4 @@
-package parkingmanagerservice;
+package parkingmanagerdata;
 
 import java.io.Serializable;
 import java.util.ArrayList;
