@@ -233,6 +233,10 @@ public class messageHandler {
             SensorToUpdate.getId().print();
             System.out.printf(" to " + SensorToUpdate.getStatus() + "%n");
 
+            // update counters:
+            UpdateSignsCounters();
+
+            /*
             // find all relevant signs
             List<ParkingElement> SignsToUpdate = ParkingManagerService.Data.getSignsForParkingElement(SensorToUpdate);
             // change counters of signs
@@ -262,12 +266,40 @@ public class messageHandler {
                     System.out.printf(" to " + n + "%n");
                 }
             }
+            */
             // assumption: all signs are initialized at esp as auto-update and
             //             do not need a message to update the actual counter
             //             Our program doesn't support manual change of counters
         }
     }
 
+
+    private static void UpdateSignsCounters() {
+        // updates all of the counters of the signs to the updated values in the parking lot tree
+        List<ParkingElement> ListOfSigns = ParkingManagerService.Data.getParkingSignsList();
+        // zero all signs counters
+        for (ParkingElement sign : ListOfSigns) {
+            if (!(sign instanceof ParkingSign)) continue;
+            ((ParkingSign)sign).setCounter(0);
+        }
+
+        // go through all the sensors, and update counters
+
+        List<ParkingElement> ListOfSensors = ParkingManagerService.Data.getParkingSensorList();
+        for (ParkingElement sensor : ListOfSensors) {
+            // for every sensor that is free, add 1 to corresponding signs
+            if (!(sensor instanceof ParkingSensor)) continue;
+            if (((ParkingSensor) sensor).getStatus() == StatusElement.FREE) {
+                List<ParkingElement> SignsToUpdate = ParkingManagerService.Data.getSignsForParkingElement(sensor);
+                for (ParkingElement sign : SignsToUpdate) {
+                    if (!(sign instanceof ParkingSign)) continue;
+                    int n = ((ParkingSign)sign).getCounter();
+                    n++;
+                    ((ParkingSign)sign).setCounter(n);
+                }
+            }
+        }
+    }
 
     private static void WaitForOperationModeConfiguration(messages msg) {
         if      (  msg.getType() == START_REPORT_ON_EVENT_SUCCEEDED

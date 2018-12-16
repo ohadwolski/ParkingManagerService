@@ -229,6 +229,42 @@ public class DataInterface implements Serializable {
             FindParkingAreas(ParkingAreaIDList,child);
         }
     }
+    public List<ParkingElement> getParkingSignsList() {
+        List<ParkingElement> ParkingSignsList = new ArrayList<ParkingElement>();
+        if (Data.root == null)
+            return null;
+        FindParkingSigns(ParkingSignsList, Data.root);
+        return ParkingSignsList;
+    }
+
+    public void FindParkingSigns(List<ParkingElement> ParkingSignsList, Node<ParkingElement> node) {
+        if (node == null)
+            return;
+        if (node.getData() instanceof ParkingSign) {
+            ParkingSignsList.add(node.getData());
+        }
+        for (Node<ParkingElement> child : node.getChildren()) {
+            FindParkingSigns(ParkingSignsList,child);
+        }
+    }
+    public List<IdElement> getParkingSignsIdList() {
+        List<IdElement> ParkingSignsIdList = new ArrayList<IdElement>();
+        if (Data.root == null)
+            return null;
+        FindParkingSignsIds(ParkingSignsIdList, Data.root);
+        return ParkingSignsIdList;
+    }
+
+    public void FindParkingSignsIds(List<IdElement> ParkingSignsIdList, Node<ParkingElement> node) {
+        if (node == null)
+            return;
+        if (node.getData() instanceof ParkingSign) {
+            ParkingSignsIdList.add(node.getData().getId());
+        }
+        for (Node<ParkingElement> child : node.getChildren()) {
+            FindParkingSignsIds(ParkingSignsIdList,child);
+        }
+    }
 
     public void getAreaSigns(List<IdElement> signsUnderArea, Node<ParkingElement> parkingElementNode) {
         if (parkingElementNode == null) return;
@@ -252,7 +288,11 @@ public class DataInterface implements Serializable {
         NodeToPrint.getData().print();
 
         if (PrintStatus) {
-            System.out.printf(prefix + "--> Status: " + NodeToPrint.getData().getStatus() + "%n");
+            if (NodeToPrint.getData() instanceof ParkingSign) {
+                System.out.printf(prefix + "--> Status: " + NodeToPrint.getData().getStatus() + " , counter: " + ((ParkingSign)NodeToPrint.getData()).getCounter() + "%n");
+            } else {
+                System.out.printf(prefix + "--> Status: " + NodeToPrint.getData().getStatus() + "%n");
+            }
         }
         if (PrintConfiguration) {
             System.out.printf(prefix + "--> Configuration: " + NodeToPrint.getData().getConfiguration() + "%n");

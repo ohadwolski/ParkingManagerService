@@ -70,7 +70,6 @@ public class WatchdogThread implements Runnable{
                         } else {
                             CheckSensorsErrorState();
                             RequestModeChecked = false;
-                            continue;
                         }
                         break;
                     default:
