@@ -1,352 +1,96 @@
 package parkingmanagerstatus;
 
-import java.io.FileInputStream;
+
 import parkingmanagerdata.*;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
-
+//The main Class of the Status Application
 public class Status {
 
-	private DataInterface parkData;
-	public ArrayList<AreaId> areaIDList = new ArrayList<AreaId>();
-	public ArrayList<SignId> signIDList = new ArrayList<SignId>();
-	public ArrayList<SensorId> sensorIDList = new ArrayList<SensorId>();
+	private DataInterface parkData;	//interface variable
+	public ArrayList<AreaId> areaIDList = new ArrayList<AreaId>(); //areas Id List
+	public ArrayList<SignId> signIDList = new ArrayList<SignId>(); //signs Id List	
+	public ArrayList<SensorId> sensorIDList = new ArrayList<SensorId>(); //sensors Id List
 
+	//constructor
 	public Status() {
+		
 		parkData = new DataInterface();
-		loadDataInterface(); 
 	}
 	
+	//returns the root of the parking's data
 	public Node<ParkingElement> getParkRoot() {
+		
 		return parkData.getRoot();
 	}	
 	
+	//returns the areas Id array
 	public ArrayList<AreaId> getAreaIdArray() {
     	
     	return areaIDList;
     }
 	
+	//returns the sensors Id array
 	public ArrayList<SensorId> getSensorIdArray() {
     	
     	return sensorIDList;
     }
 	
+	//returns the signs Id array
 	public ArrayList<SignId> getSignIdArray() {
     	
     	return signIDList;
     }
 
+	//returns a parking element according to Id
 	public ParkingElement getParkingElement(IdElement id) {
 	    	
 	    return parkData.getParkingElement(id);
 	}
 	
+	//returns a parking element node according to Id
 	public Node<ParkingElement> getParkingElementNode(IdElement id) {
     	
     	return parkData.getParkingElementNode(id);
     }
 	
+	//initialize the areas Id array with all the current areas in the parking lot
 	public void initAreasArray( ) {
 		
 		parkData.getAreasOfParkingLot(areaIDList, parkData.getRoot());
 	}
 	
+	//initialize the signs Id array with all the current areas in the parking lot
 	public void initSignsArray( ) {
 		
 		parkData.getSignsOfParkingLot(signIDList, parkData.getRoot());
 	}
 	
+	//initialize the sensors Id array with all the current areas in the parking lot
 	public void initSensorsArray( ) {
 		
 		parkData.getSensorsOfParkingLot(sensorIDList, parkData.getRoot());
 	}
 	
-		
-/*	//-----------------------------------------------------------------------------------------------------------------------------///
-	
-void setAutoInit(boolean answer) {
-    	
-		parkData.setAutoInit(answer);
-    }
-	
-	boolean getAutoInit() {
-    	
-		return parkData.getAutoInit();
-    }
-	
-	void setWorkingMode(int mode) {
-    	
-		parkData.setwWrkingMode(mode);
-    }
-	
-	int getWorkingMode() {
-    	
-		return parkData.getwWrkingMode();
-    }
-	
-	void setUpdateInterval(int interval) {
-    	
-		parkData.setUpdateInterval(interval);
-    }
-	
-	int getUpdateInterval() {
-    	
-		return parkData.getUpdateInterval();
-    }
-	
-	void setIpAddress(String ipAddress) {
-    	
-		parkData.setEspIpAddress(ipAddress);
-    }
-	
-	String getEspIpAddress() {
-    	
-		return parkData.getEspIpAddress();
-    }
-	
-	void setPort(int port) {
-    	
-		parkData.setPort(port);
-    }
-	
-	int getPort() {
-    	
-		return parkData.getPort();
-    }
-		
-	/*public ArrayList<AreaId> getAreaIdArray() {
-    	
-    	return parkData.getAreaIdArray();
-    }
-    
-    /*public ArrayList<SignId> getSignIdArray() {
-    	
-    	return parkData.getSignIdArray();
-    }*/
-    
-   /* public ArrayList<SensorId> getSensorIdArray() {
-    	
-    	return parkData.getSesnsorIdArray();
-    }
-	*/
+	//returns the root of the data structure of the parking lot
     public ParkingElement getRootParkingElement( ) {
     		
     	return parkData.getRoot().getData();
     }
 
-  /*  public ParkingElement getParkingElement(IdElement id) {
-    	
-    	return parkData.getParkingElement(id);*/
-    
-    
-   /* public Node<ParkingElement> getParkingElementNode(IdElement id) {
-    	
-    	return parkData.getParkingElementNode(id);
-    }*/
-    
-  /*  public ParkingElement addParkingArea (int Id, StatusElement s, ConfigurationElement c, IdElement parent) {
-		
-		IdElement id = new AreaId(Id);
-		AreaId idToList = new AreaId(Id);
-		areaIDList.add(idToList);						
-		ParkingElement newArea = new ParkingArea(id, s, c);
-		Node<ParkingElement> newAreaNode = new Node<ParkingElement>(newArea);	
-		newAreaNode.setParent(parkData.getParkingElementNode(parent));
-		newAreaNode.getParent().addChild(newAreaNode);
-		return newAreaNode.getData();		
-	}
-    
-	public ParkingElement addParkingSign (int SignId, int SubSignId, StatusElement s, ConfigurationElement c, IdElement parent) {
-		
-		IdElement id = new SignId(SignId,SubSignId);
-		SignId idToList = new SignId(SignId,SubSignId);
-		signIDList.add(idToList);
-		ParkingElement newSign = new ParkingSign(id, s, c);
-		Node<ParkingElement> newSignNode = new Node<ParkingElement>(newSign);	
-		newSignNode.setParent(parkData.getParkingElementNode(parent));
-		newSignNode.getParent().addChild(newSignNode);
-		return newSignNode.getData();
+    //load data file of the data structure
+	public void loadDataInterface() {
+		 
+		parkData.loadDataInterface();  
 	}
 	
-	public ParkingElement addParkingSensor (int ZoneControllerId, int ControllerId, int SensorId, StatusElement s, ConfigurationElement c, IdElement parent) {
-		
-		IdElement id = new SensorId(ZoneControllerId, ControllerId, SensorId);
-		SensorId idToList = new SensorId(ZoneControllerId, ControllerId, SensorId);
-		sensorIDList.add(idToList);
-		ParkingElement newSensor = new ParkingSensor(id, s, c);
-		Node<ParkingElement> newSensorNode = new Node<ParkingElement>(newSensor);	
-		newSensorNode.setParent(parkData.getParkingElementNode(parent));
-		newSensorNode.getParent().addChild(newSensorNode);
-		return newSensorNode.getData();
+	//get the data of the Data structure
+	public ParkingManagerData getData() {
+		 
+	    return parkData.getData();
 	}
-	
-	public void addParkingElement (Node<ParkingElement> element, IdElement parent) {
-		
-		element.setParent(parkData.getParkingElementNode(parent));
-		element.getParent().addChild(element);
-	}
-	
-	public void removeElements() {
-		
-		Iterator<Node<ParkingElement>> iter = elementsToRemove.iterator();
-		while (iter.hasNext()) {
-			Node<ParkingElement> item = iter.next();
-			if (item.getData().getId() instanceof SensorId) {
-				Iterator<SensorId> sensorIter = sensorIDList.iterator();
-				while (sensorIter.hasNext()) {
-					SensorId id = sensorIter.next();
-					if (id.compare(item.getData().getId())) {
-						sensorIter.remove();
-						parkData.getParkingElementNode(id).getParent().getChildren().remove(item);
-					}
-				}			
-			}
-			else if(item.getData().getId() instanceof SignId) {
-				Iterator<SignId> signIter = signIDList.iterator();
-				while (signIter.hasNext()) {
-					SignId id = signIter.next();
-					if (id.compare(item.getData().getId())) {
-						signIter.remove();
-						parkData.getParkingElementNode(id).getParent().getChildren().remove(item);
-					}					
-				}
-			}	
-			iter.remove();
-		}
-		Iterator<Node<ParkingElement>> iter2 = elementsToRemove.iterator();
-		while (iter2.hasNext()) {
-			Iterator<AreaId> areaIter = areaIDList.iterator();
-			Node<ParkingElement> item = iter2.next();
-			if (item.getData().getId() instanceof AreaId) {
-				while (areaIter.hasNext()) {
-					AreaId id = areaIter.next();
-					if (id.compare(item.getData().getId())) {
-						areaIter.remove();
-						parkData.getParkingElementNode(id).getParent().getChildren().remove(item);
-					}
-				}
-				iter2.remove();
-			}
-		}		
-	}
-	
-	public void findElementsTorRemove(IdElement Id) {
-			
-		Iterator<Node<ParkingElement>> iter = parkData.getParkingElementNode(Id).getParent().getChildren().iterator();
-		while (iter.hasNext()) {	
-			Node<ParkingElement> item = iter.next();
-			if (item.getData().getId().compare(Id)) {
-				if (item.getData().getId() instanceof AreaId) {
-					for (AreaId id : areaIDList) {
-						if (id.compare(item.getData().getId())) {	
-							if (!item.isLeaf()) {
-								Iterator<Node<ParkingElement>> iter2 = parkData.getParkingElementNode(Id).getChildren().iterator(); //
-								while (iter2.hasNext()) {
-									findElementsTorRemove(iter2.next().getData().getId());
-								}
-							}
-							areaElementsToRemove.add(item);
-						}		
-					}			
-				}
-				else if (item.getData().getId() instanceof SignId) {
-					for (SignId id: signIDList) {
-						if (id.compare(item.getData().getId())) {	
-							elementsToRemove.add(item);
-						}
-					}	
-				}
-				else if(item.getData().getId() instanceof SensorId) {
-					for (SensorId id: sensorIDList) {
-						if (id.compare(item.getData().getId())) {
-							elementsToRemove.add(item);
-						}	
-					}
-				}
-			}
-		}	
-	}
-	
-	public void changeParentOfParkingElement(IdElement Id, IdElement newParent) {
-
-		Node<ParkingElement> element = parkData.getParkingElementNode(Id);
-		int idx = parkData.getParkingElementNode(Id).getParent().getChildren().indexOf(parkData.getParkingElementNode(Id));
-		parkData.getParkingElementNode(Id).getParent().getChildren().remove(idx);
-		addParkingElement(element, newParent);	
-	}
-	
-	public void changeElementConfig (IdElement Id, ConfigurationElement newConfig) {
-		
-		parkData.getParkingElement(Id).setConfiguration(newConfig);
-	}
-	
-	 public Node<ParkingElement> getRoot() {
-	    	
-	    	return parkData.getRoot();
-	    }*/
-	
-	
-	 public void loadDataInterface() {
-			//DataInterface e = null;
-		 parkData.loadDataInterface();  
-	 }
+}		 
 	 
-}		 /* try {
-		         FileInputStream fileIn = new FileInputStream("C:/Users/alonjaro/Desktop/saveLoad/data.ser");
-		         ObjectInputStream in = new ObjectInputStream(fileIn);
-		         parkData = (DataInterface) in.readObject();
-		        // parkData = e;
-		         in.close();
-		         fileIn.close();
-		      } catch (IOException i) {
-		         i.printStackTrace();
-		         return;
-		      } catch (ClassNotFoundException c) {
-		         System.out.println("Employee class not found");
-		         c.printStackTrace();
-		         return;
-		      }
-		}*/
-	 
-	 /*public void loadDataInterface() {
-			
-		 //DataInterface e = null;
-		 final long timeInterval = 1000;
-		 Runnable runnable = new Runnable() {
-			 
-			 public void run() {
-				 
-				 while (true) {
-					 try {
-				         FileInputStream fileIn = new FileInputStream("C:/Users/alonjaro/Desktop/saveLoad/data.ser");
-				         ObjectInputStream in = new ObjectInputStream(fileIn);
-				         parkData = (DataInterface) in.readObject();
-				        // parkData = e;
-				         in.close();
-				         fileIn.close();
-				     } 
-					 catch (IOException i) {
-				         i.printStackTrace();
-				         return;
-				     } 
-					 catch (ClassNotFoundException c) {
-				         System.out.println("Employee class not found");
-				         c.printStackTrace();
-				         return;
-				     }
-					 try {	       
-						 Thread.sleep(timeInterval);
-					 } 
-					 catch (InterruptedException e) {
-						 e.printStackTrace();
-					 }
-				}
-			}
-		}; 
-		Thread thread = new Thread(runnable);	  
-		thread.start();
-	}*/
+	
 	
 

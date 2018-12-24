@@ -5,10 +5,3 @@
      -fx-background-size: 100% 100%;    
 }
 
-.tree-cell.style1 {
-   -fx-text-fill: black;
-}
-
-.tree-cell.style2 {
-  -fx-text-fill: red;
-}

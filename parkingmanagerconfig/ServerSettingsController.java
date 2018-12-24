@@ -1,72 +1,51 @@
 package parkingmanagerconfig;
 
 import javafx.scene.control.TextField;
-import parkingmanagerdata.*;
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 
-
+//server settings fxml class
 public class ServerSettingsController {
 
 	private Main main;
 	
-
 	@FXML
-	private TextField updateInterval;
+	private TextField updateInterval; //update interval field
 	
 	@FXML
-	private TextField port;
+	private TextField port; //port field
 	
 	@FXML
-	private TextField espIPAddress;
+	private TextField espIPAddress; //esp ip address field
 	
 	@FXML
-	private RadioButton auto;
+	private RadioButton auto; //auto setup option
 	
 	@FXML
-	private RadioButton manual;
+	private RadioButton manual; //manual setup option
 	
 	@FXML
-	private RadioButton manualByServer;
+	private RadioButton manualByServer; //manual by server working mode option
 	
 	@FXML
-	private RadioButton onEvent;
+	private RadioButton onEvent; //one-event working mode option
 	
 	@FXML
-	private RadioButton everyTSeconds;
+	private RadioButton everyTSeconds; //every-t-seconds working mode option
 	
-	@FXML
-	private TextArea currentSetup;
-	
-	@FXML
-	private TextArea currentWorkingMode;
-	
-	@FXML
-	private TextArea currentUpInt;
-	
-	@FXML
-	private TextArea currentPort;
-	
-	@FXML
-	private TextArea currentIP;
-	
+	//back button
 	@FXML
 	private void goMainView() throws IOException {
 		
 		main.showMainView();
-		main.showMainItems();
 	}
 	
+	//initialize the fxml page
 	@FXML
 	private void initialize() {
 		
-		//currentSetup.appendText(main.getAutoInit());
-		//currentWorkingMode.appendText(main.getWorkingMode());
-		//currentUpInt.appendText(main.getUpdateInterval());
-		//currentPort.appendText(main.getPort());
-		//currentIP.appendText(main.getEspIPAddress());
 		port.setText(main.getPort());
 		updateInterval.setText(main.getUpdateInterval());		
 		espIPAddress.setText(main.getEspIPAddress());
@@ -100,7 +79,14 @@ public class ServerSettingsController {
 		}
 	}
 	
+	//save as button
+	@FXML
+	private void saveData() throws IOException {
+		
+		main.saveData();
+	}
 	
+	//submit button
 	@FXML
 	private void serverSettingsSaveAfterSubmit() throws IOException {
 		
@@ -151,16 +137,13 @@ public class ServerSettingsController {
 			else {
 				systemUpdateInterval = Integer.parseInt(updateInterval.getText());
 				updateIntervalFlag = true;
-			}
-			
+			}	
 		}
 		
 		if (!espIPAddress.getText().trim().isEmpty()) {
 			
 				systemEspIpAddress = espIPAddress.getText();
-				systemEspIpAddressFlag= true;
-			
-			
+				systemEspIpAddressFlag= true;	
 		}
 		
 		if (!port.getText().trim().isEmpty()) {
@@ -169,10 +152,8 @@ public class ServerSettingsController {
 			}
 			else {
 				systemPort = Integer.parseInt(port.getText());
-				systemPortFlag = true;	
-				
-			}
-			
+				systemPortFlag = true;		
+			}		
 		}
 		if (setupFlag && systemWorkingModeFlag && updateIntervalFlag && systemEspIpAddressFlag && systemPortFlag) {
 			
@@ -180,7 +161,6 @@ public class ServerSettingsController {
 					systemEspIpAddressFlag, systemEspIpAddress, systemWorkingModeFlag, systemWorkingMode,
 					setupFlag, systemSetup);
 			main.showServerSettings();
-			main.saveData();
 		}
 		else {
 			if (!isIntervalInRange || !isPortInRange) {
@@ -188,9 +168,7 @@ public class ServerSettingsController {
 			}
 			else {
 				main.showAlert();
-			}
-			
-		}
-		
+			}	
+		}	
 	}
 }
