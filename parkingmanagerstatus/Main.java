@@ -49,10 +49,10 @@ public class Main extends Application {
 		
 		ParkingLot.loadDataInterface();
 		if (ParkingLot.getData() != null) {
-			Alert alert = new Alert (AlertType.INFORMATION);
-			alert.setTitle("Log Loading");
-			alert.setContentText("Loaded Successfully");
-			alert.show();
+			//Alert alert = new Alert (AlertType.INFORMATION);
+			//alert.setTitle("Log Loading");
+			//alert.setContentText("Loaded Successfully");
+			//alert.show();
 			initTree();
 			loadOperation();
 			loadTree();

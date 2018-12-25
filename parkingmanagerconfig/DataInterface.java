@@ -284,7 +284,7 @@ public class DataInterface implements Serializable  {
     public void saveDataInterface() throws IOException {
 		
     	JFrame parentFrame = new JFrame();
-    	JFileChooser fileChooser = new JFileChooser();
+    	JFileChooser fileChooser = new JFileChooser("./");
     	fileChooser.setDialogTitle("Specify a file to save");   
     	File fileToSave;
     	int userSelection = fileChooser.showSaveDialog(parentFrame);	 
@@ -302,7 +302,7 @@ public class DataInterface implements Serializable  {
 	public void loadDataInterface() throws IOException, ClassNotFoundException {
 		
 		JFrame parentFrame = new JFrame();
-    	JFileChooser fileChooser = new JFileChooser();
+    	JFileChooser fileChooser = new JFileChooser("./");
     	fileChooser.setDialogTitle("Specify a file to load");   
     	File fileToSave;
     	int userSelection = fileChooser.showOpenDialog(parentFrame);	 
@@ -316,8 +316,3 @@ public class DataInterface implements Serializable  {
     	}  
 	}
 }   
-  
-    
-
-
-

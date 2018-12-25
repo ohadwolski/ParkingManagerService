@@ -15,39 +15,34 @@ public class MainItemsController {
 	@FXML
 	private void goSpotsList() throws IOException {
 		
+		main.goLoadLog();
 		if (main.isThereALog() != null) {
 			main.refresh();
 			main.showSpotsList();
 		}
-		else {
+		/*else {
 			Alert alert = new Alert (AlertType.ERROR);
 			alert.setTitle("Error");
 			alert.setContentText("Log was not Loaded");
 			alert.show();
-		}
+		}*/
 	}
 	
 	//go to the signs fxml page button
 	@FXML
 	private void goSignStatus() throws IOException {
 		
+		main.goLoadLog();
 		if (main.isThereALog() != null) {
 			main.refresh();
 			main.showSignData();
 		}
-		else {
+		/*else {
 			Alert alert = new Alert (AlertType.ERROR);
 			alert.setTitle("Error");
 			alert.setContentText("Log was not Loaded");
 			alert.show();
-		}	
+		}*/	
 	}
 	
-	//Loads data log button
-	@FXML
-	private void goLoadLog() throws IOException {
-		
-		main.refresh();
-		main.goLoadLog();
-	}
 }
